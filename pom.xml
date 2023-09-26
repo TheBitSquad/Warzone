@@ -24,7 +24,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.bitsquad.warzone.main</mainClass>
+                            <mainClass>org.bitsquad.warzone.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

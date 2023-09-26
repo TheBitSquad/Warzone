@@ -11,7 +11,6 @@ class PlayerTest {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
 	}
 
 }

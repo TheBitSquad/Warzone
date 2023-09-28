@@ -3,6 +3,8 @@ package org.bitsquad.warzone.continent;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import org.bitsquad.warzone.country.Country;
+
 /**
  * Represents a Continent Object
  * 
@@ -53,14 +55,14 @@ public class Continent {
     * Getter  method for Countries hashmap
     * @return the hashmap of countries
     */
-    public Map<Integer, Country> getCountries() {
+    public HashMap<Integer, Country> getCountries() {
         return d_countries;
     }
     /**
      * Setter method of countries hashmap.
      * @param p_countries the hashmap of countries
      */
-    public void setCountries(Map<Integer, Country> p_countries) {
+    public void setCountries(HashMap<Integer, Country> p_countries) {
         this.d_countries = p_countries;
     }
     

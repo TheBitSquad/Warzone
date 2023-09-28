@@ -1,97 +1,86 @@
 package org.bitsquad.warzone.continent;
 
+import java.util.HashMap;
+import java.util.Scanner;
+
 /**
  * Represents a Continent Object
  * 
  * This class defines a continent with its ID, its constituent Countries and its bonus value.
  */
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-
-class Continent {
-    //declaring variables for continentid
-    private int continetId;
-    private int value;
-    private Map<Integer, String> countries;
+public class Continent {
+    
+    private int d_continentId;
+    private int d_value;
+    private HashMap<Integer, Country> d_countries;
 
     public Continent() {
-        countries = new HashMap<>();
+        d_countries = new HashMap<>();
     }
 
-    // Getter and Setter methods for 'id'
+    /**
+     * Getter method of continentId.
+     * @return the id of the continent
+     */
     public int getId() {
-        return continetId;
+        return d_continentId;
     }
 
-    public void setId(int continetId) {
-        this.continetId = continetId;
+    /**
+     *  Setter method of continentId.
+     * @param p_continentId the continent id
+     */
+    public void setId(int p_continentId) {
+        this.d_continentId = p_continentId;
     }
 
-    // Getter and Setter methods for 'value'
+    /**
+     *  getter method of the bonus value of continent
+     * @return the bonus value of continent 
+     */
     public int getValue() {
-        return value;
+        return d_value;
+    }
+    /**
+     * Setter method of bonus value
+     * @param p_value the bonus value of the continent
+     * @return the value
+     */
+    public void setValue(int p_value) {
+        this.d_value = p_value;
+    }
+    /** 
+    * Getter  method for Countries hashmap
+    * @return the hashmap of countries
+    */
+    public Map<Integer, Country> getCountries() {
+        return d_countries;
+    }
+    /**
+     * Setter method of countries hashmap.
+     * @param p_countries the hashmap of countries
+     */
+    public void setCountries(Map<Integer, Country> p_countries) {
+        this.d_countries = p_countries;
+    }
+    
+
+    /** 
+    * Method to add a Country
+    * @param p_countryId the country id
+    * @param p_countryName the name of the country
+    */
+    public void addCountry(int p_countryId, String p_countryName) {
+       
+        //TODO: Need to implement Country class
+        d_countries.putIfAbsent(p_countryId, new Country());
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    // Getter and Setter methods for 'countries'
-    public Map<Integer, String> getCountries() {
-        return countries;
-    }
-
-    public void setCountries(Map<Integer, String> countries) {
-        this.countries = countries;
-    }
-// to check the existing country id 
-    // Method to add a country
-    public void addCountry(int countryId, String countryName) {
-        countries.put(countryId, countryName);
-    }
-// country not exists
-    // Method to remove a country by its code
-    public void removeCountry(int countryId) {
-        countries.remove(countryId);
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Continent continent = new Continent();
-
-        System.out.print("'continentId': ");
-        int continentId = scanner.nextInt();
-        continent.setId(continentId);
-
-        System.out.print("'value': ");
-        int value = scanner.nextInt();
-        continent.setValue(value);
-
-        // Add countries
-        continent.addCountry(123, "India");
-        continent.addCountry(145, "Canada");
-
-        // Display current countries
-        System.out.println(continent.getCountries());
-
-        // Remove a country by code
-        System.out.print("Enter a country Id to remove: ");
-        int countryIdToRemove = scanner.nextInt();
-        continent.removeCountry(countryIdToRemove);
-        //updated list after removing
-        System.out.println("Updated Countries: " + continent.getCountries());
-        //add country by name and id
-        System.out.print("Enter a country Id and country Name: ");
-        int countryIdToAdd = scanner.nextInt();
-        String countryNameToAdd = scanner.nextLine();
-        continent.addCountry(countryIdToAdd, countryNameToAdd);
-        //updated list
-        System.out.println("Updated Countries: " + continent.getCountries());
-
-        scanner.close();
+    /**
+    * Method to remove a country using country Id
+    * @param p_countryId  the country id
+    */
+    public void removeCountry(int p_countryId) {
+        d_countries.remove(p_countryId);
     }
 }
-

@@ -12,14 +12,14 @@ public class Order {
     public int d_sourceCountryID;
     public int d_targetCountryID;
     public int d_noOfArmyUnits;
-    public typeOfAction d_typeOfAction;
+    public TYPEOFACTION d_typeOfAction;
 
-    public enum typeOfAction {
+    public enum TYPEOFACTION {
         DEPLOY, ADVANCE, BOMB, BLOCKADE, AIRLIFT, NEGOTIATE
     };
 
     public Order(int p_playerID, int p_sourceCountryID, int p_targetCountryID, int p_noOfArmyUnits,
-            typeOfAction p_typeOfAction) {
+            TYPEOFACTION p_typeOfAction) {
         this.d_playerID = p_playerID;
         this.d_sourceCountryID = p_sourceCountryID;
         this.d_targetCountryID = p_targetCountryID;

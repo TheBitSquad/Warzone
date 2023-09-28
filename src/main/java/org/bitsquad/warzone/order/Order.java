@@ -9,83 +9,90 @@ package org.bitsquad.warzone.order;
  * 
  */
 public class Order {
-    public int d_playerID;
-    public int d_sourceCountryID;
-    public int d_targetCountryID;
+    public int d_playerId;
+    public int d_sourceCountryId;
+    public int d_targetCountryId;
     public int d_noOfArmyUnits;
-    public TYPEOFACTION d_typeOfAction;
+    public TYPEOFACTION d_action;
 
     public enum TYPEOFACTION {
         DEPLOY, ADVANCE, BOMB, BLOCKADE, AIRLIFT, NEGOTIATE
     };
 
     /**
+     * Parametrized Constructor Order
      * 
-     * @param p_playerID        Player ID
-     * @param p_sourceCountryID Source Country ID
-     * @param p_targetCountryID Target Country ID
+     * @param p_playerId        Player ID
+     * @param p_sourceCountryId Source Country ID
+     * @param p_targetCountryId Target Country ID
      * @param p_noOfArmyUnits   No of Army Units
-     * @param p_typeOfAction    Type of Actions
+     * @param p_action          Type of Actions
      */
-
-    public Order(int p_playerID, int p_sourceCountryID, int p_targetCountryID, int p_noOfArmyUnits,
-            TYPEOFACTION p_typeOfAction) {
-        this.d_playerID = p_playerID;
-        this.d_sourceCountryID = p_sourceCountryID;
-        this.d_targetCountryID = p_targetCountryID;
+    public Order(int p_playerId, int p_sourceCountryId, int p_targetCountryId, int p_noOfArmyUnits,
+            TYPEOFACTION p_action) {
+        this.d_playerId = p_playerId;
+        this.d_sourceCountryId = p_sourceCountryId;
+        this.d_targetCountryId = p_targetCountryId;
         this.d_noOfArmyUnits = p_noOfArmyUnits;
-        this.d_typeOfAction = p_typeOfAction;
+        this.d_action = p_action;
     }
 
     /**
+     * Setter for Player Id
      * 
-     * @param p_playerID Setting the player ID
+     * @param p_playerId Setting the player ID
      */
-    public void setPlayerID(int p_playerID) {
-        d_playerID = p_playerID;
+    public void setPlayerId(int p_playerId) {
+        d_playerId = p_playerId;
     }
 
     /**
+     * Getter for player Id
      * 
-     * @return Returns the player ID
+     * @return Returns the player Id
      */
-    public int getPlayerID() {
-        return d_playerID;
+    public int getPlayerId() {
+        return d_playerId;
     }
 
     /**
+     * Setter for source country Id
      * 
-     * @param p_sourceCountryID Setting the source country ID
+     * @param p_sourceCountryId Setting the source country Id
      */
-    public void setSourceCountryID(int p_sourceCountryID) {
-        d_sourceCountryID = p_sourceCountryID;
+    public void setSourceCountryId(int p_sourceCountryId) {
+        d_sourceCountryId = p_sourceCountryId;
     }
 
     /**
+     * Getter for source country Id
      * 
-     * @return Returns the source country ID
+     * @return Returns the source country Id
      */
-    public int getSourceCountryID() {
-        return d_sourceCountryID;
+    public int getSourceCountryId() {
+        return d_sourceCountryId;
     }
 
     /**
+     * Setter method for target country Id
      * 
-     * @param p_targetCountryID Setting the target country ID
+     * @param p_targetCountryId Setting the target country Id
      */
-    public void setTargetCountryID(int p_targetCountryID) {
-        d_targetCountryID = p_targetCountryID;
+    public void setTargetCountryId(int p_targetCountryId) {
+        d_targetCountryId = p_targetCountryId;
     }
 
     /**
+     * Getter method for target country Id
      * 
-     * @return Returns the target country ID
+     * @return Returns the target country Id
      */
-    public int getTargetCountryID() {
-        return d_targetCountryID;
+    public int getTargetCountryId() {
+        return d_targetCountryId;
     }
 
     /**
+     * Setter method for number of army units
      * 
      * @param p_noOfArmyUnits Setting the number of army units
      */
@@ -94,11 +101,30 @@ public class Order {
     }
 
     /**
+     * Getter method for number of army units
      * 
      * @return Returns the number of army units
      */
     public int getNoOfArmyUnits() {
         return d_noOfArmyUnits;
+    }
+
+    /**
+     * Getter for Type of Actions
+     * 
+     * @return Returns the type of actions
+     */
+    public TYPEOFACTION getAction() {
+        return d_action;
+    }
+
+    /**
+     * Setter for Type of Actions
+     * 
+     * @param p_action Setts the type of actions
+     */
+    public void setAction(TYPEOFACTION p_action) {
+        d_action = p_action;
     }
 
     // TODO: Need to implement

@@ -38,14 +38,9 @@ public class Country {
 
 
     Country(){
-        this.d_countryId = 0;
-        this.d_countryName = "n";
-        this.d_noOfArmies= 0;
-        this.d_continentId= 0;
-        this.d_ownedByPlayerId = 0;
         this.d_neighbors = new ArrayList<Integer>();
     }
-    Country(int p_countryId,String p_countryName,int p_noOfArmies,int p_continentId,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
+    Country(int p_countryId,int p_continentId,String p_countryName,int p_noOfArmies,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
         this.d_countryId = p_countryId;
         this.d_countryName = p_countryName;
         this.d_noOfArmies= p_noOfArmies;
@@ -68,9 +63,7 @@ public class Country {
      * @param p_id the id of country.
      */
     public void setCountryId(int p_countryId) {
-        if (p_countryId>=1) {
-            this.d_countryId = p_countryId;
-        }
+        this.d_countryId = p_countryId;
     }
 
 
@@ -163,12 +156,10 @@ public class Country {
      * @param p_neighborCountryId the id of the neighbor.
      */
     public boolean addNeighbor(int p_neighborCountryId) {
-        if (d_neighbors.contains(p_neighborCountryId) == false) {
+        if (!d_neighbors.contains(p_neighborCountryId) && p_neighborCountryId!=this.d_countryId) {
             d_neighbors.add(p_neighborCountryId);
             return true;
-        }
-        else {
-            System.out.println("The Neighbor Country is already is added");
+        } else {
             return false;
         }
 
@@ -179,7 +170,7 @@ public class Country {
      * @param p_neighborCountryId the id of the neighbor country.
      */
     public boolean removeNeighbor(int p_neighborCountryId) {
-        if(p_neighborCountryId>=1 && d_neighbors.contains(p_neighborCountryId)) {
+        if(d_neighbors.contains(p_neighborCountryId)) {
             d_neighbors.remove(Integer.valueOf(p_neighborCountryId));
             return true;
         }
@@ -187,5 +178,4 @@ public class Country {
             return false;
         }
     }
-
 }

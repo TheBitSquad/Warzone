@@ -37,20 +37,33 @@ public class Country {
      */
     private ArrayList<Integer> d_neighbors;
 
-    
+    /**
+     * Default constructor
+     */
     Country(){
         this.d_neighbors = new ArrayList<Integer>();
     }
-    Country(int p_countryId){
-        this.d_countryId = p_countryId;
-        this.d_neighbors = new ArrayList<Integer>();
-    }
-    Country(int p_countryId, int p_continentId){
+
+    /**
+     * Parameterized constructor
+     * @param p_countryId country ID
+     * @param p_continentId continent ID
+     */
+    public Country(int p_countryId, int p_continentId){
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
         this.d_neighbors = new ArrayList<Integer>();
     }
-    Country(int p_countryId,int p_continentId,String p_countryName,int p_armyValue,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
+    /**
+     * Parameterized constructor
+     * @param p_countryId country ID
+     * @param p_continentId continent ID
+     * @param p_countryName country name
+     * @param p_armyValue the number of army units present in a country
+     * @param p_neighbors the neighbors of a country
+     * @param p_ownedByPlayerId the playerid of the owner of the country
+     */
+    public Country(int p_countryId,int p_continentId,String p_countryName,int p_armyValue,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
         this.d_countryName = p_countryName;

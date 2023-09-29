@@ -50,11 +50,12 @@ public class Continent {
 
     /**
      *  getter method of the bonus value of continent
-     * @return the bonus value of continent 
+     * @return d_bonusValue the bonus value of continent
      */
     public int getValue() {
         return d_bonusValue;
     }
+
     /**
      * Setter method of bonus value
      * @param p_bonusValue the bonus value of the continent

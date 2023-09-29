@@ -106,7 +106,7 @@ public class Country {
      * Setter method of Army Value.
      * @param p_armyValue the number of Country's Armies.
      */
-    public void setArmy_Value(int p_armyValue) {
+    public void setArmyValue(int p_armyValue) {
         this.d_armyValue = p_armyValue;
     }
 

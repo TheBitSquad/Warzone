@@ -1,9 +1,10 @@
 package org.bitsquad.warzone.country;
 import java.util.ArrayList;
+
 /**
  * Represents a country object.
  * 
- * This class defines a country with its ID, list of neighbours and other relevant details according to system design.
+ * This class defines a country with its ID, list of neighbors and other relevant details according to system design.
  */
 public class Country {
     /**
@@ -17,9 +18,9 @@ public class Country {
     private String d_countryName;
 
     /**
-     * noOfArmies stores the number of Armies allocated to the country by the owner.
+     * The number of Armies allocated to the country.
      */
-    private int d_noOfArmies;
+    private int d_armyValue;
 
     /**
      * The id of the continent to which the country belongs.
@@ -32,26 +33,35 @@ public class Country {
     private int d_ownedByPlayerId;
 
     /**
-     * d_neighbors stores the list of neighbor countries' id.
+     * The list of neighbor countries' id.
      */
     private ArrayList<Integer> d_neighbors;
 
-
+    
     Country(){
         this.d_neighbors = new ArrayList<Integer>();
     }
-    Country(int p_countryId,int p_continentId,String p_countryName,int p_noOfArmies,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
+    Country(int p_countryId){
         this.d_countryId = p_countryId;
-        this.d_countryName = p_countryName;
-        this.d_noOfArmies= p_noOfArmies;
+        this.d_neighbors = new ArrayList<Integer>();
+    }
+    Country(int p_countryId, int p_continentId){
+        this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
+        this.d_neighbors = new ArrayList<Integer>();
+    }
+    Country(int p_countryId,int p_continentId,String p_countryName,int p_armyValue,int p_ownedByPlayerId,ArrayList<Integer> p_neighbors){
+        this.d_countryId = p_countryId;
+        this.d_continentId= p_continentId;
+        this.d_countryName = p_countryName;
+        this.d_armyValue= p_armyValue;
         this.d_ownedByPlayerId = p_ownedByPlayerId;
         this.d_neighbors = p_neighbors;
     }
 
 
     /**
-     *  getter method of Country Id.
+     * Getter method for the Country Id.
      * @return the id of the country
      */
     public int getCountryId() {
@@ -59,8 +69,8 @@ public class Country {
     }
 
     /**
-     * setId method will set the id of the Country.
-     * @param p_id the id of country.
+     * Setter method for the Country Id.
+     * @param p_countryId the id of country.
      */
     public void setCountryId(int p_countryId) {
         this.d_countryId = p_countryId;
@@ -68,7 +78,7 @@ public class Country {
 
 
     /**
-     * getter method for Country name
+     * Getter method for the Country Name.
      * @return the country name.
      */
     public String getCountryName() {
@@ -76,8 +86,8 @@ public class Country {
     }
 
     /**
-     * setter method for country name.
-     * @param p_countryName
+     * Setter method for the Country Name
+     * @param p_countryName the Country name
      */
     public void setCountryName(String p_countryName) {
         this.d_countryName = p_countryName;
@@ -85,19 +95,19 @@ public class Country {
 
 
     /**
-     * Getter method of NoOfArmies which get number of Country's Armies.
-     * @return the number of Armies allocated to the country by the owner.
+     * Getter method for Army Value.
+     * @return the number of Armies allocated to the country.
      */
-    public int getNoOfArmies() {
-        return d_noOfArmies;
+    public int getArmyValue() {
+        return d_armyValue;
     }
 
     /**
-     * Setter method of noOfArmies.
-     * @param p_noOfArmies the number of Country's Armies.
+     * Setter method of Army Value.
+     * @param p_armyValue the number of Country's Armies.
      */
-    public void setNoOfArmies(int p_noOfArmies) {
-        this.d_noOfArmies = p_noOfArmies;
+    public void setArmy_Value(int p_armyValue) {
+        this.d_armyValue = p_armyValue;
     }
 
 
@@ -154,6 +164,7 @@ public class Country {
     /**
      *  addNeighbor method add the id of the neighbor country in the neighbors list.
      * @param p_neighborCountryId the id of the neighbor.
+     * @return true if the condition is true otherwise false 
      */
     public boolean addNeighbor(int p_neighborCountryId) {
         if (!d_neighbors.contains(p_neighborCountryId) && p_neighborCountryId!=this.d_countryId) {
@@ -168,6 +179,7 @@ public class Country {
     /**
      * removeNeighbor method remove the id of the neighbor country from the neighbors list.
      * @param p_neighborCountryId the id of the neighbor country.
+     * @return true if the condition is true otherwise false
      */
     public boolean removeNeighbor(int p_neighborCountryId) {
         if(d_neighbors.contains(p_neighborCountryId)) {
@@ -179,3 +191,4 @@ public class Country {
         }
     }
 }
+

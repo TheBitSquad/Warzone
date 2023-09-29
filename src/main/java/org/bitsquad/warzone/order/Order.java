@@ -9,11 +9,11 @@ package org.bitsquad.warzone.order;
  * 
  */
 public class Order {
-    public int d_playerId;
-    public int d_sourceCountryId;
-    public int d_targetCountryId;
-    public int d_noOfArmyUnits;
-    public TYPEOFACTION d_action;
+    private int d_playerId;
+    private int d_sourceCountryId;
+    private int d_targetCountryId;
+    private int d_noOfArmyUnits;
+    private TYPEOFACTION d_action;
 
     public enum TYPEOFACTION {
         DEPLOY, ADVANCE, BOMB, BLOCKADE, AIRLIFT, NEGOTIATE
@@ -47,7 +47,7 @@ public class Order {
     }
 
     /**
-     * Getter for player Id
+     * Getter for Player Id
      * 
      * @return Returns the player Id
      */
@@ -101,9 +101,9 @@ public class Order {
     }
 
     /**
-     * Getter method for number of army units
+     * Getter method for number of army units involved
      * 
-     * @return Returns the number of army units
+     * @return Returns the number of army units involved
      */
     public int getNoOfArmyUnits() {
         return d_noOfArmyUnits;

@@ -15,6 +15,9 @@ public class Continent {
     private int d_bonusValue;
     private HashMap<Integer, Country> d_countries;
 
+    /**
+     * Default Constructor
+     */
     public Continent() {
         d_countries = new HashMap<>();
     }
@@ -55,7 +58,6 @@ public class Continent {
     /**
      * Setter method of bonus value
      * @param p_bonusValue the bonus value of the continent
-     * @return the value
      */
     public void setValue(int p_bonusValue) {
         this.d_bonusValue = p_bonusValue;

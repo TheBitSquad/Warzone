@@ -1,7 +1,6 @@
 package org.bitsquad.warzone.continent;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 import org.bitsquad.warzone.country.Country;
 
@@ -13,11 +12,21 @@ import org.bitsquad.warzone.country.Country;
 public class Continent {
     
     private int d_continentId;
-    private int d_value;
+    private int d_bonusValue;
     private HashMap<Integer, Country> d_countries;
 
     public Continent() {
         d_countries = new HashMap<>();
+    }
+
+    /**
+     * Parameterized Constructor
+     * @param p_continentId continent ID
+     * @param p_bonusValue continents' bonus value
+     */
+    public Continent(int p_continentId, int p_bonusValue){
+        d_continentId = p_continentId;
+        d_bonusValue = p_bonusValue;
     }
 
     /**
@@ -41,15 +50,15 @@ public class Continent {
      * @return the bonus value of continent 
      */
     public int getValue() {
-        return d_value;
+        return d_bonusValue;
     }
     /**
      * Setter method of bonus value
-     * @param p_value the bonus value of the continent
+     * @param p_bonusValue the bonus value of the continent
      * @return the value
      */
-    public void setValue(int p_value) {
-        this.d_value = p_value;
+    public void setValue(int p_bonusValue) {
+        this.d_bonusValue = p_bonusValue;
     }
     /** 
     * Getter  method for Countries hashmap

@@ -40,7 +40,7 @@ public class Country {
     /**
      * Default constructor
      */
-    Country(){
+    public Country(){
         this.d_neighbors = new ArrayList<Integer>();
     }
 

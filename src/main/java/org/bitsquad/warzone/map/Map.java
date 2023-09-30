@@ -2,6 +2,10 @@ package org.bitsquad.warzone.map;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -115,4 +119,99 @@ public class Map {
         }
     }
 
+    /**
+     * Load the continent details from the text file to Map
+     * @param p_bufferedReader BufferedReader object to read the text file
+     * @throws IOException handles IOException
+     */
+    void loadContinents(BufferedReader p_bufferedReader) throws IOException {
+        String l_lines = p_bufferedReader.readLine();
+        try{
+            while (!(l_lines == null) && !(l_lines.isEmpty())) {
+                String[] l_data = l_lines.split(" ");
+                addContinent(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
+                l_lines = p_bufferedReader.readLine();
+            }
+            p_bufferedReader.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load the country details from the text file to Map
+     * @param p_bufferedReader BufferedReader object to read the text file
+     * @throws IOException handles IOException
+     */
+    void loadCountries(BufferedReader p_bufferedReader) throws IOException {
+        String l_lines = p_bufferedReader.readLine();
+        try{
+            while (!(l_lines == null) && !(l_lines.isEmpty())) {
+                String[] l_data = l_lines.split(" ");
+                addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
+                l_lines = p_bufferedReader.readLine();
+            }
+            p_bufferedReader.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load the Neighbors details from the text file to Map
+     * @param p_bufferedReader BufferedReader object to read the text file
+     * @throws IOException handles IOException
+     */
+    void loadNeighbors(BufferedReader p_bufferedReader) throws IOException {
+        String l_lines = p_bufferedReader.readLine();
+        try{
+            while (!(l_lines == null) && !(l_lines.isEmpty())) {
+                String[] l_data = l_lines.split(" ");
+                int l_sourceCountry = Integer.parseInt(l_data[0]);
+                for(int i = 1 ; i < l_data.length ; i++){
+                    int l_destinationCountry = Integer.parseInt(l_data[i]);
+                    addNeighbor(l_sourceCountry, l_destinationCountry);
+                }
+                l_lines = p_bufferedReader.readLine();
+            }
+            p_bufferedReader.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load contents of the text file to Map
+     * @param p_fileName Map file name
+     */
+    void loadMap(String p_fileName) {
+        File l_file_name = new File(p_fileName+".txt");
+        try{
+            if(l_file_name.exists()){
+                BufferedReader l_bufferedReader = new BufferedReader(new FileReader(l_file_name));
+                String l_lines = null;
+                while((l_lines = l_bufferedReader.readLine()) != null){
+                    switch (l_lines) {
+                        case "[continents]": loadContinents(l_bufferedReader);
+                            break;
+                        case "[countries]": loadCountries(l_bufferedReader);
+                            break;
+                        case "[neighbors]": loadNeighbors(l_bufferedReader);
+                            break;
+                    }
+                }
+                l_bufferedReader.close();
+            }
+        }
+        catch (Exception e){
+            System.err.println("Unable to load the map.");
+        }
+    }
+
+    void saveMap(String p_fileName){
+
+    }
 }

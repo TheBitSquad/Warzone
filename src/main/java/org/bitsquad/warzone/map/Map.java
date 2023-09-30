@@ -121,9 +121,9 @@ public class Map {
      * @param p_bufferedReader BufferedReader object to read the text file
      * @throws IOException handles IOException
      */
-    void loadContinents(BufferedReader p_bufferedReader) throws IOException {
-        String l_lines = p_bufferedReader.readLine();
+    void loadContinents(BufferedReader p_bufferedReader) {
         try{
+            String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
                 addContinent(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
@@ -138,11 +138,10 @@ public class Map {
     /**
      * Load the country details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
-     * @throws IOException handles IOException
      */
-    void loadCountries(BufferedReader p_bufferedReader) throws IOException {
-        String l_lines = p_bufferedReader.readLine();
+    void loadCountries(BufferedReader p_bufferedReader) {
         try{
+            String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
                 addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
@@ -159,9 +158,9 @@ public class Map {
      * @param p_bufferedReader BufferedReader object to read the text file
      * @throws IOException handles IOException
      */
-    void loadNeighbors(BufferedReader p_bufferedReader) throws IOException {
-        String l_lines = p_bufferedReader.readLine();
+    void loadNeighbors(BufferedReader p_bufferedReader) {
         try{
+            String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
                 int l_sourceCountry = Integer.parseInt(l_data[0]);
@@ -200,8 +199,8 @@ public class Map {
                 l_bufferedReader.close();
             }
         }
-        catch (Exception e){
-            System.err.println("Unable to load the map.");
+        catch (IOException e){
+            System.err.println("Unable to load the map," + e.getMessage());
         }
     }
 

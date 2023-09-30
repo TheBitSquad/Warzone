@@ -61,7 +61,7 @@ public class Map {
      * @return boolean if adding a country to an existing continent, else false
      */
     boolean addCountry(int p_countryId, int p_continentId){
-        if(d_continents.keySet().contains(p_continentId)){
+        if(d_continents.containsKey(p_continentId)){
             Continent l_continent = d_continents.get(p_continentId);
             l_continent.addCountry(p_countryId, "");
             return true;
@@ -92,7 +92,8 @@ public class Map {
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
                 Country l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
                 l_sourceCountry.addNeighbor(p_destinationCountryId);
-            } else if (l_continent.getCountries().containsKey(p_destinationCountryId)){
+            }
+            if (l_continent.getCountries().containsKey(p_destinationCountryId)){
                 Country l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
                 l_destinationCountry.addNeighbor(p_sourceCountryId);
             }
@@ -190,9 +191,9 @@ public class Map {
                     switch (l_lines) {
                         case "[continents]": loadContinents(l_bufferedReader);
                             break;
-                        case "[countries]": //loadCountries(l_bufferedReader);
+                        case "[countries]": loadCountries(l_bufferedReader);
                             break;
-                        case "[neighbors]": //loadNeighbors(l_bufferedReader);
+                        case "[neighbors]": loadNeighbors(l_bufferedReader);
                             break;
                     }
                 }
@@ -222,10 +223,10 @@ public class Map {
                 for(int l_countryId: l_continents.getCountries().keySet()){
                     l_bufferedWriter.write(l_countryId + " " + l_continents.getId() + "\n");
                     //building neighbors list
-                    l_stringBuilder.append(l_countryId).append(" ");
+                    l_stringBuilder.append(l_countryId);
                     Country l_country = l_continents.getCountries().get(l_countryId);
                     for (int neighborId : l_country.getNeighbors()) {
-                        l_stringBuilder.append(neighborId).append(" ");
+                        l_stringBuilder.append(" ").append(neighborId);
                     }
                     l_stringBuilder.append("\n");
                 }

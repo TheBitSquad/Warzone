@@ -2,10 +2,7 @@ package org.bitsquad.warzone.map;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -132,7 +129,6 @@ public class Map {
                 addContinent(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
                 l_lines = p_bufferedReader.readLine();
             }
-            p_bufferedReader.close();
         }
         catch (IOException e){
             e.printStackTrace();
@@ -152,7 +148,6 @@ public class Map {
                 addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
                 l_lines = p_bufferedReader.readLine();
             }
-            p_bufferedReader.close();
         }
         catch (IOException e){
             e.printStackTrace();
@@ -176,7 +171,6 @@ public class Map {
                 }
                 l_lines = p_bufferedReader.readLine();
             }
-            p_bufferedReader.close();
         }
         catch (IOException e){
             e.printStackTrace();
@@ -197,9 +191,9 @@ public class Map {
                     switch (l_lines) {
                         case "[continents]": loadContinents(l_bufferedReader);
                             break;
-                        case "[countries]": loadCountries(l_bufferedReader);
+                        case "[countries]": //loadCountries(l_bufferedReader);
                             break;
-                        case "[neighbors]": loadNeighbors(l_bufferedReader);
+                        case "[neighbors]": //loadNeighbors(l_bufferedReader);
                             break;
                     }
                 }
@@ -211,7 +205,39 @@ public class Map {
         }
     }
 
-    void saveMap(String p_fileName){
-
+    /**
+     * Write the Map data to a text file
+     * @param p_fileName FileName
+     */
+    void saveMap(String p_fileName) {
+        try{
+            StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
+            BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".txt"));
+            //save continents data
+            l_bufferedWriter.write("[continents]\n");
+            for(Continent l_continents : d_continents.values())
+                l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
+            //save countries data and build neighbors list
+            l_bufferedWriter.write("\n[countries]\n");
+            for(Continent l_continents : d_continents.values()) {
+                for(int l_countryId: l_continents.getCountries().keySet()){
+                    l_bufferedWriter.write(l_countryId + " " + l_continents.getId() + "\n");
+                    //building neighbors list
+                    l_stringBuilder.append(l_countryId).append(" ");
+                    Country l_country = l_continents.getCountries().get(l_countryId);
+                    for (int neighborId : l_country.getNeighbors()) {
+                        l_stringBuilder.append(neighborId).append(" ");
+                    }
+                    l_stringBuilder.append("\n");
+                }
+            }
+            l_bufferedWriter.append(l_stringBuilder);
+            l_bufferedWriter.flush();
+            l_bufferedWriter.close();
+        }
+        catch (IOException e){
+            System.err.println("Error saving the map" + e.getMessage());
+        }
     }
 }
+

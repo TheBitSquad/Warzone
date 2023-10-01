@@ -3,12 +3,13 @@ package org.bitsquad.warzone.map;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.bitsquad.warzone.country.Country;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * This tests the functionality of Map class.
  */
@@ -22,6 +23,32 @@ class MapTest {
 
 	@AfterEach
 	public void destroy(){ map = null; }
+
+
+	@AfterAll
+	public static void destroyAll(){
+		// Deleting temp created files
+		try {
+			// Delete the file
+			String filenames[] = {"tempMap.map", "savedMap.map", "testMap.map"};
+
+			for(String f_name: filenames){
+				Files.deleteIfExists(Paths.get(f_name));
+			}
+		}
+		// If the input directory is not empty
+		catch (DirectoryNotEmptyException e) {
+			System.err.println("Directory is not empty!");
+		}
+		// If some I/O error occurred
+		catch (IOException e) {
+			System.err.println("I/O error occurred");
+		}
+		// Delete access denied issue
+		catch (SecurityException e) {
+			System.err.println("Delete access denied!");
+		}
+	}
 
 	/**
 	 * Test addContinent Method

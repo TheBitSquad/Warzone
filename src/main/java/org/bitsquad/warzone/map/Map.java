@@ -8,7 +8,6 @@ import java.util.Set;
 
 /**
  * Represents a game map.
- *
  * This class defines a map with a list of continents and its Directed Graph as well all related functionality.
  */
 public class Map {
@@ -72,7 +71,7 @@ public class Map {
 
     /**
      * Removes a country from the map
-     * @param p_countryId
+     * @param p_countryId Country Id
      */
     void removeCountry(int p_countryId){
         for(Continent l_continent: d_continents.values()){
@@ -120,7 +119,6 @@ public class Map {
     /**
      * Load the continent details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
-     * @throws IOException handles IOException
      */
     void loadContinents(BufferedReader p_bufferedReader) {
         try{
@@ -157,7 +155,6 @@ public class Map {
     /**
      * Load the Neighbors details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
-     * @throws IOException handles IOException
      */
     void loadNeighbors(BufferedReader p_bufferedReader) {
         try{
@@ -179,10 +176,12 @@ public class Map {
 
     /**
      * Load contents of the text file to Map
+     *
      * @param p_fileName Map file name
+     * @return true if map loaded successfully
      */
-    void loadMap(String p_fileName) {
-        File l_file_name = new File(p_fileName+".txt");
+    boolean loadMap(String p_fileName) {
+        File l_file_name = new File(p_fileName+".map");
         try{
             if(l_file_name.exists()){
                 BufferedReader l_bufferedReader = new BufferedReader(new FileReader(l_file_name));
@@ -199,10 +198,12 @@ public class Map {
                 }
                 l_bufferedReader.close();
             }
+            return true;
         }
         catch (IOException e){
             System.err.println("Unable to load the map," + e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -212,7 +213,7 @@ public class Map {
     void saveMap(String p_fileName) {
         try{
             StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
-            BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".txt"));
+            BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
             //save continents data
             l_bufferedWriter.write("[continents]\n");
             for(Continent l_continents : d_continents.values())
@@ -237,6 +238,30 @@ public class Map {
         }
         catch (IOException e){
             System.err.println("Error saving the map" + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads the contents of map file to edit
+     * If file doesn't exist, create a new map file
+     * @param p_fileName Map file name
+     */
+    void editMap(String p_fileName) {
+        File l_fileName = new File(p_fileName+".map");
+        if(l_fileName.exists())
+            loadMap(p_fileName);
+        else{
+            try{
+                BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
+                l_bufferedWriter.write("[continents]\n\n");
+                l_bufferedWriter.write("[countries]\n\n");
+                l_bufferedWriter.write("[neighbors]\n");
+                l_bufferedWriter.flush();
+                l_bufferedWriter.close();
+            }
+            catch(IOException e){
+                System.err.println("Error creating new file" + e.getMessage());
+            }
         }
     }
 }

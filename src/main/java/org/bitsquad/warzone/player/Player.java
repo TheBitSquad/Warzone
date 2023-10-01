@@ -128,4 +128,18 @@ public class Player {
     public void setCurrentOrder(Order p_currentOrder) {
         this.d_currentOrder = p_currentOrder;
     }
+
+    /**
+     * Issues the current order
+     */
+    public void issueOrder() {
+        this.d_orderList.add(this.d_currentOrder);
+        this.d_currentOrder = new Order(
+                this.d_id,
+                0,
+                0,
+                0,
+                Order.TYPEOFACTION.DEPLOY
+        );
+    }
 }

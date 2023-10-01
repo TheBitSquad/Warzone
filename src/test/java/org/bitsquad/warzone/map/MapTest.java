@@ -3,7 +3,7 @@ package org.bitsquad.warzone.map;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.bitsquad.warzone.country.Country;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,15 +37,15 @@ class MapTest {
 	/**
 	 * Test addCountry Method
 	 */
-	@Ignore
+	@Test
 	public void testAddCountry() {
 		map.addContinent(1, 5);
 		assertTrue(map.addCountry(1, 1));
 		assertFalse(map.addCountry(1, 2));
 		assertNotNull(map.getContinents().get(1).getCountries().get(1));
-		//ToDo: check AddCountry method again
+
 		map.addContinent(2, 4);
-		map.addCountry(1,2);
+		assertFalse(map.addCountry(1,2));
 		assertNull(map.getContinents().get(2).getCountries().get(1));
 	}
 
@@ -69,8 +69,9 @@ class MapTest {
 		map.addCountry(1, 1);
 		map.addCountry(2, 2);
 		map.addCountry(3, 1);
-		map.addNeighbor(1, 2);
-		map.addNeighbor(1, 3);
+		assertTrue(map.addNeighbor(1, 2));
+		assertTrue(map.addNeighbor(1, 3));
+		assertTrue(map.addNeighbor(3, 1));
 		assertTrue(map.getContinents().get(1).getCountries().get(1).getNeighbors().contains(2));
 		assertTrue(map.getContinents().get(2).getCountries().get(2).getNeighbors().contains(1));
 	}

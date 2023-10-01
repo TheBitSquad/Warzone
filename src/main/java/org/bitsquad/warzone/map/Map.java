@@ -117,14 +117,17 @@ public class Map {
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
                 l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
-            } else if (l_continent.getCountries().containsKey(p_destinationCountryId)){
+            }
+            if (l_continent.getCountries().containsKey(p_destinationCountryId)){
                 l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
             }
         }
 
+        // Add the edge, only if both countries exist
         if(l_sourceCountry != null && l_destinationCountry != null){
-            return (l_sourceCountry.addNeighbor(p_destinationCountryId) &&
-                    l_destinationCountry.addNeighbor(p_sourceCountryId));
+            l_sourceCountry.addNeighbor(p_destinationCountryId);
+            l_destinationCountry.addNeighbor(p_sourceCountryId);
+            return true;
         } else {
             return false;
         }

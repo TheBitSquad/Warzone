@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.map;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -85,16 +86,24 @@ public class Map {
      * Adds a neighbor to a country
      * @param p_sourceCountryId sourceCountryId
      * @param p_destinationCountryId destinationCountryId
+     * @return boolean if both such countries exist, then true, else false
      */
-    void addNeighbor(int p_sourceCountryId, int p_destinationCountryId){
+    boolean addNeighbor(int p_sourceCountryId, int p_destinationCountryId){
+        Country l_sourceCountry = null, l_destinationCountry = null;
+
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
-                Country l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
-                l_sourceCountry.addNeighbor(p_destinationCountryId);
+                l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
             } else if (l_continent.getCountries().containsKey(p_destinationCountryId)){
-                Country l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
-                l_destinationCountry.addNeighbor(p_sourceCountryId);
+                l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
             }
+        }
+
+        if(l_sourceCountry != null && l_destinationCountry != null){
+            return (l_sourceCountry.addNeighbor(p_destinationCountryId) &&
+                    l_destinationCountry.addNeighbor(p_sourceCountryId));
+        } else {
+            return false;
         }
     }
 

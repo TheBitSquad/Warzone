@@ -60,7 +60,16 @@ public class Map {
      * @return boolean if adding a country to an existing continent, else false
      */
     boolean addCountry(int p_countryId, int p_continentId){
-        if(d_continents.keySet().contains(p_continentId)){
+
+        // Check if the country is present in any continent
+        for(Continent l_continent: d_continents.values()){
+            if(l_continent.getCountries().containsKey(p_countryId)){
+                return false;
+            }
+        }
+
+        // Check if the continent exists
+        if(d_continents.containsKey(p_continentId)){
             Continent l_continent = d_continents.get(p_continentId);
             l_continent.addCountry(p_countryId, "");
             return true;
@@ -77,6 +86,7 @@ public class Map {
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_countryId)){
                 l_continent.removeCountry(p_countryId);
+                break;
             }
         }
     }

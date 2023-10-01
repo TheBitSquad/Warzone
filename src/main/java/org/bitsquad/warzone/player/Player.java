@@ -142,4 +142,17 @@ public class Player {
                 Order.TYPEOFACTION.DEPLOY
         );
     }
+
+    /**
+     * Get the next order in the order list
+     *
+     * @return the next order
+     */
+    public Order nextOrder() {
+        if (this.d_orderList.isEmpty()) {
+            return null;
+        }
+
+        return this.d_orderList.remove(0);
+    }
 }

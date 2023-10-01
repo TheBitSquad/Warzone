@@ -11,13 +11,26 @@ import java.util.Set;
  * This class defines a map with a list of continents and its Directed Graph as well all related functionality.
  */
 public class Map {
-    HashMap<Integer, Continent> d_continents;
+
+    private HashMap<Integer, Continent> d_continents;
 
     /**
      * Default Constructor
      */
     Map(){
         d_continents = new HashMap<Integer, Continent>();
+    }
+
+    /**
+     * Getter method for continents
+     * @return d_continents the continents in a map
+     */
+    public HashMap<Integer, Continent> getContinents() {
+        return d_continents;
+    }
+
+    public Continent getContinent(int p_continentId){
+        return d_continents.get(p_continentId);
     }
 
     /**

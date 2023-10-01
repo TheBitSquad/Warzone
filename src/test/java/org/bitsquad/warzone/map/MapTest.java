@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.bitsquad.warzone.country.Country;
 import org.junit.Ignore;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,15 +20,18 @@ class MapTest {
 		map = new Map();
 	}
 
+	@AfterEach
+	public void destroy(){ map = null; }
+
 	/**
 	 * Test addContinent Method
 	 */
 	@Test
 	public void testAddContinent() {
 		map.addContinent(1, 5);
-		assertNotNull(map.d_continents.get(1));
-		assertNull(map.d_continents.get(2));
-		assertEquals(5, map.d_continents.get(1).getValue());
+		assertNotNull(map.getContinents().get(1));
+		assertNull(map.getContinents().get(2));
+		assertEquals(5, map.getContinents().get(1).getValue());
 	}
 
 	/**
@@ -38,11 +42,11 @@ class MapTest {
 		map.addContinent(1, 5);
 		assertTrue(map.addCountry(1, 1));
 		assertFalse(map.addCountry(1, 2));
-		assertNotNull(map.d_continents.get(1).getCountries().get(1));
+		assertNotNull(map.getContinents().get(1).getCountries().get(1));
 		//ToDo: check AddCountry method again
 		map.addContinent(2, 4);
 		map.addCountry(1,2);
-		assertNull(map.d_continents.get(2).getCountries().get(1));
+		assertNull(map.getContinents().get(2).getCountries().get(1));
 	}
 
 	/**
@@ -52,7 +56,7 @@ class MapTest {
 	public void testRemoveContinent() {
 		map.addContinent(1, 5);
 		assertTrue(map.removeContinent(1));
-		assertNull(map.d_continents.get(1));
+		assertNull(map.getContinents().get(1));
 	}
 
 	/**
@@ -67,8 +71,8 @@ class MapTest {
 		map.addCountry(3, 1);
 		map.addNeighbor(1, 2);
 		map.addNeighbor(1, 3);
-		assertTrue(map.d_continents.get(1).getCountries().get(1).getNeighbors().contains(2));
-		assertTrue(map.d_continents.get(2).getCountries().get(2).getNeighbors().contains(1));
+		assertTrue(map.getContinents().get(1).getCountries().get(1).getNeighbors().contains(2));
+		assertTrue(map.getContinents().get(2).getCountries().get(2).getNeighbors().contains(1));
 	}
 
 
@@ -82,7 +86,7 @@ class MapTest {
 		map.addCountry(2, 1);
 		map.addNeighbor(1, 2);
 		map.removeNeighbor(1, 2);
-		assertFalse(map.d_continents.get(1).getCountries().get(1).getNeighbors().contains(2));
+		assertFalse(map.getContinents().get(1).getCountries().get(1).getNeighbors().contains(2));
 	}
 
 	/**
@@ -98,16 +102,16 @@ class MapTest {
 		writer.flush();
 		writer.close();
 		map.loadMap("testMap");
-		assertNotNull(map.d_continents.get(1));
-		assertNotNull(map.d_continents.get(2));
-		assertNotNull(map.d_continents.get(1).getCountries().get(1));
-		assertNotNull(map.d_continents.get(1).getCountries().get(2));
-		assertNotNull(map.d_continents.get(2).getCountries().get(3));
-		assertNotNull(map.d_continents.get(2).getCountries().get(4));
-		assertTrue(map.d_continents.get(1).getCountries().get(1).getNeighbors().contains(2));
-		assertTrue(map.d_continents.get(1).getCountries().get(2).getNeighbors().contains(1));
-		assertTrue(map.d_continents.get(2).getCountries().get(3).getNeighbors().contains(4));
-		assertTrue(map.d_continents.get(2).getCountries().get(4).getNeighbors().contains(3));
+		assertNotNull(map.getContinents().get(1));
+		assertNotNull(map.getContinents().get(2));
+		assertNotNull(map.getContinents().get(1).getCountries().get(1));
+		assertNotNull(map.getContinents().get(1).getCountries().get(2));
+		assertNotNull(map.getContinents().get(2).getCountries().get(3));
+		assertNotNull(map.getContinents().get(2).getCountries().get(4));
+		assertTrue(map.getContinents().get(1).getCountries().get(1).getNeighbors().contains(2));
+		assertTrue(map.getContinents().get(1).getCountries().get(2).getNeighbors().contains(1));
+		assertTrue(map.getContinents().get(2).getCountries().get(3).getNeighbors().contains(4));
+		assertTrue(map.getContinents().get(2).getCountries().get(4).getNeighbors().contains(3));
 	}
 
 	/**

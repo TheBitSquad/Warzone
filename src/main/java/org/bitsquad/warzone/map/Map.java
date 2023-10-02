@@ -1,11 +1,20 @@
 package org.bitsquad.warzone.map;
+import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.swing.mxGraphComponent;
+
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
-import org.bitsquad.warzone.player.Player;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.ext.JGraphXAdapter;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a game map.
@@ -14,12 +23,14 @@ import java.util.Set;
 public class Map {
 
     private HashMap<Integer, Continent> d_continents;
+    private Graph<Country, DefaultEdge> d_graph;
 
     /**
      * Default Constructor
      */
-    Map(){
+    public Map(){
         d_continents = new HashMap<Integer, Continent>();
+        d_graph = new SimpleGraph<>(DefaultEdge.class);
     }
 
     /**
@@ -177,7 +188,7 @@ public class Map {
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
-                addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
+                addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[2]));
                 l_lines = p_bufferedReader.readLine();
             }
         }
@@ -226,7 +237,8 @@ public class Map {
                             break;
                         case "[countries]": loadCountries(l_bufferedReader);
                             break;
-                        case "[neighbors]": loadNeighbors(l_bufferedReader);
+                        case "[neighbors]":
+                        case "[borders]": loadNeighbors(l_bufferedReader);
                             break;
                     }
                 }
@@ -297,6 +309,107 @@ public class Map {
                 System.err.println("Error creating new file" + e.getMessage());
             }
         }
+    }
+
+    /**
+     * Populates the JgraphtT.graph data structure
+     */
+    private void populateJGraph(){
+
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+
+        // Add the vertices i.e. Countries
+        for(Continent l_continent: d_continents.values()){
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+            for(Country l_country: l_countries.values()){
+                d_graph.addVertex(l_country);
+            }
+        }
+
+        // Add the edges
+        for(Country l_country: l_allCountries.values()){
+            for(int l_neighborId: l_country.getNeighbors()){
+                d_graph.addEdge(l_country, l_allCountries.get(l_neighborId));
+            }
+        }
+    }
+
+    /**
+     * Checks if a continent is a subgraph
+     * @param l_continentId ContinentId
+     * @return boolean true if the continent is a subgraph
+     */
+    private boolean isContinentSubgraph(int l_continentId){
+        // Just checking if the subgraph of all Countries in a continent is a connected graph
+        Graph<Country, DefaultEdge> l_subgraph = new SimpleGraph<Country, DefaultEdge>(DefaultEdge.class);
+
+        Collection<Country> l_subgraphVertices =
+                d_continents.get(l_continentId).getCountries().values();
+
+        for(Country l_vertex: l_subgraphVertices){
+            l_subgraph.addVertex(l_vertex);
+        }
+
+        // Get all edges between those vertices
+        for(DefaultEdge l_edge: d_graph.edgeSet()){
+            Country l_source = d_graph.getEdgeSource(l_edge);
+            Country l_target = d_graph.getEdgeTarget(l_edge);
+
+            if(l_subgraphVertices.contains(l_source) && l_subgraphVertices.contains(l_target)){
+                l_subgraph.addEdge(l_source, l_target);
+            }
+        }
+        return GraphTests.isConnected(l_subgraph);
+    }
+
+    /**
+     * Checks if the graph is valid or not
+     * @return boolean true if the graph is valid
+     */
+    public boolean validateMap(){
+        populateJGraph();
+        if(GraphTests.isConnected(d_graph)){
+            for(int l_continentId: d_continents.keySet()){
+                if(!isContinentSubgraph(l_continentId))
+                    return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Used to visualise the game map
+     */
+    public void visualizeGraph(){
+
+        JFrame l_frame = new JFrame("Game Map");
+        l_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        l_frame.setSize(800, 600);
+        l_frame.getContentPane().setLayout(new BorderLayout());
+
+        JGraphXAdapter<Country, DefaultEdge> l_graphAdapter =
+                new JGraphXAdapter<>(d_graph);
+
+        l_graphAdapter.setCellsEditable(false);
+        l_graphAdapter.setConnectableEdges(false);
+        l_graphAdapter.setAllowDanglingEdges(false);
+        l_graphAdapter.setCellsBendable(false);
+        l_graphAdapter.setCellsMovable(false);
+        l_graphAdapter.setCellsLocked(true);
+
+        // Setting edge labels to null
+        l_graphAdapter.getEdgeToCellMap().forEach((edge, cell) -> cell.setValue(null));
+
+        mxOrganicLayout l_layout = new mxOrganicLayout(l_graphAdapter);
+        l_layout.execute(l_graphAdapter.getDefaultParent());
+
+        mxGraphComponent l_graphComponent = new mxGraphComponent(l_graphAdapter);
+        l_frame.getContentPane().add(l_graphComponent,BorderLayout.CENTER);
+        l_frame.setLocationRelativeTo(null);
+        l_frame.setVisible(true);
     }
 }
 

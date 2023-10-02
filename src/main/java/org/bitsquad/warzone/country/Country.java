@@ -73,6 +73,24 @@ public class Country {
     }
 
 
+    public String toString(){
+        return "CountryId: " + d_countryId
+                + "\nContinent Id: " + d_continentId
+                + "\njOwned by Player: " + d_ownedByPlayerId
+                + "\nArmy units: " + d_armyValue;
+    }
+
+    public int hashCode()
+    {
+        return toString().hashCode();
+    }
+
+    public boolean equals(Object l_obj)
+    {
+        return (l_obj instanceof Country)
+                && (toString().equals(l_obj.toString()));
+    }
+
     /**
      * Getter method for the Country Id.
      * @return the id of the country

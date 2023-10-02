@@ -54,7 +54,7 @@ public class Map {
      * @param p_continentId continentId
      * @param p_bonusValue bonus value of the continent
      */
-    void addContinent(int p_continentId, int p_bonusValue){
+    public void addContinent(int p_continentId, int p_bonusValue){
         d_continents.putIfAbsent(p_continentId, new Continent(p_continentId, p_bonusValue));
     }
 
@@ -63,7 +63,7 @@ public class Map {
      * @param p_continentId ID of the continent to be removed
      * @return boolean true if an existing continent is being removed, else false
      */
-    boolean removeContinent(int p_continentId){
+    public boolean removeContinent(int p_continentId){
         // Get the continent to be removed
         Continent l_continentToRemove = d_continents.get(p_continentId);
         if(l_continentToRemove == null) return false;
@@ -88,7 +88,7 @@ public class Map {
      * @param p_continentId ID of the continent to which the country needs to be added to
      * @return boolean if adding a country to an existing continent, else false
      */
-    boolean addCountry(int p_countryId, int p_continentId){
+    public boolean addCountry(int p_countryId, int p_continentId){
 
         // Check if the country is present in any continent
         for(Continent l_continent: d_continents.values()){
@@ -111,7 +111,7 @@ public class Map {
      * Removes a country from the map
      * @param p_countryId Country Id
      */
-    void removeCountry(int p_countryId){
+    public void removeCountry(int p_countryId){
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_countryId)){
                 l_continent.removeCountry(p_countryId);
@@ -126,7 +126,7 @@ public class Map {
      * @param p_destinationCountryId destinationCountryId
      * @return boolean if both such countries exist, then true, else false
      */
-    boolean addNeighbor(int p_sourceCountryId, int p_destinationCountryId){
+    public boolean addNeighbor(int p_sourceCountryId, int p_destinationCountryId){
         Country l_sourceCountry = null, l_destinationCountry = null;
 
         for(Continent l_continent: d_continents.values()){
@@ -153,7 +153,7 @@ public class Map {
      * @param p_sourceCountryId sourceCountryId
      * @param p_destinationCountryId destinationCountryId
      */
-    void removeNeighbor(int p_sourceCountryId, int p_destinationCountryId){
+    public void removeNeighbor(int p_sourceCountryId, int p_destinationCountryId){
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
                 Country l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
@@ -169,7 +169,7 @@ public class Map {
      * Load the continent details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
      */
-    void loadContinents(BufferedReader p_bufferedReader) {
+    private void loadContinents(BufferedReader p_bufferedReader) {
         try{
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
@@ -187,7 +187,7 @@ public class Map {
      * Load the country details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
      */
-    void loadCountries(BufferedReader p_bufferedReader) {
+    private void loadCountries(BufferedReader p_bufferedReader) {
         try{
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
@@ -205,7 +205,7 @@ public class Map {
      * Load the Neighbors details from the text file to Map
      * @param p_bufferedReader BufferedReader object to read the text file
      */
-    void loadNeighbors(BufferedReader p_bufferedReader) {
+    private void loadNeighbors(BufferedReader p_bufferedReader) {
         try{
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
@@ -224,13 +224,13 @@ public class Map {
     }
 
     /**
-     * Load contents of the text file to Map
+     * Load contents of the .map text file to Map
      *
      * @param p_fileName Map file name
      * @return true if map loaded successfully
      */
-    boolean loadMap(String p_fileName) {
-        File l_file_name = new File(p_fileName+".map");
+    public boolean loadMap(String p_fileName) {
+        File l_file_name = new File(p_fileName);
         try{
             if(l_file_name.exists()){
                 BufferedReader l_bufferedReader = new BufferedReader(new FileReader(l_file_name));
@@ -257,10 +257,10 @@ public class Map {
     }
 
     /**
-     * Write the Map data to a text file
+     * Write the Map data to a .map text file
      * @param p_fileName FileName
      */
-    void saveMap(String p_fileName) {
+    public void saveMap(String p_fileName) {
         try{
             StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
             BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
@@ -272,7 +272,7 @@ public class Map {
             l_bufferedWriter.write("\n[countries]\n");
             for(Continent l_continents : d_continents.values()) {
                 for(int l_countryId: l_continents.getCountries().keySet()){
-                    l_bufferedWriter.write(l_countryId + " " + l_continents.getId() + "\n");
+                    l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
                     //building neighbors list
                     l_stringBuilder.append(l_countryId);
                     Country l_country = l_continents.getCountries().get(l_countryId);
@@ -292,17 +292,17 @@ public class Map {
     }
 
     /**
-     * Loads the contents of map file to edit
-     * If file doesn't exist, create a new map file
+     * Loads the contents of .map file to edit
+     * If file doesn't exist, create a new .map file
      * @param p_fileName Map file name
      */
-    void editMap(String p_fileName) {
-        File l_fileName = new File(p_fileName+".map");
+    public void editMap(String p_fileName) {
+        File l_fileName = new File(p_fileName);
         if(l_fileName.exists())
             loadMap(p_fileName);
         else{
             try{
-                BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
+                BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName));
                 l_bufferedWriter.write("[continents]\n\n");
                 l_bufferedWriter.write("[countries]\n\n");
                 l_bufferedWriter.write("[neighbors]\n");
@@ -388,10 +388,9 @@ public class Map {
      * Used to visualise the game map
      */
     public void visualizeGraph(){
-
         JFrame l_frame = new JFrame("Game Map");
         l_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        l_frame.setSize(500, 500);
+        l_frame.setSize(800, 600);
         l_frame.getContentPane().setLayout(new BorderLayout());
 
         JGraphXAdapter<Country, DefaultEdge> l_graphAdapter =

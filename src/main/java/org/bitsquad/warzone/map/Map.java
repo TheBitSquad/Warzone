@@ -1,7 +1,11 @@
 package org.bitsquad.warzone.map;
+
 import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxUtils;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 
@@ -387,11 +391,18 @@ public class Map {
 
         JFrame l_frame = new JFrame("Game Map");
         l_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        l_frame.setSize(800, 600);
+        l_frame.setSize(500, 500);
         l_frame.getContentPane().setLayout(new BorderLayout());
 
         JGraphXAdapter<Country, DefaultEdge> l_graphAdapter =
                 new JGraphXAdapter<>(d_graph);
+
+        mxGraphComponent l_graphComponent = new mxGraphComponent(l_graphAdapter);
+        mxGraphModel l_graphModel = (mxGraphModel) l_graphComponent.getGraph().getModel();
+        Collection<Object> l_cells = l_graphModel.getCells().values();
+        // Remove arrow from edge
+        mxUtils.setCellStyles(l_graphComponent.getGraph().getModel(),
+                l_cells.toArray(), mxConstants.STYLE_ENDARROW, mxConstants.NONE);
 
         l_graphAdapter.setCellsEditable(false);
         l_graphAdapter.setConnectableEdges(false);
@@ -399,17 +410,16 @@ public class Map {
         l_graphAdapter.setCellsBendable(false);
         l_graphAdapter.setCellsMovable(false);
         l_graphAdapter.setCellsLocked(true);
-
         // Setting edge labels to null
         l_graphAdapter.getEdgeToCellMap().forEach((edge, cell) -> cell.setValue(null));
 
         mxOrganicLayout l_layout = new mxOrganicLayout(l_graphAdapter);
         l_layout.execute(l_graphAdapter.getDefaultParent());
 
-        mxGraphComponent l_graphComponent = new mxGraphComponent(l_graphAdapter);
         l_frame.getContentPane().add(l_graphComponent,BorderLayout.CENTER);
         l_frame.setLocationRelativeTo(null);
         l_frame.setVisible(true);
     }
+
 }
 

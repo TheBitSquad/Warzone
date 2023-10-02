@@ -123,13 +123,13 @@ class MapTest {
 	 */
 	@Test
 	public void testLoadMap() throws IOException {
-		String mapData = "[continents]\n1 5\n2 3\n\n[countries]\n1 1\n2 1\n3 2\n4 2\n\n[neighbors]\n1 2\n2 1\n3 4\n4 3\n";
+		String mapData = "[continents]\n1 5\n2 3\n\n[countries]\n1 Country_1 1\n2 Country_2 1\n3 Country_3 2\n4 Country_4 2\n\n[neighbors]\n1 2\n2 1\n3 4\n4 3\n";
 		File file = new File("testMap.map");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(mapData);
 		writer.flush();
 		writer.close();
-		map.loadMap("testMap");
+		map.loadMap("testMap.map");
 		assertNotNull(map.getContinents().get(1));
 		assertNotNull(map.getContinents().get(2));
 		assertNotNull(map.getContinents().get(1).getCountries().get(1));
@@ -167,7 +167,7 @@ class MapTest {
 		while ((line = l_bufferedReader.readLine()) != null) {
 			content.append(line).append("\n");
 		}
-		String expected = "[continents]\n1 5\n2 3\n\n[countries]\n1 1\n2 1\n3 2\n4 2\n\n[neighbors]\n1 2\n2 1 4\n3 4\n4 2 3\n";
+		String expected = "[continents]\n1 5\n2 3\n\n[countries]\n1 Country_1 1\n2 Country_2 1\n3 Country_3 2\n4 Country_4 2\n\n[neighbors]\n1 2\n2 1 4\n3 4\n4 2 3\n";
 		assertEquals(expected, content.toString());
 	}
 
@@ -179,9 +179,9 @@ class MapTest {
 	public void testEditMap() throws IOException{
 		File file = new File("tempMap.map");
 		if(file.exists())
-			assertTrue(map.loadMap("tempMap"));
+			assertTrue(map.loadMap("tempMap.map"));
 		else{
-			map.editMap("tempMap");
+			map.editMap("tempMap.map");
 			assertTrue(file.exists());
 			StringBuilder content = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new FileReader(file));

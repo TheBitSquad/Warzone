@@ -43,7 +43,7 @@ public class CliParser {
         CommandClassPhaseMap.put("Deploy", PHASE.ORDER);
     }
 
-    Class getClassName(String p_commandName) throws ClassNotFoundException {
+    private Class getClassName(String p_commandName) throws ClassNotFoundException {
         //TODO: Add a phase in the formal arguments maybe to check only in the valid phases
         String l_packageName = CliParser.class.getPackageName();
         String l_requiredKey = null;
@@ -64,7 +64,7 @@ public class CliParser {
         }
     }
 
-    CliResponse parseCommandString(String p_ip) throws ClassNotFoundException, CommandLine.ParameterException {
+    public CliResponse parseCommandString(String p_ip) throws ClassNotFoundException, CommandLine.ParameterException {
         if(p_ip == null) {
             System.err.println("No command was inputted");
             return new CliResponse(true, "No command was inputted", false);
@@ -75,7 +75,7 @@ public class CliParser {
         Object l_obj;
 
         if(l_command == null) {
-            System.err.println(l_ip_arr[0] + "is not a valid command");
+            System.err.println(l_ip_arr[0] + " is not a valid command");
             return new CliResponse(true, l_ip_arr[0] + " is not a valid command.", false);
         }
         try {

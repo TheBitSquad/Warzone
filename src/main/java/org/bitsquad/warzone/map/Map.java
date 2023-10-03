@@ -340,15 +340,15 @@ public class Map {
 
     /**
      * Checks if a continent is a subgraph
-     * @param l_continentId ContinentId
+     * @param p_continentId ContinentId
      * @return boolean true if the continent is a subgraph
      */
-    private boolean isContinentSubgraph(int l_continentId){
+    private boolean isContinentSubgraph(int p_continentId){
         // Just checking if the subgraph of all Countries in a continent is a connected graph
         Graph<Country, DefaultEdge> l_subgraph = new SimpleGraph<Country, DefaultEdge>(DefaultEdge.class);
 
         Collection<Country> l_subgraphVertices =
-                d_continents.get(l_continentId).getCountries().values();
+                d_continents.get(p_continentId).getCountries().values();
 
         for(Country l_vertex: l_subgraphVertices){
             l_subgraph.addVertex(l_vertex);

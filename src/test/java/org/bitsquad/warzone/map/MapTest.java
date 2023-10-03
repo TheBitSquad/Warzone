@@ -158,7 +158,11 @@ class MapTest {
 		map.addNeighbor(2, 1);
 		map.addNeighbor(2, 4);
 		map.addNeighbor(4, 3);
-		map.saveMap("savedMap");
+		try {
+			map.saveMap("savedMap");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		File file = new File("savedMap.map");
 		assertTrue(file.exists());
 		StringBuilder content = new StringBuilder();

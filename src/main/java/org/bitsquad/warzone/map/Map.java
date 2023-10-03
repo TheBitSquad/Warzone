@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.map;
 
 import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.layout.mxParallelEdgeLayout;
 import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 
@@ -318,7 +319,7 @@ public class Map {
      * Populates the JgraphtT.graph data structure
      */
     private void populateJGraph(){
-
+        d_graph = new SimpleGraph<>(DefaultEdge.class);
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
 
         // Add the vertices i.e. Countries
@@ -387,8 +388,9 @@ public class Map {
      * Used to visualise the game map
      */
     public void visualizeGraph(){
+        populateJGraph();
         JFrame l_frame = new JFrame("Game Map");
-        l_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        l_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         l_frame.setSize(800, 600);
         l_frame.getContentPane().setLayout(new BorderLayout());
 
@@ -417,6 +419,7 @@ public class Map {
         l_frame.getContentPane().add(l_graphComponent,BorderLayout.CENTER);
         l_frame.setLocationRelativeTo(null);
         l_frame.setVisible(true);
+        l_frame.setEnabled(true);
     }
 
 }

@@ -57,10 +57,10 @@ class EditContinent implements Callable<Integer> {
 
 @Command(name = "editcountry")
 class EditCountry implements Callable<Integer> {
-    @Option(names = "-add", arity = "2", required = true,
+    @Option(names = "-add", arity = "2",
             description = "Enter country ID and continent ID respectively")
     int[] d_addIds;
-    @Option(names = "-remove", arity = "1", required = true,
+    @Option(names = "-remove", arity = "1",
             description = "Enter the country ID to remove")
     int[] d_removeIds;
     @Spec
@@ -72,13 +72,16 @@ class EditCountry implements Callable<Integer> {
             for (int i = 0; i < d_addIds.length; i += 2) {
                 int l_countryId = d_addIds[i];
                 int l_continentId = d_addIds[i + 1];
-                System.out.println("Adding country: Continent:" + d_addIds[i] + " Country:" + d_addIds[i + 1]);
-                GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
+                boolean resp = GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
+                if(!resp){
+                    System.out.println("Cannot add country");
+                } else {
+                    System.out.printf("Added country: %d to %d\n", l_countryId, l_continentId);
+                }
             }
         }
         if (d_removeIds != null) {
             for (int i = 0; i < d_removeIds.length; i++) {
-                System.out.println("Removing country id:" + d_removeIds[i]);
                 GameEngine.get_instance().getGameMap().removeCountry(d_removeIds[i]);
             }
         }
@@ -101,14 +104,13 @@ class EditCountry implements Callable<Integer> {
 @Command(name = "editneighbor")
 class EditNeighbor implements Callable<Integer> {
 
-
     @Option(names = "-add", arity = "2",
-            description = "Enter country ID and neigbour country ID respectively",
-            required = true)
+            description = "Enter country ID and neigbour country ID respectively"
+    )
     int[] d_add_ids;
     @Option(names = "-remove", arity = "2",
-            description = "Enter the country ID and neighbour country ID to remove",
-            required = true)
+            description = "Enter the country ID and neighbour country ID to remove"
+    )
     int[] d_remove_ids;
     @Spec
     CommandSpec d_spec; // injected by picocli
@@ -208,12 +210,10 @@ class LoadMap implements Callable<Integer> {
 @Command(name = "gameplayer")
 class GamePlayer implements Callable<Integer> {
     @Option(names = "-add",
-            description = "Enter player name",
-            required = true)
+            description = "Enter player name")
     String[] d_add_names;
     @Option(names = "-remove",
-            description = "Enter the player name",
-            required = true)
+            description = "Enter the player name")
     String[] d_remove_names;
     @Spec
     CommandSpec d_spec; // injected by picocli
@@ -259,7 +259,11 @@ class GamePlayer implements Callable<Integer> {
 @Command(name = "assigncountries")
 class AssignCountries implements Callable<Integer> {
     public Integer call() {
-        GameEngine.get_instance().assignCountries();
+        try {
+            GameEngine.get_instance().assignCountries();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         return 0;
     }
 }

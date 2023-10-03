@@ -53,6 +53,7 @@ public class GameEngine {
     GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
+        d_currentPhase = PHASE.MAP;
     }
 
     public static GameEngine get_instance() {
@@ -72,7 +73,11 @@ public class GameEngine {
         this.d_currentPlayerIndex = 0;
     }
 
-    public void assignCountries() {
+    public void assignCountries() throws Exception{
+        if(this.d_gamePlayers.size() == 0){
+            throw new Exception("No players have been added yet");
+        }
+
         // Create a map of whole countries
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
         for (Continent l_continent : d_gameMap.getContinents().values()) {
@@ -83,10 +88,15 @@ public class GameEngine {
         // Split countries between players
         ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
         Collections.shuffle(l_countryIDs);
+
+        if(l_countryIDs.size() == 0){
+            throw new Exception("No countries have been added");
+        }
         int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
         for (int i = 0; i < l_countryIDs.size(); i++) {
-            int assignee = i % l_intervals;
+            int assignee = Math.min(i / l_intervals, d_gamePlayers.size() - 1);
             d_gamePlayers.get(assignee).addCountryOwned(l_allCountries.get(l_countryIDs.get(i)));
+            l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(d_gamePlayers.get(assignee).getId());
         }
 
         // Change the current phase
@@ -215,7 +225,7 @@ public class GameEngine {
         while (true) {
             ip = scanner.nextLine();
             try {
-                CliResponse resp = parser.parseCommandString(ip);
+                parser.parseCommandString(ip);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }

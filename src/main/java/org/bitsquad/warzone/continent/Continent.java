@@ -19,7 +19,7 @@ public class Continent {
      * Default Constructor
      */
     public Continent() {
-        d_countries = new HashMap<>();
+        this.d_countries = new HashMap<>();
     }
 
     /**
@@ -30,6 +30,7 @@ public class Continent {
     public Continent(int p_continentId, int p_bonusValue){
         d_continentId = p_continentId;
         d_bonusValue = p_bonusValue;
+        this.d_countries = new HashMap<>();
     }
 
     /**
@@ -85,7 +86,7 @@ public class Continent {
     * @param p_countryName the name of the country
     */
     public void addCountry(int p_countryId, String p_countryName) {
-        d_countries.putIfAbsent(p_countryId, new Country(d_continentId, p_countryId));
+        d_countries.putIfAbsent(p_countryId, new Country(p_countryId, d_continentId));
     }
 
     /**

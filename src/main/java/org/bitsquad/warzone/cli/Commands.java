@@ -269,7 +269,12 @@ class Deploy implements Callable<Integer> {
     int d_num;
 
     public Integer call() {
-        GameEngine.get_instance().deployArmy(d_countryID, d_num);
+        try {
+            GameEngine.get_instance().deployArmy(d_countryID, d_num);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
         return 0;
     }
 }

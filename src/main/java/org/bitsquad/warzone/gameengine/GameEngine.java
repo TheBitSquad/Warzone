@@ -128,8 +128,32 @@ public class GameEngine {
 
         // Change the turn
         if (l_currentPlayer.getAvailableArmyUnits() == 0) {
-            this.d_currentPlayerIndex = (this.d_currentPlayerIndex + 1) % this.d_gamePlayers.size();
+            this.d_currentPlayerIndex++;
+            if(this.d_currentPlayerIndex == this.d_gamePlayers.size()){
+                resetCurrentPlayerIndex();
+                executeOrders();
+            }
         }
+    }
+
+    private void executeOrders() {
+        Order l_orderToExecute;
+
+        boolean l_isAllOrderSetsEmpty = false;
+        while(!l_isAllOrderSetsEmpty){
+            l_isAllOrderSetsEmpty = true;
+            for(Player l_player: this.d_gamePlayers){
+                l_orderToExecute = l_player.nextOrder();
+                if(l_orderToExecute != null){
+                    l_isAllOrderSetsEmpty = false;
+                    l_orderToExecute.execute();
+                }
+            }
+        }
+    }
+
+    private void resetCurrentPlayerIndex() {
+        this.d_currentPlayerIndex = 0;
     }
 
     public static void main(String[] args) throws ClassNotFoundException {

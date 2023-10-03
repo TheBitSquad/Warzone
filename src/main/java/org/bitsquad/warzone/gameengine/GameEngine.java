@@ -129,22 +129,23 @@ public class GameEngine {
         // Change the turn
         if (l_currentPlayer.getAvailableArmyUnits() == 0) {
             this.d_currentPlayerIndex++;
-            if(this.d_currentPlayerIndex == this.d_gamePlayers.size()){
-                resetCurrentPlayerIndex();
+            if (this.d_currentPlayerIndex == this.d_gamePlayers.size()) {
                 executeOrders();
+                nextTurn();
             }
         }
     }
 
     private void executeOrders() {
+        System.out.println("Executing Orders");
         Order l_orderToExecute;
 
         boolean l_isAllOrderSetsEmpty = false;
-        while(!l_isAllOrderSetsEmpty){
+        while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
-            for(Player l_player: this.d_gamePlayers){
+            for (Player l_player : this.d_gamePlayers) {
                 l_orderToExecute = l_player.nextOrder();
-                if(l_orderToExecute != null){
+                if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
                     l_orderToExecute.execute();
                 }
@@ -152,8 +153,38 @@ public class GameEngine {
         }
     }
 
-    private void resetCurrentPlayerIndex() {
+    private void nextTurn() {
+        System.out.println("Next Turn");
+
         this.d_currentPlayerIndex = 0;
+
+        // Assign reinforcement units
+        for (Player l_player : this.d_gamePlayers) {
+            // Calculate the reinforcement
+            int l_numberReinforcement = getNumberOfReinforcementUnits(l_player);
+
+            // Add the army
+            l_player.setAvailableArmyUnits(l_player.getAvailableArmyUnits() + l_numberReinforcement);
+        }
+    }
+
+    private int getNumberOfReinforcementUnits(Player p_player) {
+        int l_numberReinforcement = 3;
+        l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
+        for (Continent l_continent : this.d_gameMap.getContinents().values()) {
+            boolean l_isAllCountiesOwnedByPlayer = true;
+            for (Country l_country : l_continent.getCountries().values()) {
+                if (!p_player.getCountriesOwned().contains(l_country)) {
+                    l_isAllCountiesOwnedByPlayer = false;
+                    break;
+                }
+            }
+
+            if (l_isAllCountiesOwnedByPlayer) {
+                l_numberReinforcement += l_continent.getValue();
+            }
+        }
+        return l_numberReinforcement;
     }
 
     public void addPlayer(String p_playerName) throws Exception {

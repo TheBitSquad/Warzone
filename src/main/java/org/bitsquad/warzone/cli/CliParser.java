@@ -1,46 +1,35 @@
 package org.bitsquad.warzone.cli;
 
+import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
 import picocli.CommandLine;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  This class represents the implementation of the command line interface, which processes user input commands
  */
 public class CliParser {
-    static Map GameMap;
-    static List<Player> GamePlayers;
-    static void setGameMap(Map p_gameMap){
-        GameMap = p_gameMap;
-    }
-    static void setGamePlayers(List<Player> p_gamePlayers){
-        GamePlayers = p_gamePlayers;
-    }
-
-    enum PHASE{DEFAULT, SETUP, STARTUP, ORDER}
-    static HashMap<String, PHASE> CommandClassPhaseMap = new HashMap<>();
+    static HashMap<String, GameEngine.PHASE> CommandClassPhaseMap = new HashMap<>();
     static {
         // Add to the map to return the class/object for a lookup.
-        CommandClassPhaseMap.put("EditContinent", PHASE.SETUP);
-        CommandClassPhaseMap.put("EditCountry", PHASE.SETUP);
-        CommandClassPhaseMap.put("EditNeighbor", PHASE.SETUP);
+        CommandClassPhaseMap.put("EditContinent", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("EditCountry", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("EditNeighbor", GameEngine.PHASE.SETUP);
 
-        CommandClassPhaseMap.put("SaveMap", PHASE.SETUP);
-        CommandClassPhaseMap.put("EditMap", PHASE.SETUP);
-        CommandClassPhaseMap.put("ValidateMap", PHASE.SETUP);
+        CommandClassPhaseMap.put("SaveMap", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("EditMap", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("ValidateMap", GameEngine.PHASE.SETUP);
 
-        CommandClassPhaseMap.put("ShowMap", PHASE.DEFAULT);
+        CommandClassPhaseMap.put("ShowMap", GameEngine.PHASE.DEFAULT);
 
-        CommandClassPhaseMap.put("LoadMap", PHASE.STARTUP);
-        CommandClassPhaseMap.put("GamePlayer", PHASE.STARTUP);
-        CommandClassPhaseMap.put("AssignCountries", PHASE.STARTUP);
+        CommandClassPhaseMap.put("LoadMap", GameEngine.PHASE.STARTUP);
+        CommandClassPhaseMap.put("GamePlayer", GameEngine.PHASE.STARTUP);
+        CommandClassPhaseMap.put("AssignCountries", GameEngine.PHASE.STARTUP);
 
-        CommandClassPhaseMap.put("Deploy", PHASE.ORDER);
+        CommandClassPhaseMap.put("Deploy", GameEngine.PHASE.ORDER);
+        CommandClassPhaseMap.put("Test", GameEngine.PHASE.ORDER);
     }
 
     private Class getClassName(String p_commandName) throws ClassNotFoundException {

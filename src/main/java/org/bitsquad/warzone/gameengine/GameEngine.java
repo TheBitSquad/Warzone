@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class GameEngine {
     private static GameEngine d_instance;
-
+    public enum PHASE{DEFAULT, SETUP, STARTUP, ORDER}
     Map d_gameMap;
     List<Player> d_gamePlayers;
     GameEngine(){
@@ -31,9 +31,6 @@ public class GameEngine {
         return d_instance;
     }
 
-    public void printNumberOfPlayers() {
-        System.out.println(this.d_gamePlayers.size());
-    }
     public static void main(String[] args) throws ClassNotFoundException {
         CliParser parser = new CliParser();
         Scanner scanner = new Scanner(System.in);

@@ -3,6 +3,7 @@
  */
 package org.bitsquad.warzone.cli;
 
+import org.bitsquad.warzone.gameengine.GameEngine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 

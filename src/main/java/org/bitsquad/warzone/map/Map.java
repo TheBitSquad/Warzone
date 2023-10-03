@@ -248,7 +248,7 @@ public class Map {
                 }
                 l_bufferedReader.close();
             }
-            return true;
+            return validateMap();
         }
         catch (IOException e){
             System.err.println("Unable to load the map," + e.getMessage());
@@ -260,7 +260,10 @@ public class Map {
      * Write the Map data to a .map text file
      * @param p_fileName FileName
      */
-    public void saveMap(String p_fileName) {
+    public boolean saveMap(String p_fileName) {
+        if(!validateMap()){
+            return false;
+        }
         try{
             StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
             BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
@@ -285,10 +288,12 @@ public class Map {
             l_bufferedWriter.append(l_stringBuilder);
             l_bufferedWriter.flush();
             l_bufferedWriter.close();
+            return true;
         }
         catch (IOException e){
             System.err.println("Error saving the map" + e.getMessage());
         }
+        return false;
     }
 
     /**

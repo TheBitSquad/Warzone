@@ -59,6 +59,19 @@ public class GameEngine {
         return d_instance;
     }
 
+    public void loadMap(String p_filename) throws Exception {
+        boolean resp = this.d_gameMap.loadMap(p_filename);
+        if(resp){
+            this.d_currentPhase = PHASE.STARTUP;
+        } else {
+            throw new Exception("Invalid map or filname");
+        }
+    }
+
+    public void assignCountries(){
+        //TODO: AssignCountries to all the players
+    }
+
     public static void main(String[] args) throws ClassNotFoundException {
         CliParser parser = new CliParser();
         Scanner scanner = new Scanner(System.in);

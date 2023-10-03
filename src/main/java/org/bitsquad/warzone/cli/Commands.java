@@ -192,8 +192,12 @@ class LoadMap implements Callable<Integer>{
     String d_filename;
 
     public Integer call() {
-//        CliParser.GameMap.loadMap();
-        System.out.println("Load map: " + d_filename);
+        try {
+            GameEngine.get_instance().loadMap(d_filename);
+        } catch (Exception e) {
+            System.err.println(e);
+            return 1;
+        }
         return 0;
     }
 }
@@ -247,7 +251,8 @@ class GamePlayer implements Callable<Integer>{
 @Command(name = "assigncountries")
 class AssignCountries implements Callable<Integer>{
     public Integer call() {
-        return 4;
+        GameEngine.get_instance().assignCountries();
+        return 0;
     }
 }
 

@@ -1,4 +1,5 @@
 org.bitsquad.warzone
+org.bitsquad.warzone.cli
 org.bitsquad.warzone.continent
 org.bitsquad.warzone.country
 org.bitsquad.warzone.gameengine

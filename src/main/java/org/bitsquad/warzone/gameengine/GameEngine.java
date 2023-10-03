@@ -5,6 +5,7 @@ import org.bitsquad.warzone.cli.CliResponse;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.*;
@@ -21,7 +22,9 @@ public class GameEngine {
 
     private Map d_gameMap;
     private List<Player> d_gamePlayers;
+
     private PHASE d_currentPhase;
+    private int d_currentPlayerIndex;
 
     public Map getGameMap() {
         return d_gameMap;
@@ -66,6 +69,7 @@ public class GameEngine {
         } else {
             throw new Exception("Invalid map or filename");
         }
+        this.d_currentPlayerIndex = 0;
     }
 
     public void assignCountries() {
@@ -87,6 +91,45 @@ public class GameEngine {
 
         // Change the current phase
         this.d_currentPhase = PHASE.PLAY;
+    }
+
+    public void deployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
+        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
+
+        // Check whether the player has the sufficient army units or not
+        int l_newAvailableArmyUnits = l_currentPlayer.getAvailableArmyUnits() - p_armyUnits;
+        if (l_newAvailableArmyUnits < 0) {
+            throw new Exception("insufficient army units");
+        }
+
+        // Check if the country ID is owned by player
+        boolean l_hasCountry = false;
+        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
+            if (l_country.getCountryId() == p_targetCountryID) {
+                l_hasCountry = true;
+                break;
+            }
+        }
+        if (!l_hasCountry) {
+            throw new Exception("can not deploy to enemy territory");
+        }
+
+        // Issue the deployment order
+        Order l_deployOrder = new Order(
+                l_currentPlayer.getId(),
+                -1,
+                p_targetCountryID,
+                p_armyUnits,
+                Order.TYPEOFACTION.DEPLOY
+        );
+        l_currentPlayer.setCurrentOrder(l_deployOrder);
+        l_currentPlayer.issueOrder();
+        l_currentPlayer.setAvailableArmyUnits(l_newAvailableArmyUnits);
+
+        // Change the turn
+        if (l_currentPlayer.getAvailableArmyUnits() == 0) {
+            this.d_currentPlayerIndex = (this.d_currentPlayerIndex + 1) % this.d_gamePlayers.size();
+        }
     }
 
     public static void main(String[] args) throws ClassNotFoundException {

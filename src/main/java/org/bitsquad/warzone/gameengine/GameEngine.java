@@ -2,12 +2,12 @@ package org.bitsquad.warzone.gameengine;
 
 import org.bitsquad.warzone.cli.CliParser;
 import org.bitsquad.warzone.cli.CliResponse;
+import org.bitsquad.warzone.continent.Continent;
+import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Represents the Game engine.
@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class GameEngine {
     private static GameEngine d_instance;
 
-    public enum PHASE {DEFAULT, SETUP, STARTUP, ORDER}
+    public enum PHASE {DEFAULT, MAP, STARTUP, PLAY}
 
     private Map d_gameMap;
     private List<Player> d_gamePlayers;
@@ -61,15 +61,32 @@ public class GameEngine {
 
     public void loadMap(String p_filename) throws Exception {
         boolean resp = this.d_gameMap.loadMap(p_filename);
-        if(resp){
+        if (resp) {
             this.d_currentPhase = PHASE.STARTUP;
         } else {
-            throw new Exception("Invalid map or filname");
+            throw new Exception("Invalid map or filename");
         }
     }
 
-    public void assignCountries(){
-        //TODO: AssignCountries to all the players
+    public void assignCountries() {
+        // Create a map of whole countries
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+        for (Continent l_continent : d_gameMap.getContinents().values()) {
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+        }
+
+        // Split countries between players
+        ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
+        Collections.shuffle(l_countryIDs);
+        int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
+        for (int i = 0; i < l_countryIDs.size(); i++) {
+            int assignee = i % l_intervals;
+            d_gamePlayers.get(assignee).addCountryOwned(l_allCountries.get(l_countryIDs.get(i)));
+        }
+
+        // Change the current phase
+        this.d_currentPhase = PHASE.PLAY;
     }
 
     public static void main(String[] args) throws ClassNotFoundException {

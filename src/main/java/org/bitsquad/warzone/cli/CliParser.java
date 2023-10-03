@@ -1,8 +1,6 @@
 package org.bitsquad.warzone.cli;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
-import org.bitsquad.warzone.map.Map;
-import org.bitsquad.warzone.player.Player;
 import picocli.CommandLine;
 
 import java.util.*;
@@ -14,13 +12,13 @@ public class CliParser {
     static HashMap<String, GameEngine.PHASE> CommandClassPhaseMap = new HashMap<>();
     static {
         // Add to the map to return the class/object for a lookup.
-        CommandClassPhaseMap.put("EditContinent", GameEngine.PHASE.SETUP);
-        CommandClassPhaseMap.put("EditCountry", GameEngine.PHASE.SETUP);
-        CommandClassPhaseMap.put("EditNeighbor", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("EditContinent", GameEngine.PHASE.MAP);
+        CommandClassPhaseMap.put("EditCountry", GameEngine.PHASE.MAP);
+        CommandClassPhaseMap.put("EditNeighbor", GameEngine.PHASE.MAP);
 
-        CommandClassPhaseMap.put("SaveMap", GameEngine.PHASE.SETUP);
-        CommandClassPhaseMap.put("EditMap", GameEngine.PHASE.SETUP);
-        CommandClassPhaseMap.put("ValidateMap", GameEngine.PHASE.SETUP);
+        CommandClassPhaseMap.put("SaveMap", GameEngine.PHASE.MAP);
+        CommandClassPhaseMap.put("EditMap", GameEngine.PHASE.MAP);
+        CommandClassPhaseMap.put("ValidateMap", GameEngine.PHASE.MAP);
 
         CommandClassPhaseMap.put("ShowMap", GameEngine.PHASE.DEFAULT);
 
@@ -28,8 +26,8 @@ public class CliParser {
         CommandClassPhaseMap.put("GamePlayer", GameEngine.PHASE.STARTUP);
         CommandClassPhaseMap.put("AssignCountries", GameEngine.PHASE.STARTUP);
 
-        CommandClassPhaseMap.put("Deploy", GameEngine.PHASE.ORDER);
-        CommandClassPhaseMap.put("Test", GameEngine.PHASE.ORDER);
+        CommandClassPhaseMap.put("Deploy", GameEngine.PHASE.PLAY);
+        CommandClassPhaseMap.put("Test", GameEngine.PHASE.PLAY);
     }
 
     private Class getClassName(String p_commandName) throws ClassNotFoundException {

@@ -156,6 +156,26 @@ public class GameEngine {
         this.d_currentPlayerIndex = 0;
     }
 
+    public void addPlayer(String p_playerName) throws Exception {
+        // Check if a player is already present
+        for(Player l_player: this.d_gamePlayers){
+            if(l_player.getName().equalsIgnoreCase(p_playerName)){
+                throw new Exception("Player already exists!");
+            }
+        }
+        d_gamePlayers.add(new Player(p_playerName));
+    }
+
+    public void removePlayer(String p_playerName) throws Exception {
+        for(Player l_player: this.d_gamePlayers){
+            if(l_player.getName().equalsIgnoreCase(p_playerName)){
+                this.d_gamePlayers.remove(l_player);
+                return;
+            }
+        }
+        throw new Exception("Player does not exist!");
+    }
+
     public static void main(String[] args) throws ClassNotFoundException {
         CliParser parser = new CliParser();
         Scanner scanner = new Scanner(System.in);

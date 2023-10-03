@@ -260,40 +260,34 @@ public class Map {
      * Write the Map data to a .map text file
      * @param p_fileName FileName
      */
-    public boolean saveMap(String p_fileName) {
+    public void saveMap(String p_fileName) throws Exception {
         if(!validateMap()){
-            return false;
+            throw new Exception("Invalid Map, cannot save");
         }
-        try{
-            StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
-            BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
-            //save continents data
-            l_bufferedWriter.write("[continents]\n");
-            for(Continent l_continents : d_continents.values())
-                l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
-            //save countries data and build neighbors list
-            l_bufferedWriter.write("\n[countries]\n");
-            for(Continent l_continents : d_continents.values()) {
-                for(int l_countryId: l_continents.getCountries().keySet()){
-                    l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
-                    //building neighbors list
-                    l_stringBuilder.append(l_countryId);
-                    Country l_country = l_continents.getCountries().get(l_countryId);
-                    for (int neighborId : l_country.getNeighbors()) {
-                        l_stringBuilder.append(" ").append(neighborId);
-                    }
-                    l_stringBuilder.append("\n");
+
+        StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
+        BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
+        //save continents data
+        l_bufferedWriter.write("[continents]\n");
+        for(Continent l_continents : d_continents.values())
+            l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
+        //save countries data and build neighbors list
+        l_bufferedWriter.write("\n[countries]\n");
+        for(Continent l_continents : d_continents.values()) {
+            for(int l_countryId: l_continents.getCountries().keySet()){
+                l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
+                //building neighbors list
+                l_stringBuilder.append(l_countryId);
+                Country l_country = l_continents.getCountries().get(l_countryId);
+                for (int neighborId : l_country.getNeighbors()) {
+                    l_stringBuilder.append(" ").append(neighborId);
                 }
+                l_stringBuilder.append("\n");
             }
-            l_bufferedWriter.append(l_stringBuilder);
-            l_bufferedWriter.flush();
-            l_bufferedWriter.close();
-            return true;
         }
-        catch (IOException e){
-            System.err.println("Error saving the map" + e.getMessage());
-        }
-        return false;
+        l_bufferedWriter.append(l_stringBuilder);
+        l_bufferedWriter.flush();
+        l_bufferedWriter.close();
     }
 
     /**

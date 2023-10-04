@@ -197,4 +197,70 @@ class MapTest {
 			assertEquals(expected, content.toString());
 		}
 	}
+
+	/**
+	 * Tests the isContinentSubgraph method
+	 */
+	@Test
+	public void testIsContinentSubgraph(){
+		map.addContinent(1, 5);
+		map.addCountry(1, 1);
+		map.addCountry(2, 1);
+		map.addCountry(3, 1);
+		map.addContinent(2, 5);
+		map.addCountry(4, 2);
+		map.addCountry(5, 2);
+		map.addContinent(3, 5);
+		map.addCountry(6, 3);
+		map.addCountry(7, 3);
+
+		map.addNeighbor(1, 2);
+		map.addNeighbor(2, 3);
+		map.addNeighbor(2, 4);
+		map.addNeighbor(4, 5);
+		map.addNeighbor(6, 5);
+
+		assertTrue(map.isContinentSubgraph(1));
+		assertTrue(map.isContinentSubgraph(2));
+		assertFalse(map.isContinentSubgraph(3));
+	}
+
+	/**
+	 * Tests the validate map method
+	 */
+	@Test
+	public void testValidateMap(){
+		map.addContinent(1, 5);
+		map.addCountry(1, 1);
+		map.addCountry(2, 1);
+		map.addCountry(3, 1);
+		map.addContinent(2, 5);
+		map.addCountry(4, 2);
+		map.addCountry(5, 2);
+		map.addContinent(3, 5);
+		map.addCountry(6, 3);
+		map.addCountry(7, 3);
+		// Graph not connected
+		assertFalse(map.validateMap());
+
+		map.addNeighbor(1, 2);
+		map.addNeighbor(2, 3);
+		map.addNeighbor(2, 4);
+		map.addNeighbor(4, 5);
+		map.addNeighbor(6, 5);
+		map.addNeighbor(7, 6);
+		assertTrue(map.validateMap());
+
+		map.removeNeighbor(7, 6);
+		//Country 7 not connected
+		assertFalse(map.validateMap());
+
+		map.removeContinent(3);
+		map.addContinent(3, 5);
+		map.addCountry(6, 3);
+		map.addCountry(7, 3);
+
+		// Continent 3 is not a valid subgraph (not connected)
+		assertFalse(map.validateMap());
+	}
 }

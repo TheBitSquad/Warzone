@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 /**
  * Main Class
+ *
+ * @author Group_W16
+ * @version BUILD 1.0
  */
 public class Main {
     public static void main(String[] args) {

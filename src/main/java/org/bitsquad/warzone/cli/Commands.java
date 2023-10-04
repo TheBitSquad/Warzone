@@ -14,6 +14,9 @@ import picocli.CommandLine.Spec;
 
 import java.util.concurrent.Callable;
 
+/**
+ * editcontinent command class
+ */
 @Command(name = "editcontinent", mixinStandardHelpOptions = true, version = "1.0.0")
 class EditContinent implements Callable<Integer> {
     @Option(names = "-add", arity = "2", paramLabel = "CONTINENT_ID VALUE",
@@ -25,6 +28,10 @@ class EditContinent implements Callable<Integer> {
     @Spec
     CommandSpec d_spec; // injected by picocli
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         validate();
         if (d_addArray != null) {
@@ -42,6 +49,9 @@ class EditContinent implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Validation for the command
+     */
     private void validate() {
         if (missing(d_addArray) && missing(d_removeIds)) {
             throw new ParameterException(d_spec.commandLine(),
@@ -50,11 +60,19 @@ class EditContinent implements Callable<Integer> {
         }
     }
 
+    /**
+     * Helper function to check if given option is present
+     * @param p_list list of option inputs
+     * @return boolean if the option is missing input
+     */
     private boolean missing(int[] p_list) {
         return p_list == null || p_list.length == 0;
     }
 }
 
+/**
+ * editcountry command class
+ */
 @Command(name = "editcountry")
 class EditCountry implements Callable<Integer> {
     @Option(names = "-add", arity = "2",
@@ -66,6 +84,10 @@ class EditCountry implements Callable<Integer> {
     @Spec
     CommandSpec d_spec; // injected by picocli
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         validate();
         if (d_addIds != null) {
@@ -88,6 +110,9 @@ class EditCountry implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Validation for the command
+     */
     private void validate() {
         if (missing(d_addIds) && missing(d_removeIds)) {
             throw new ParameterException(d_spec.commandLine(),
@@ -96,11 +121,19 @@ class EditCountry implements Callable<Integer> {
         }
     }
 
+    /**
+     * Helper function to check if given option is present
+     * @param p_list list of option inputs
+     * @return boolean if the option is missing input
+     */
     private boolean missing(int[] p_list) {
         return p_list == null || p_list.length == 0;
     }
 }
 
+/**
+ * editneighbor command class
+ */
 @Command(name = "editneighbor")
 class EditNeighbor implements Callable<Integer> {
 
@@ -115,6 +148,10 @@ class EditNeighbor implements Callable<Integer> {
     @Spec
     CommandSpec d_spec; // injected by picocli
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         validate();
         if (d_add_ids != null) {
@@ -130,6 +167,9 @@ class EditNeighbor implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Validation for the command
+     */
     private void validate() {
         if (missing(d_add_ids) && missing(d_remove_ids)) {
             throw new ParameterException(d_spec.commandLine(),
@@ -138,25 +178,44 @@ class EditNeighbor implements Callable<Integer> {
         }
     }
 
+    /**
+     * Helper function to check if given option is present
+     * @param p_list list of option inputs
+     * @return boolean if the option is missing input
+     */
     private boolean missing(int[] p_list) {
         return p_list == null || p_list.length == 0;
     }
 }
 
+/**
+ * showmap command class
+ */
 @Command(name = "showmap")
 class ShowMap implements Callable<Integer> {
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         GameEngine.get_instance().getGameMap().visualizeGraph();
         return 0;
     }
 }
 
+/**
+ * savemap command class
+ */
 @Command(name = "savemap")
 class SaveMap implements Callable<Integer> {
     @Parameters(index = "0",
             paramLabel = "Filename",
             description = "Filename of the map")
     String d_filename;
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         try {
             GameEngine.get_instance().getGameMap().saveMap(d_filename);
@@ -167,6 +226,9 @@ class SaveMap implements Callable<Integer> {
     }
 }
 
+/**
+ * editmap command class
+ */
 @Command(name = "editmap")
 class EditMap implements Callable<Integer> {
     @Parameters(index = "0",
@@ -174,21 +236,34 @@ class EditMap implements Callable<Integer> {
             description = "Filename of the map")
     String d_filename;
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         GameEngine.get_instance().getGameMap().editMap(d_filename);
         return 0;
     }
 }
 
-
+/**
+ * validatemap command class
+ */
 @Command(name = "validatemap")
 class ValidateMap implements Callable<Integer> {
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         System.out.println(GameEngine.get_instance().getGameMap().validateMap());
         return 0;
     }
 }
 
+/**
+ * loadmap command class
+ */
 @Command(name = "loadmap")
 class LoadMap implements Callable<Integer> {
     @Parameters(index = "0",
@@ -196,9 +271,13 @@ class LoadMap implements Callable<Integer> {
             description = "Filename of the map")
     String d_filename;
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         try {
-            GameEngine.get_instance().loadMap(d_filename);
+            GameEngine.get_instance().handleLoadMap(d_filename);
         } catch (Exception e) {
             System.err.println(e);
             return 1;
@@ -207,6 +286,9 @@ class LoadMap implements Callable<Integer> {
     }
 }
 
+/**
+ * gameplayer command class
+ */
 @Command(name = "gameplayer")
 class GamePlayer implements Callable<Integer> {
     @Option(names = "-add",
@@ -218,12 +300,16 @@ class GamePlayer implements Callable<Integer> {
     @Spec
     CommandSpec d_spec; // injected by picocli
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         validate();
         if (d_add_names != null) {
             for (String l_addName : d_add_names) {
                 try {
-                    GameEngine.get_instance().addPlayer(l_addName);
+                    GameEngine.get_instance().handleAddPlayer(l_addName);
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
@@ -233,7 +319,7 @@ class GamePlayer implements Callable<Integer> {
         if (d_remove_names != null) {
             for (String l_removeName : d_remove_names) {
                 try {
-                    GameEngine.get_instance().removePlayer(l_removeName);
+                    GameEngine.get_instance().handleRemovePlayer(l_removeName);
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
@@ -242,6 +328,9 @@ class GamePlayer implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Validation for the command
+     */
     private void validate() {
         if (missing(d_add_names) && missing(d_remove_names)) {
             throw new ParameterException(d_spec.commandLine(),
@@ -250,17 +339,29 @@ class GamePlayer implements Callable<Integer> {
         }
     }
 
-    private boolean missing(String[] d_list) {
-        return d_list == null || d_list.length == 0;
+    /**
+     * Helper function to check if given option is present
+     * @param p_list list of option inputs
+     * @return boolean if the option is missing input
+     */
+    private boolean missing(String[] p_list) {
+        return p_list == null || p_list.length == 0;
     }
 
 }
 
+/**
+ * assigncountries command class
+ */
 @Command(name = "assigncountries")
 class AssignCountries implements Callable<Integer> {
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         try {
-            GameEngine.get_instance().assignCountries();
+            GameEngine.get_instance().handleAssignCountries();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -268,6 +369,9 @@ class AssignCountries implements Callable<Integer> {
     }
 }
 
+/**
+ * deploy command class
+ */
 @Command(name = "deploy")
 class Deploy implements Callable<Integer> {
     @Parameters(index = "0", description = "country ID")
@@ -275,9 +379,13 @@ class Deploy implements Callable<Integer> {
     @Parameters(index = "1", description = "Number of army units")
     int d_num;
 
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
     public Integer call() {
         try {
-            GameEngine.get_instance().deployArmy(d_countryID, d_num);
+            GameEngine.get_instance().handleDeployArmy(d_countryID, d_num);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;

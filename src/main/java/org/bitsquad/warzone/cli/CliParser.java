@@ -29,6 +29,11 @@ public class CliParser {
         CommandClassPhaseMap.put("Deploy", GameEngine.PHASE.PLAY);
     }
 
+    /**
+     * Gets corresponding command handler class name for command name
+     * @param p_commandName command name
+     * @return class name of command handler
+     */
     private String commandClassName(String p_commandName){
         String l_requiredKey = null;
         Set<String> l_keys = CommandClassPhaseMap.keySet();
@@ -41,6 +46,13 @@ public class CliParser {
         }
         return l_requiredKey;
     }
+
+    /**
+     * Generates a fully qualified class name for a given class name
+     * @param p_className name of the class
+     * @return Class
+     * @throws ClassNotFoundException
+     */
     private Class getFullyQualifiedClassName(String p_className) throws ClassNotFoundException {
         String l_packageName = CliParser.class.getPackageName();
         if(p_className == null) {
@@ -51,6 +63,12 @@ public class CliParser {
         }
     }
 
+    /**
+     * Parses the inputted command string
+     * @param p_ip inputted command
+     * @throws ClassNotFoundException
+     * @throws CommandLine.ParameterException
+     */
     public void parseCommandString(String p_ip) throws ClassNotFoundException, CommandLine.ParameterException {
         if(p_ip == null) {
             System.err.println("No command was inputted");
@@ -69,7 +87,7 @@ public class CliParser {
 
         if(CommandClassPhaseMap.get(commandClassName(l_commandName)) != GameEngine.PHASE.DEFAULT){
             if(l_commandName.equalsIgnoreCase("assigncountries") || l_commandName.equalsIgnoreCase("gameplayer")){
-                // Changes state, hence it should be allowed if the previous state is either Phase.Map or Phase.Startup
+
                 if(GameEngine.get_instance().getCurrentPhase() != GameEngine.PHASE.MAP &&
                         GameEngine.get_instance().getCurrentPhase() != GameEngine.PHASE.STARTUP){
                     System.err.println("Command not valid in current phase!");

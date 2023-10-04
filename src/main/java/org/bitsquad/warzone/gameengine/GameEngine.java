@@ -221,6 +221,7 @@ public class GameEngine {
                 l_orderToExecute = l_player.nextOrder();
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
+                    System.out.println("Executing: " + l_orderToExecute);
                     l_orderToExecute.execute();
                 }
             }

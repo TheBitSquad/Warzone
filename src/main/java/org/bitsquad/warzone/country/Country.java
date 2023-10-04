@@ -58,7 +58,7 @@ public class Country {
     public String toString(){
         return "CountryId: " + d_countryId
                 + "\nContinent Id: " + d_continentId
-                + "\njOwned by Player: " + d_ownedByPlayerId
+                + "\nOwned by Player: " + d_ownedByPlayerId
                 + "\nArmy units: " + d_armyValue;
     }
 

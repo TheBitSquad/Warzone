@@ -46,6 +46,19 @@ public class Order {
     }
 
     /**
+     * toString method
+     * @return string representation of class
+     */
+    @Override
+    public String toString() {
+        return "Order: " +
+                "d_playerId=" + d_playerId +
+                ", d_targetCountryId=" + d_targetCountryId +
+                ", d_noOfArmyUnits=" + d_noOfArmyUnits +
+                ", d_action=" + d_action;
+    }
+
+    /**
      * Setter for Player Id
      * 
      * @param p_playerId Setting the player ID

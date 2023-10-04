@@ -200,7 +200,7 @@ public class Country {
      */
     public boolean removeNeighbor(int p_neighborCountryId) {
         if(d_neighbors.contains(p_neighborCountryId)) {
-            d_neighbors.remove(Integer.valueOf(p_neighborCountryId));
+            d_neighbors.remove(d_neighbors.indexOf(p_neighborCountryId));
             return true;
         }
         else {

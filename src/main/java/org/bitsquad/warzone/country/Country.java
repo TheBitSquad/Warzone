@@ -7,34 +7,12 @@ import java.util.ArrayList;
  * This class defines a country with its ID, list of neighbors and other relevant details according to system design.
  */
 public class Country {
-    /**
-     * The id of the country.
-     */
+
     private int d_countryId;
-
-    /**
-     * The name of the country.
-     */
     private String d_countryName;
-
-    /**
-     * The number of Armies allocated to the country.
-     */
     private int d_armyValue;
-
-    /**
-     * The id of the continent to which the country belongs.
-     */
     private int d_continentId;
-
-    /**
-     * The player id who owns the country.
-     */
     private int d_ownedByPlayerId;
-
-    /**
-     * The list of neighbor countries' id.
-     */
     private ArrayList<Integer> d_neighbors;
 
     /**
@@ -54,6 +32,7 @@ public class Country {
         this.d_continentId= p_continentId;
         this.d_neighbors = new ArrayList<Integer>();
     }
+
     /**
      * Parameterized constructor
      * @param p_countryId country ID
@@ -72,7 +51,10 @@ public class Country {
         this.d_neighbors = p_neighbors;
     }
 
-
+    /**
+     * ToString method
+     * @return string representation of the class
+     */
     public String toString(){
         return "CountryId: " + d_countryId
                 + "\nContinent Id: " + d_continentId
@@ -80,11 +62,20 @@ public class Country {
                 + "\nArmy units: " + d_armyValue;
     }
 
+    /**
+     * Hashcode
+     * @return hashcode for the object
+     */
     public int hashCode()
     {
         return toString().hashCode();
     }
 
+    /**
+     * Used to check for equality
+     * @param l_obj object ot be compared to
+     * @return true if the objects are equal
+     */
     public boolean equals(Object l_obj)
     {
         return (l_obj instanceof Country)
@@ -107,7 +98,6 @@ public class Country {
         this.d_countryId = p_countryId;
     }
 
-
     /**
      * Getter method for the Country Name.
      * @return the country name.
@@ -123,7 +113,6 @@ public class Country {
     public void setCountryName(String p_countryName) {
         this.d_countryName = p_countryName;
     }
-
 
     /**
      * Getter method for Army Value.
@@ -141,7 +130,6 @@ public class Country {
         this.d_armyValue = p_armyValue;
     }
 
-
     /**
      * Getter method of continent Id.
      * @return the continent id.
@@ -158,7 +146,6 @@ public class Country {
         this.d_continentId = p_continentId;
     }
 
-
     /**
      * This getter method use to get the player id who owns the country.
      * @return the player id.
@@ -174,7 +161,6 @@ public class Country {
     public void setOwnedByPlayerId(int p_ownedByPlayerId) {
         this.d_ownedByPlayerId = p_ownedByPlayerId;
     }
-
 
     /**
      * This getter method use to get the list of neighbor Countries.

@@ -24,16 +24,17 @@ public class GameEngine {
 
     private PHASE d_currentPhase;
 
+    private int d_currentPlayerIndex;
+
     /**
      * Sets the currentPlayer
      * @param p_currentPlayerIndex
      */
     private void setCurrentPlayerIndex(int p_currentPlayerIndex) {
-        System.out.println("Current player: " + d_gamePlayers.get(p_currentPlayerIndex).getName());
+        System.out.println("Current player: " + d_gamePlayers.get(p_currentPlayerIndex).getName() +
+                "Player id: " + d_gamePlayers.get(p_currentPlayerIndex).getId());
         this.d_currentPlayerIndex = p_currentPlayerIndex;
     }
-
-    private int d_currentPlayerIndex;
 
     /**
      * Getter method for game map
@@ -298,21 +299,4 @@ public class GameEngine {
         }
         throw new Exception("Player does not exist!");
     }
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        CliParser parser = new CliParser();
-        Scanner scanner = new Scanner(System.in);
-
-        String ip;
-        while (true) {
-            System.out.print(">");
-            ip = scanner.nextLine();
-            try {
-                parser.parseCommandString(ip);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        }
-    }
-
 }

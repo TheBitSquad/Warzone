@@ -156,6 +156,10 @@ public class Player {
         return this.d_orderList.remove(0);
     }
 
+    /**
+     * Adds a country to the countries owned
+     * @param p_country Country object
+     */
     public void addCountryOwned(Country p_country) {
         this.d_countriesOwned.add(p_country);
     }

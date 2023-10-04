@@ -135,6 +135,9 @@ public class Order {
         d_action = p_action;
     }
 
+    /**
+     * Executes an order
+     */
     public void execute() {
         if(d_action == TYPEOFACTION.DEPLOY){
             Map l_gameMap; Player l_player;

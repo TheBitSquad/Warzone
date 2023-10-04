@@ -350,7 +350,8 @@ public class Map {
      * @param p_continentId ContinentId
      * @return boolean true if the continent is a subgraph
      */
-    private boolean isContinentSubgraph(int p_continentId){
+    public boolean isContinentSubgraph(int p_continentId){
+        populateJGraph();
         // Just checking if the subgraph of all Countries in a continent is a connected graph
         Graph<Country, DefaultEdge> l_subgraph = new SimpleGraph<Country, DefaultEdge>(DefaultEdge.class);
 

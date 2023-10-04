@@ -159,7 +159,8 @@ public class Map {
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
                 Country l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
                 l_sourceCountry.removeNeighbor(p_destinationCountryId);
-            } else if (l_continent.getCountries().containsKey(p_destinationCountryId)){
+            }
+            if (l_continent.getCountries().containsKey(p_destinationCountryId)){
                 Country l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
                 l_destinationCountry.removeNeighbor(p_sourceCountryId);
             }

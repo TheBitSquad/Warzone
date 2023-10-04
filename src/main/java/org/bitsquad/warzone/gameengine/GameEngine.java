@@ -23,6 +23,16 @@ public class GameEngine {
     private List<Player> d_gamePlayers;
 
     private PHASE d_currentPhase;
+
+    /**
+     * Sets the currentPlayer
+     * @param p_currentPlayerIndex
+     */
+    private void setCurrentPlayerIndex(int p_currentPlayerIndex) {
+        System.out.println("Current player: " + d_gamePlayers.get(p_currentPlayerIndex).getName());
+        this.d_currentPlayerIndex = p_currentPlayerIndex;
+    }
+
     private int d_currentPlayerIndex;
 
     /**
@@ -105,7 +115,6 @@ public class GameEngine {
         } else {
             throw new Exception("Invalid map or filename");
         }
-        this.d_currentPlayerIndex = 0;
     }
 
     /**
@@ -143,6 +152,7 @@ public class GameEngine {
 
         // Change the current phase
         this.d_currentPhase = PHASE.PLAY;
+        nextRound();
     }
 
     /**
@@ -186,10 +196,12 @@ public class GameEngine {
 
         // Change the turn
         if (l_currentPlayer.getAvailableArmyUnits() == 0) {
-            this.d_currentPlayerIndex++;
-            if (this.d_currentPlayerIndex == this.d_gamePlayers.size()) {
+            // IF we are on the last player
+            if (this.d_currentPlayerIndex + 1 == this.d_gamePlayers.size()) {
                 executeOrders();
                 nextRound();
+            } else {
+                setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
             }
         }
     }
@@ -219,9 +231,6 @@ public class GameEngine {
      */
     private void nextRound() {
         System.out.println("New Round!");
-
-        this.d_currentPlayerIndex = 0;
-
         // Assign reinforcement units
         for (Player l_player : this.d_gamePlayers) {
             // Calculate the reinforcement
@@ -233,6 +242,7 @@ public class GameEngine {
             System.out.println(l_player.getName() + ": Reinforcements: " + l_numberReinforcement +
                     ". Total Units available to deploy: " + l_player.getAvailableArmyUnits());
         }
+        setCurrentPlayerIndex(0);
     }
 
     /**

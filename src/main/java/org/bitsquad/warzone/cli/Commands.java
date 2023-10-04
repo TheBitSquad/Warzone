@@ -96,7 +96,7 @@ class EditCountry implements Callable<Integer> {
                 int l_continentId = d_addIds[i + 1];
                 boolean resp = GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
                 if(!resp){
-                    System.out.println("Cannot add country");
+                    System.out.printf("Cannot add country %d to continent %d\n", l_countryId, l_continentId);
                 } else {
                     System.out.printf("Added country: %d to %d\n", l_countryId, l_continentId);
                 }
@@ -256,7 +256,11 @@ class ValidateMap implements Callable<Integer> {
      * @return exit code
      */
     public Integer call() {
-        System.out.println(GameEngine.get_instance().getGameMap().validateMap());
+        if(GameEngine.get_instance().getGameMap().validateMap()){
+            System.out.println("Valid map");
+        } else {
+            System.out.println("Invalid map");
+        }
         return 0;
     }
 }

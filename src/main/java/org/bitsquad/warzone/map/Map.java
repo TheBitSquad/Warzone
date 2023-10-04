@@ -118,10 +118,20 @@ public class Map {
      * @param p_countryId Country Id
      */
     public void removeCountry(int p_countryId){
+        Country l_countryToRemove = null;
         for(Continent l_continent: d_continents.values()){
             if(l_continent.getCountries().containsKey(p_countryId)){
+                l_countryToRemove = l_continent.getCountries().get(p_countryId);
+                // Remove country from continent
                 l_continent.removeCountry(p_countryId);
                 break;
+            }
+        }
+        if(l_countryToRemove == null) return;
+        // Remove country as neighbor from other countries
+        for(Continent l_continent: d_continents.values()){
+            for(Country l_country: l_continent.getCountries().values()){
+                l_country.removeNeighbor(l_countryToRemove.getCountryId());
             }
         }
     }

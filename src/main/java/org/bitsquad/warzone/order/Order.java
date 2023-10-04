@@ -1,5 +1,13 @@
 package org.bitsquad.warzone.order;
 
+import org.bitsquad.warzone.continent.Continent;
+import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.Player;
+
+import java.util.HashMap;
+
 /**
  * Represents an order placed by a player
  *
@@ -35,6 +43,19 @@ public class Order {
         this.d_targetCountryId = p_targetCountryId;
         this.d_noOfArmyUnits = p_noOfArmyUnits;
         this.d_action = p_action;
+    }
+
+    /**
+     * toString method
+     * @return string representation of class
+     */
+    @Override
+    public String toString() {
+        return "Order: " +
+                "d_playerId=" + d_playerId +
+                ", d_targetCountryId=" + d_targetCountryId +
+                ", d_noOfArmyUnits=" + d_noOfArmyUnits +
+                ", d_action=" + d_action;
     }
 
     /**
@@ -127,8 +148,24 @@ public class Order {
         d_action = p_action;
     }
 
-    // TODO: Need to implement
+    /**
+     * Executes an order
+     */
     public void execute() {
+        if(d_action == TYPEOFACTION.DEPLOY){
+            Map l_gameMap; Player l_player;
+            l_gameMap = GameEngine.get_instance().getGameMap();
 
+            // Get all countries
+            HashMap<Integer, Country> l_allCountries = new HashMap<>();
+            for (Continent l_continent : l_gameMap.getContinents().values()) {
+                HashMap<Integer, Country> l_countries = l_continent.getCountries();
+                l_allCountries.putAll(l_countries);
+            }
+
+            // Make changes to the map
+            Country l_country = l_allCountries.get(this.d_targetCountryId);
+            l_country.setArmyValue(l_country.getArmyValue() + this.d_noOfArmyUnits);
+        }
     }
 }

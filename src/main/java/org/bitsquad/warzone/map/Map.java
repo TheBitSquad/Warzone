@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.map;
 
 import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.layout.mxParallelEdgeLayout;
 import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 
@@ -45,6 +46,11 @@ public class Map {
         return d_continents;
     }
 
+    /**
+     * Used to get a particular continent by ID
+     * @param p_continentId Continent id
+     * @return
+     */
     public Continent getContinent(int p_continentId){
         return d_continents.get(p_continentId);
     }
@@ -158,7 +164,8 @@ public class Map {
             if(l_continent.getCountries().containsKey(p_sourceCountryId)){
                 Country l_sourceCountry = l_continent.getCountries().get(p_sourceCountryId);
                 l_sourceCountry.removeNeighbor(p_destinationCountryId);
-            } else if (l_continent.getCountries().containsKey(p_destinationCountryId)){
+            }
+            if (l_continent.getCountries().containsKey(p_destinationCountryId)){
                 Country l_destinationCountry = l_continent.getCountries().get(p_destinationCountryId);
                 l_destinationCountry.removeNeighbor(p_sourceCountryId);
             }
@@ -248,7 +255,7 @@ public class Map {
                 }
                 l_bufferedReader.close();
             }
-            return true;
+            return validateMap();
         }
         catch (IOException e){
             System.err.println("Unable to load the map," + e.getMessage());
@@ -260,35 +267,34 @@ public class Map {
      * Write the Map data to a .map text file
      * @param p_fileName FileName
      */
-    public void saveMap(String p_fileName) {
-        try{
-            StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
-            BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
-            //save continents data
-            l_bufferedWriter.write("[continents]\n");
-            for(Continent l_continents : d_continents.values())
-                l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
-            //save countries data and build neighbors list
-            l_bufferedWriter.write("\n[countries]\n");
-            for(Continent l_continents : d_continents.values()) {
-                for(int l_countryId: l_continents.getCountries().keySet()){
-                    l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
-                    //building neighbors list
-                    l_stringBuilder.append(l_countryId);
-                    Country l_country = l_continents.getCountries().get(l_countryId);
-                    for (int neighborId : l_country.getNeighbors()) {
-                        l_stringBuilder.append(" ").append(neighborId);
-                    }
-                    l_stringBuilder.append("\n");
+    public void saveMap(String p_fileName) throws Exception {
+        if(!validateMap()){
+            throw new Exception("Invalid Map, cannot save");
+        }
+
+        StringBuilder l_stringBuilder = new StringBuilder("\n[neighbors]\n");
+        BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
+        //save continents data
+        l_bufferedWriter.write("[continents]\n");
+        for(Continent l_continents : d_continents.values())
+            l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
+        //save countries data and build neighbors list
+        l_bufferedWriter.write("\n[countries]\n");
+        for(Continent l_continents : d_continents.values()) {
+            for(int l_countryId: l_continents.getCountries().keySet()){
+                l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
+                //building neighbors list
+                l_stringBuilder.append(l_countryId);
+                Country l_country = l_continents.getCountries().get(l_countryId);
+                for (int neighborId : l_country.getNeighbors()) {
+                    l_stringBuilder.append(" ").append(neighborId);
                 }
+                l_stringBuilder.append("\n");
             }
-            l_bufferedWriter.append(l_stringBuilder);
-            l_bufferedWriter.flush();
-            l_bufferedWriter.close();
         }
-        catch (IOException e){
-            System.err.println("Error saving the map" + e.getMessage());
-        }
+        l_bufferedWriter.append(l_stringBuilder);
+        l_bufferedWriter.flush();
+        l_bufferedWriter.close();
     }
 
     /**
@@ -319,7 +325,7 @@ public class Map {
      * Populates the JgraphtT.graph data structure
      */
     private void populateJGraph(){
-
+        d_graph = new SimpleGraph<>(DefaultEdge.class);
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
 
         // Add the vertices i.e. Countries
@@ -341,15 +347,15 @@ public class Map {
 
     /**
      * Checks if a continent is a subgraph
-     * @param l_continentId ContinentId
+     * @param p_continentId ContinentId
      * @return boolean true if the continent is a subgraph
      */
-    private boolean isContinentSubgraph(int l_continentId){
+    private boolean isContinentSubgraph(int p_continentId){
         // Just checking if the subgraph of all Countries in a continent is a connected graph
         Graph<Country, DefaultEdge> l_subgraph = new SimpleGraph<Country, DefaultEdge>(DefaultEdge.class);
 
         Collection<Country> l_subgraphVertices =
-                d_continents.get(l_continentId).getCountries().values();
+                d_continents.get(p_continentId).getCountries().values();
 
         for(Country l_vertex: l_subgraphVertices){
             l_subgraph.addVertex(l_vertex);
@@ -388,8 +394,9 @@ public class Map {
      * Used to visualise the game map
      */
     public void visualizeGraph(){
+        populateJGraph();
         JFrame l_frame = new JFrame("Game Map");
-        l_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        l_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         l_frame.setSize(800, 600);
         l_frame.getContentPane().setLayout(new BorderLayout());
 
@@ -418,6 +425,7 @@ public class Map {
         l_frame.getContentPane().add(l_graphComponent,BorderLayout.CENTER);
         l_frame.setLocationRelativeTo(null);
         l_frame.setVisible(true);
+        l_frame.setEnabled(true);
     }
 
 }

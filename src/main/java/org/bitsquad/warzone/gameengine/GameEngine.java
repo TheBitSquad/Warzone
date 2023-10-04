@@ -1,7 +1,6 @@
 package org.bitsquad.warzone.gameengine;
 
 import org.bitsquad.warzone.cli.CliParser;
-import org.bitsquad.warzone.cli.CliResponse;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
@@ -26,36 +25,67 @@ public class GameEngine {
     private PHASE d_currentPhase;
     private int d_currentPlayerIndex;
 
+    /**
+     * Getter method for game map
+     * @return gamemap
+     */
     public Map getGameMap() {
         return d_gameMap;
     }
 
+    /**
+     * Setter for game map
+     * @param p_gameMap gamemap
+     */
     public void setGameMap(Map p_gameMap) {
         this.d_gameMap = p_gameMap;
     }
 
+    /**
+     * Getter for gameplayers list
+     * @return list of game players
+     */
     public List<Player> getGamePlayers() {
         return d_gamePlayers;
     }
 
+    /**
+     * Setter for game players
+     * @param p_gamePlayers list of game players
+     */
     public void setGamePlayers(List<Player> p_gamePlayers) {
         this.d_gamePlayers = p_gamePlayers;
     }
 
+    /**
+     * Gets the current game phase
+     * @return current game phases
+     */
     public PHASE getCurrentPhase() {
         return d_currentPhase;
     }
 
+    /**
+     * Setter for current game phase
+     * @param p_currentPhase game phase
+     */
     public void setCurrentPhase(PHASE p_currentPhase) {
         this.d_currentPhase = p_currentPhase;
     }
 
+    /**
+     * Default constructor
+     */
     GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
         d_currentPhase = PHASE.MAP;
     }
 
+    /**
+     * Singleton instance getter
+     * @return instance of GameEngine
+     */
     public static GameEngine get_instance() {
         if (d_instance == null) {
             d_instance = new GameEngine();
@@ -63,7 +93,12 @@ public class GameEngine {
         return d_instance;
     }
 
-    public void loadMap(String p_filename) throws Exception {
+    /**
+     * Handler method for loadmap command
+     * @param p_filename filename of map file
+     * @throws Exception if the map is invalid or IOError
+     */
+    public void handleLoadMap(String p_filename) throws Exception {
         boolean resp = this.d_gameMap.loadMap(p_filename);
         if (resp) {
             this.d_currentPhase = PHASE.STARTUP;
@@ -73,7 +108,14 @@ public class GameEngine {
         this.d_currentPlayerIndex = 0;
     }
 
-    public void assignCountries() throws Exception{
+    /**
+     * Handler for assigncountries command
+     * @throws Exception
+     */
+    public void handleAssignCountries() throws Exception{
+        if(!this.d_gameMap.validateMap()){
+            throw new Exception("Not a valid map cannot begin gameplay");
+        }
         if(this.d_gamePlayers.size() == 0){
             throw new Exception("No players have been added yet");
         }
@@ -103,7 +145,13 @@ public class GameEngine {
         this.d_currentPhase = PHASE.PLAY;
     }
 
-    public void deployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
+    /**
+     * Handler method for deploy army command
+     * @param p_targetCountryID ID of target country
+     * @param p_armyUnits number of army units
+     * @throws Exception
+     */
+    public void handleDeployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
 
         // Check whether the player has the sufficient army units or not
@@ -141,11 +189,14 @@ public class GameEngine {
             this.d_currentPlayerIndex++;
             if (this.d_currentPlayerIndex == this.d_gamePlayers.size()) {
                 executeOrders();
-                nextTurn();
+                nextRound();
             }
         }
     }
 
+    /**
+     * Executes orders in Round-Robin fashion
+     */
     private void executeOrders() {
         System.out.println("Executing Orders");
         Order l_orderToExecute;
@@ -163,8 +214,11 @@ public class GameEngine {
         }
     }
 
-    private void nextTurn() {
-        System.out.println("Next Turn");
+    /**
+     * Sets up the start of a new round
+     */
+    private void nextRound() {
+        System.out.println("New Round!");
 
         this.d_currentPlayerIndex = 0;
 
@@ -175,9 +229,17 @@ public class GameEngine {
 
             // Add the army
             l_player.setAvailableArmyUnits(l_player.getAvailableArmyUnits() + l_numberReinforcement);
+
+            System.out.println(l_player.getName() + ": Reinforcements: " + l_numberReinforcement +
+                    ". Total Units available to deploy: " + l_player.getAvailableArmyUnits());
         }
     }
 
+    /**
+     * Calculates number of reinforcement units for a player
+     * @param p_player Player Objec
+     * @return int number of reinforcement units
+     */
     private int getNumberOfReinforcementUnits(Player p_player) {
         int l_numberReinforcement = 3;
         l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
@@ -197,7 +259,12 @@ public class GameEngine {
         return l_numberReinforcement;
     }
 
-    public void addPlayer(String p_playerName) throws Exception {
+    /**
+     * Handler method for gamplayer -add command
+     * @param p_playerName name of the player
+     * @throws Exception
+     */
+    public void handleAddPlayer(String p_playerName) throws Exception {
         // Check if a player is already present
         for(Player l_player: this.d_gamePlayers){
             if(l_player.getName().equalsIgnoreCase(p_playerName)){
@@ -207,7 +274,12 @@ public class GameEngine {
         d_gamePlayers.add(new Player(p_playerName));
     }
 
-    public void removePlayer(String p_playerName) throws Exception {
+    /**
+     * Handler method of remove player command
+     * @param p_playerName Player name
+     * @throws Exception
+     */
+    public void handleRemovePlayer(String p_playerName) throws Exception {
         for(Player l_player: this.d_gamePlayers){
             if(l_player.getName().equalsIgnoreCase(p_playerName)){
                 this.d_gamePlayers.remove(l_player);
@@ -223,6 +295,7 @@ public class GameEngine {
 
         String ip;
         while (true) {
+            System.out.print(">");
             ip = scanner.nextLine();
             try {
                 parser.parseCommandString(ip);

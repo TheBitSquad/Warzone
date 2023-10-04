@@ -1,0 +1,15 @@
+[continents]
+1 5
+2 3
+
+[countries]
+1 Country_1 1
+2 Country_2 1
+3 Country_3 2
+4 Country_4 2
+
+[neighbors]
+1 2
+2 1 4
+3 4
+4 2 3

@@ -46,6 +46,11 @@ public class Map {
         return d_continents;
     }
 
+    /**
+     * Used to get a particular continent by ID
+     * @param p_continentId Continent id
+     * @return
+     */
     public Continent getContinent(int p_continentId){
         return d_continents.get(p_continentId);
     }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
  * This tests the functionality of Order class.
  */
 class OrderTest {
-
 	@Test
 	void test() {
 	}

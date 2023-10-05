@@ -7,3 +7,5 @@ Game Design Outline Document: [Game Outline Document](https://liveconcordia-my.s
 UML Class Diagram: [UML Class Diagram](https://drive.google.com/file/d/1wG4AMuCU9uOf12bNBoisPwxV0WYLAKCF/view?usp=sharing)
 
 Flowchart Diagram: [Flowchart Diagram](https://drive.google.com/file/d/1qkdKj3camtycs-aPsomErns_CYR2nTxI/view?usp=sharing)
+
+Javadocs are available on github pages: [W16-Warzone Javadocs](https://thebitsquad.github.io/Warzone/index.html)

@@ -10,34 +10,43 @@ import org.junit.jupiter.api.Test;
  */
 class ContinentTest {
 
-	private Continent continent;
+	private Continent d_continent;
 
 	@BeforeEach
 	void setUp() {
-		continent = new Continent(1, 5);
+		d_continent = new Continent(1, 5);
 	}
 
 	@Test
 	void testGetId() {
-		assertEquals(1, continent.getId());
+		assertEquals(1, d_continent.getId());
 	}
 
+	/**
+	 * Tests set value
+	 */
 	@Test
 	void testSetValue() {
-		continent.setValue(10);
-		assertEquals(10, continent.getValue());
+		d_continent.setValue(10);
+		assertEquals(10, d_continent.getValue());
 	}
 
+	/**
+	 * Tests add country
+	 */
 	@Test
 	void testAddCountry() {
-		continent.addCountry(101, "Country1");
-		assertTrue(continent.getCountries().containsKey(101));
+		d_continent.addCountry(101, "Country1");
+		assertTrue(d_continent.getCountries().containsKey(101));
 	}
 
+	/**
+	 * Tests remove country
+	 */
 	@Test
 	void testRemoveCountry() {
-		continent.addCountry(101, "Country1");
-		continent.removeCountry(101);
-		assertFalse(continent.getCountries().containsKey(101));
+		d_continent.addCountry(101, "Country1");
+		d_continent.removeCountry(101);
+		assertFalse(d_continent.getCountries().containsKey(101));
 	}
 }

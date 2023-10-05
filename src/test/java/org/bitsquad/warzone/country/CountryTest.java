@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,19 +11,19 @@ import org.junit.jupiter.api.Test;
  * This tests the functionality of Country class.
  */
 class CountryTest {
-	static ArrayList<Integer> ns;
-	static private Country countryObject;
+	static ArrayList<Integer> Ns;
+	static private Country CountryObject;
 
 	@BeforeAll
 	public static void init(){
-		ns= new ArrayList<Integer>();
-		countryObject = new Country(1,1,"India",5,4,ns);
+		Ns = new ArrayList<Integer>();
+		CountryObject = new Country(1,1,"India",5,4, Ns);
 	}
 
 	@AfterAll
 	public static void destroy(){
-		ns = null;
-		countryObject = null;
+		Ns = null;
+		CountryObject = null;
 	}
 	/**
 	 * This method will testing that neighbor country id is only be added if it is not added.
@@ -34,12 +33,11 @@ class CountryTest {
 	@BeforeEach
 	public void initEach(){
 	     //test setup code
-		ArrayList<Integer> ns1= new ArrayList<Integer>();
-		ns1.add(4);
-		ns1.add(5);
-		ns1.add(6);
-		countryObject.setNeighbors(ns1);
-		
+		ArrayList<Integer> l_ns1= new ArrayList<Integer>();
+		l_ns1.add(4);
+		l_ns1.add(5);
+		l_ns1.add(6);
+		CountryObject.setNeighbors(l_ns1);
 	}
 
 
@@ -49,10 +47,10 @@ class CountryTest {
 	@Test
 	void testAddNeighbor() {
 
-		assertFalse(countryObject.addNeighbor(1));
-		assertTrue(countryObject.addNeighbor(2));
-		assertTrue(countryObject.addNeighbor(3));
-		assertFalse(countryObject.addNeighbor(3));
+		assertFalse(CountryObject.addNeighbor(1));
+		assertTrue(CountryObject.addNeighbor(2));
+		assertTrue(CountryObject.addNeighbor(3));
+		assertFalse(CountryObject.addNeighbor(3));
 	}
 
 	/**
@@ -61,8 +59,8 @@ class CountryTest {
 	@Test
 	void testRemoveNeighbor() {
 
-		assertFalse(countryObject.removeNeighbor(2));
-		assertTrue(countryObject.removeNeighbor(4));
+		assertFalse(CountryObject.removeNeighbor(2));
+		assertTrue(CountryObject.removeNeighbor(4));
 	}
 
 }

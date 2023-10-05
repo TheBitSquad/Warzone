@@ -64,6 +64,7 @@ public class Continent {
     public void setValue(int p_bonusValue) {
         this.d_bonusValue = p_bonusValue;
     }
+
     /** 
     * Getter  method for Countries hashmap
     * @return the hashmap of countries
@@ -71,6 +72,7 @@ public class Continent {
     public HashMap<Integer, Country> getCountries() {
         return d_countries;
     }
+
     /**
      * Setter method of countries hashmap.
      * @param p_countries the hashmap of countries
@@ -78,7 +80,6 @@ public class Continent {
     public void setCountries(HashMap<Integer, Country> p_countries) {
         this.d_countries = p_countries;
     }
-    
 
     /** 
     * Method to add a Country

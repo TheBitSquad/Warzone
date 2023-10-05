@@ -1,6 +1,5 @@
 package org.bitsquad.warzone.gameengine;
 
-import org.bitsquad.warzone.cli.CliParser;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
@@ -21,14 +20,18 @@ public class GameEngine {
 
     private Map d_gameMap;
     private List<Player> d_gamePlayers;
-
     private PHASE d_currentPhase;
-
     private int d_currentPlayerIndex;
+
+    GameEngine() {
+        d_gameMap = new Map();
+        d_gamePlayers = new ArrayList<>();
+        d_currentPhase = PHASE.MAP;
+    }
 
     /**
      * Sets the currentPlayer
-     * @param p_currentPlayerIndex
+     * @param p_currentPlayerIndex is the current player index
      */
     private void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         System.out.println("Current player: " + d_gamePlayers.get(p_currentPlayerIndex).getName() +
@@ -38,7 +41,7 @@ public class GameEngine {
 
     /**
      * Getter method for game map
-     * @return gamemap
+     * @return gamemap the map of the current game engine
      */
     public Map getGameMap() {
         return d_gameMap;
@@ -46,14 +49,14 @@ public class GameEngine {
 
     /**
      * Setter for game map
-     * @param p_gameMap gamemap
+     * @param p_gameMap the map
      */
     public void setGameMap(Map p_gameMap) {
         this.d_gameMap = p_gameMap;
     }
 
     /**
-     * Getter for gameplayers list
+     * Getter for game players list
      * @return list of game players
      */
     public List<Player> getGamePlayers() {
@@ -82,15 +85,6 @@ public class GameEngine {
      */
     public void setCurrentPhase(PHASE p_currentPhase) {
         this.d_currentPhase = p_currentPhase;
-    }
-
-    /**
-     * Default constructor
-     */
-    GameEngine() {
-        d_gameMap = new Map();
-        d_gamePlayers = new ArrayList<>();
-        d_currentPhase = PHASE.MAP;
     }
 
     /**
@@ -252,7 +246,7 @@ public class GameEngine {
      * @param p_player Player Objec
      * @return int number of reinforcement units
      */
-    private int getNumberOfReinforcementUnits(Player p_player) {
+    public int getNumberOfReinforcementUnits(Player p_player) {
         int l_numberReinforcement = 3;
         l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
         for (Continent l_continent : this.d_gameMap.getContinents().values()) {

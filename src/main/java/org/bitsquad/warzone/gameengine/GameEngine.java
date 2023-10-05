@@ -252,7 +252,7 @@ public class GameEngine {
      * @param p_player Player Objec
      * @return int number of reinforcement units
      */
-    private int getNumberOfReinforcementUnits(Player p_player) {
+    public int getNumberOfReinforcementUnits(Player p_player) {
         int l_numberReinforcement = 3;
         l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
         for (Continent l_continent : this.d_gameMap.getContinents().values()) {

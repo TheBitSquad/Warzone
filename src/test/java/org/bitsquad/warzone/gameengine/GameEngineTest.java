@@ -6,12 +6,10 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This tests the functionality of GameEngine class.
@@ -43,11 +41,11 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyInitialBonus() {
-        Player p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
 
-        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(p1));
-        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(p2));
+        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -55,33 +53,33 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyCountryBonus() {
-        Player p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
 
-        ArrayList<Country> p1Countries = new ArrayList<>();
-        p1Countries.add(new Country(1, 1));
-        p1Countries.add(new Country(2, 1));
-        p1Countries.add(new Country(3, 1));
-        p1Countries.add(new Country(4, 2));
-        p1Countries.add(new Country(5, 2));
-        p1Countries.add(new Country(6, 2));
-        p1Countries.add(new Country(7, 4));
-        p1Countries.add(new Country(8, 5));
-        p1Countries.add(new Country(9, 6));
+        ArrayList<Country> l_p1Countries = new ArrayList<>();
+        l_p1Countries.add(new Country(1, 1));
+        l_p1Countries.add(new Country(2, 1));
+        l_p1Countries.add(new Country(3, 1));
+        l_p1Countries.add(new Country(4, 2));
+        l_p1Countries.add(new Country(5, 2));
+        l_p1Countries.add(new Country(6, 2));
+        l_p1Countries.add(new Country(7, 4));
+        l_p1Countries.add(new Country(8, 5));
+        l_p1Countries.add(new Country(9, 6));
 
 
-        ArrayList<Country> p2Countries = new ArrayList<>();
-        p2Countries.add(new Country(6, 2));
-        p2Countries.add(new Country(7, 3));
-        p2Countries.add(new Country(8, 3));
-        p2Countries.add(new Country(9, 3));
-        p2Countries.add(new Country(10, 3));
+        ArrayList<Country> l_p2Countries = new ArrayList<>();
+        l_p2Countries.add(new Country(6, 2));
+        l_p2Countries.add(new Country(7, 3));
+        l_p2Countries.add(new Country(8, 3));
+        l_p2Countries.add(new Country(9, 3));
+        l_p2Countries.add(new Country(10, 3));
 
-        p1.setCountriesOwned(p1Countries);
-        p2.setCountriesOwned(p2Countries);
+        l_p1.setCountriesOwned(l_p1Countries);
+        l_p2.setCountriesOwned(l_p2Countries);
 
-        assertEquals(6, GameEngine.get_instance().getNumberOfReinforcementUnits(p1));
-        assertEquals(4, GameEngine.get_instance().getNumberOfReinforcementUnits(p2));
+        assertEquals(6, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(4, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -89,50 +87,50 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyContinentBonus() {
-        Player p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
 
-        ArrayList<Country> p1Countries = new ArrayList<>();
-        p1Countries.add(new Country(1, 1));
-        p1Countries.add(new Country(2, 1));
-        p1Countries.add(new Country(3, 1));
-        p1Countries.add(new Country(4, 2));
-        p1Countries.add(new Country(5, 2));
-        p1Countries.add(new Country(11, 2));
-        p1Countries.add(new Country(7, 4));
-        p1Countries.add(new Country(8, 5));
-        p1Countries.add(new Country(9, 6));
+        ArrayList<Country> l_p1Countries = new ArrayList<>();
+        l_p1Countries.add(new Country(1, 1));
+        l_p1Countries.add(new Country(2, 1));
+        l_p1Countries.add(new Country(3, 1));
+        l_p1Countries.add(new Country(4, 2));
+        l_p1Countries.add(new Country(5, 2));
+        l_p1Countries.add(new Country(11, 2));
+        l_p1Countries.add(new Country(7, 4));
+        l_p1Countries.add(new Country(8, 5));
+        l_p1Countries.add(new Country(9, 6));
 
 
-        ArrayList<Country> p2Countries = new ArrayList<>();
-        p2Countries.add(new Country(6, 2));
-        p2Countries.add(new Country(7, 3));
-        p2Countries.add(new Country(8, 3));
-        p2Countries.add(new Country(9, 3));
-        p2Countries.add(new Country(10, 3));
+        ArrayList<Country> l_p2Countries = new ArrayList<>();
+        l_p2Countries.add(new Country(6, 2));
+        l_p2Countries.add(new Country(7, 3));
+        l_p2Countries.add(new Country(8, 3));
+        l_p2Countries.add(new Country(9, 3));
+        l_p2Countries.add(new Country(10, 3));
 
-        p1.setCountriesOwned(p1Countries);
-        p2.setCountriesOwned(p2Countries);
+        l_p1.setCountriesOwned(l_p1Countries);
+        l_p2.setCountriesOwned(l_p2Countries);
 
-        Map map = new Map();
-        map.addContinent(1, 3);
-        map.addContinent(2, 10);
-        map.addContinent(3, 7);
-        map.addCountry(1, 1);
-        map.addCountry(2, 1);
-        map.addCountry(3, 1);
-        map.addCountry(4, 2);
-        map.addCountry(5, 2);
-        map.addCountry(6, 2);
-        map.addCountry(11, 2);
-        map.addCountry(7, 3);
-        map.addCountry(8, 3);
-        map.addCountry(9, 3);
-        map.addCountry(10, 3);
-        GameEngine.get_instance().setGameMap(map);
+        Map l_map = new Map();
+        l_map.addContinent(1, 3);
+        l_map.addContinent(2, 10);
+        l_map.addContinent(3, 7);
+        l_map.addCountry(1, 1);
+        l_map.addCountry(2, 1);
+        l_map.addCountry(3, 1);
+        l_map.addCountry(4, 2);
+        l_map.addCountry(5, 2);
+        l_map.addCountry(6, 2);
+        l_map.addCountry(11, 2);
+        l_map.addCountry(7, 3);
+        l_map.addCountry(8, 3);
+        l_map.addCountry(9, 3);
+        l_map.addCountry(10, 3);
+        GameEngine.get_instance().setGameMap(l_map);
 
-        assertEquals(9, GameEngine.get_instance().getNumberOfReinforcementUnits(p1));
-        assertEquals(11, GameEngine.get_instance().getNumberOfReinforcementUnits(p2));
+        assertEquals(9, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(11, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -141,39 +139,39 @@ class GameEngineTest {
      */
     @Test
     void testDeployArmy() {
-        Player p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player p2 = GameEngine.get_instance().getGamePlayers().get(1);
-        p1.setAvailableArmyUnits(4);
-        p2.setAvailableArmyUnits(7);
+        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        l_p1.setAvailableArmyUnits(4);
+        l_p2.setAvailableArmyUnits(7);
 
 
-        ArrayList<Country> p1Countries = new ArrayList<>();
-        p1Countries.add(new Country(1, 1));
-        p1Countries.add(new Country(2, 1));
-        p1Countries.add(new Country(3, 1));
+        ArrayList<Country> l_p1Countries = new ArrayList<>();
+        l_p1Countries.add(new Country(1, 1));
+        l_p1Countries.add(new Country(2, 1));
+        l_p1Countries.add(new Country(3, 1));
 
 
-        ArrayList<Country> p2Countries = new ArrayList<>();
-        p2Countries.add(new Country(7, 3));
-        p2Countries.add(new Country(8, 3));
-        p2Countries.add(new Country(9, 3));
-        p2Countries.add(new Country(10, 3));
+        ArrayList<Country> l_p2Countries = new ArrayList<>();
+        l_p2Countries.add(new Country(7, 3));
+        l_p2Countries.add(new Country(8, 3));
+        l_p2Countries.add(new Country(9, 3));
+        l_p2Countries.add(new Country(10, 3));
 
-        p1.setCountriesOwned(p1Countries);
-        p2.setCountriesOwned(p2Countries);
+        l_p1.setCountriesOwned(l_p1Countries);
+        l_p2.setCountriesOwned(l_p2Countries);
 
-        Map map = new Map();
-        map.addContinent(1, 3);
-        map.addContinent(2, 10);
-        map.addContinent(3, 7);
-        map.addCountry(1, 1);
-        map.addCountry(2, 1);
-        map.addCountry(3, 1);
-        map.addCountry(7, 3);
-        map.addCountry(8, 3);
-        map.addCountry(9, 3);
-        map.addCountry(10, 3);
-        GameEngine.get_instance().setGameMap(map);
+        Map l_map = new Map();
+        l_map.addContinent(1, 3);
+        l_map.addContinent(2, 10);
+        l_map.addContinent(3, 7);
+        l_map.addCountry(1, 1);
+        l_map.addCountry(2, 1);
+        l_map.addCountry(3, 1);
+        l_map.addCountry(7, 3);
+        l_map.addCountry(8, 3);
+        l_map.addCountry(9, 3);
+        l_map.addCountry(10, 3);
+        GameEngine.get_instance().setGameMap(l_map);
 
         assertThrows(Exception.class, () -> {
             GameEngine.get_instance().handleDeployArmy(1, 5);

@@ -19,7 +19,6 @@ public class Player {
     private int d_availableArmyUnits;
     private ArrayList<Country> d_countriesOwned;
     private ArrayList<Order> d_orderList;
-
     // d_currentOrder contains the current order to be issued next
     private Order d_currentOrder;
 

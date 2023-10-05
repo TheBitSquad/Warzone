@@ -30,9 +30,6 @@ public class Map {
     private HashMap<Integer, Continent> d_continents;
     private Graph<Country, DefaultEdge> d_graph;
 
-    /**
-     * Default Constructor
-     */
     public Map(){
         d_continents = new HashMap<Integer, Continent>();
         d_graph = new SimpleGraph<>(DefaultEdge.class);
@@ -438,6 +435,5 @@ public class Map {
         l_frame.setVisible(true);
         l_frame.setEnabled(true);
     }
-
 }
 

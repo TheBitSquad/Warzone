@@ -15,9 +15,6 @@ public class Country {
     private int d_ownedByPlayerId;
     private ArrayList<Integer> d_neighbors;
 
-    /**
-     * Default constructor
-     */
     public Country(){
         this.d_neighbors = new ArrayList<Integer>();
     }

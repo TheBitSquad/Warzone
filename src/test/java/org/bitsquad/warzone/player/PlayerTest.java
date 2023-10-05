@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test;
  */
 class PlayerTest {
 
-    private static Player player1;
-    private static Player player2;
-    private static Player player3;
+    private static Player d_player1;
+    private static Player d_player2;
+    private static Player d_player3;
 
     @BeforeEach
     public void initEach() {
-        player1 = new Player("a");
-        player2 = new Player("b");
-        player3 = new Player("c");
+        d_player1 = new Player("a");
+        d_player2 = new Player("b");
+        d_player3 = new Player("c");
     }
 
     /**
@@ -27,9 +27,9 @@ class PlayerTest {
      */
     @Test
     void testPlayerIDGeneration() {
-        assertNotEquals(player1.getId(), player2.getId());
-        assertNotEquals(player2.getId(), player3.getId());
-        assertNotEquals(player1.getId(), player3.getId());
+        assertNotEquals(d_player1.getId(), d_player2.getId());
+        assertNotEquals(d_player2.getId(), d_player3.getId());
+        assertNotEquals(d_player1.getId(), d_player3.getId());
     }
 
     /**
@@ -37,19 +37,19 @@ class PlayerTest {
      */
     @Test
     void testIssueOrder() {
-        Order order1 = new Order(player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
-        player1.setCurrentOrder(order1);
-        player1.issueOrder();
+        Order l_order1 = new Order(d_player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
+        d_player1.setCurrentOrder(l_order1);
+        d_player1.issueOrder();
 
-        assertEquals(1, player1.getOrderList().size());
-        assertEquals(0, player1.getCurrentOrder().getSourceCountryId());
+        assertEquals(1, d_player1.getOrderList().size());
+        assertEquals(0, d_player1.getCurrentOrder().getSourceCountryId());
 
-        Order order2 = new Order(player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
-        player1.setCurrentOrder(order2);
-        player1.issueOrder();
+        Order l_order2 = new Order(d_player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
+        d_player1.setCurrentOrder(l_order2);
+        d_player1.issueOrder();
 
-        assertEquals(2, player1.getOrderList().size());
-        assertEquals(0, player1.getCurrentOrder().getSourceCountryId());
+        assertEquals(2, d_player1.getOrderList().size());
+        assertEquals(0, d_player1.getCurrentOrder().getSourceCountryId());
     }
 
     /**
@@ -57,16 +57,16 @@ class PlayerTest {
      */
     @Test
     void testNextOrder() {
-        Order order1 = new Order(player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
-        Order order2 = new Order(player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
-        player1.setCurrentOrder(order1);
-        player1.issueOrder();
-        player1.setCurrentOrder(order2);
-        player1.issueOrder();
+        Order l_order1 = new Order(d_player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
+        Order l_order2 = new Order(d_player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
+        d_player1.setCurrentOrder(l_order1);
+        d_player1.issueOrder();
+        d_player1.setCurrentOrder(l_order2);
+        d_player1.issueOrder();
 
-        assertEquals(1, player1.nextOrder().getSourceCountryId());
-        assertEquals(4, player1.nextOrder().getTargetCountryId());
-        assertNull(player1.nextOrder());
+        assertEquals(1, d_player1.nextOrder().getSourceCountryId());
+        assertEquals(4, d_player1.nextOrder().getTargetCountryId());
+        assertNull(d_player1.nextOrder());
     }
 
 }

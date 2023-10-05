@@ -18,22 +18,19 @@ import java.util.List;
  */
 class GameEngineTest {
 
-    /**
-     * It adds multiple players before each test.
-     */
     @BeforeEach
     public void initEach() {
+        // It adds multiple players before each test.
         assertDoesNotThrow(() -> {
             GameEngine.get_instance().handleAddPlayer("a");
             GameEngine.get_instance().handleAddPlayer("b");
         });
     }
 
-    /**
-     * It removes players and the map after each test.
-     */
     @AfterEach
     public void destroyEach() {
+        // It removes multiple players and the map after each test for checking
+        // reinforcement army calculation
         assertDoesNotThrow(() -> {
             GameEngine.get_instance().handleRemovePlayer("a");
             GameEngine.get_instance().handleRemovePlayer("b");
@@ -138,4 +135,72 @@ class GameEngineTest {
         assertEquals(11, GameEngine.get_instance().getNumberOfReinforcementUnits(p2));
     }
 
+    /**
+     * It checks if the requested number of army is sufficient and whether
+     * the deploying on the target country is possible or not
+     */
+    @Test
+    void testDeployArmy() {
+        Player p1 = GameEngine.get_instance().getGamePlayers().get(0);
+        Player p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        p1.setAvailableArmyUnits(4);
+        p2.setAvailableArmyUnits(7);
+
+
+        ArrayList<Country> p1Countries = new ArrayList<>();
+        p1Countries.add(new Country(1, 1));
+        p1Countries.add(new Country(2, 1));
+        p1Countries.add(new Country(3, 1));
+
+
+        ArrayList<Country> p2Countries = new ArrayList<>();
+        p2Countries.add(new Country(7, 3));
+        p2Countries.add(new Country(8, 3));
+        p2Countries.add(new Country(9, 3));
+        p2Countries.add(new Country(10, 3));
+
+        p1.setCountriesOwned(p1Countries);
+        p2.setCountriesOwned(p2Countries);
+
+        Map map = new Map();
+        map.addContinent(1, 3);
+        map.addContinent(2, 10);
+        map.addContinent(3, 7);
+        map.addCountry(1, 1);
+        map.addCountry(2, 1);
+        map.addCountry(3, 1);
+        map.addCountry(7, 3);
+        map.addCountry(8, 3);
+        map.addCountry(9, 3);
+        map.addCountry(10, 3);
+        GameEngine.get_instance().setGameMap(map);
+
+        assertThrows(Exception.class, () -> {
+            GameEngine.get_instance().handleDeployArmy(1, 5);
+        });
+        assertThrows(Exception.class, () -> {
+            GameEngine.get_instance().handleDeployArmy(7, 1);
+        });
+        assertDoesNotThrow(() -> {
+            GameEngine.get_instance().handleDeployArmy(1, 2);
+        });
+        assertDoesNotThrow(() -> {
+            GameEngine.get_instance().handleDeployArmy(1, 1);
+        });
+        assertThrows(Exception.class, () -> {
+            GameEngine.get_instance().handleDeployArmy(1, 2);
+        });
+        assertDoesNotThrow(() -> {
+            GameEngine.get_instance().handleDeployArmy(1, 1);
+        });
+        assertDoesNotThrow(() -> {
+            GameEngine.get_instance().handleDeployArmy(7, 6);
+        });
+        assertThrows(Exception.class, () -> {
+            GameEngine.get_instance().handleDeployArmy(7, 2);
+        });
+        assertThrows(Exception.class, () -> {
+            GameEngine.get_instance().handleDeployArmy(1, 1);
+        });
+    }
 }

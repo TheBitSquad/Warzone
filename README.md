@@ -13,7 +13,7 @@ Javadocs are available on github pages: [W16-Warzone Javadocs](https://thebitsqu
 
 ---------
 To-do:
-[] State Pattern to implement phases of the application
-[] Observer Pattern for game log file
-[] Command Patter to implement Orders
-[] Implementation of advance, bomb, blockade, airlift and negotiate commands
+- [ ] State Pattern to implement phases of the application
+- [ ] Observer Pattern for game log file
+- [ ] Command Patter to implement Orders
+- [ ] Implementation of advance, bomb, blockade, airlift and negotiate commands

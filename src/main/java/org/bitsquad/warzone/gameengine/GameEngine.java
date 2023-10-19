@@ -73,6 +73,14 @@ public class GameEngine {
     }
 
     /**
+     * Returns the current player object
+     * @return Player
+     */
+    public Player getCurrentPlayer(){
+        return this.d_gamePlayers.get(this.d_currentPlayerIndex);
+    }
+
+    /**
      * Gets the current game phase
      * @return current game phases
      */

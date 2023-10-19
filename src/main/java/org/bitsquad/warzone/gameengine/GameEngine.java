@@ -3,6 +3,7 @@ package org.bitsquad.warzone.gameengine;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.order.DeployOrder;
 import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;
 
@@ -178,12 +179,11 @@ public class GameEngine {
         }
 
         // Issue the deployment order
-        Order l_deployOrder = new Order(
+        Order l_deployOrder = new DeployOrder(
                 l_currentPlayer.getId(),
                 -1,
                 p_targetCountryID,
-                p_armyUnits,
-                Order.TYPEOFACTION.DEPLOY
+                p_armyUnits
         );
         l_currentPlayer.setCurrentOrder(l_deployOrder);
         l_currentPlayer.issueOrder();

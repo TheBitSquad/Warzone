@@ -35,13 +35,7 @@ public class Player {
         this.d_orderList = new ArrayList<>();
 
         // Initialize the current order
-        this.d_currentOrder = new Order(
-                this.d_id,
-                0,
-                0,
-                0,
-                Order.TYPEOFACTION.DEPLOY
-        );
+        this.d_currentOrder = null;
 
         // Add one to the total number of players
         Player.LastPlayerID += 1;
@@ -133,13 +127,7 @@ public class Player {
      */
     public void issueOrder() {
         this.d_orderList.add(this.d_currentOrder);
-        this.d_currentOrder = new Order(
-                this.d_id,
-                0,
-                0,
-                0,
-                Order.TYPEOFACTION.DEPLOY
-        );
+        this.d_currentOrder = null;
     }
 
     /**

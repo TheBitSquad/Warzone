@@ -23,6 +23,9 @@ public class DeployOrder extends Order{
         super(p_playerId, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
+    /**
+     * Executes the Order
+     */
     @Override
     public void execute(){
         Map l_gameMap;

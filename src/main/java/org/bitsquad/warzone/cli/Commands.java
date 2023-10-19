@@ -397,3 +397,129 @@ class Deploy implements Callable<Integer> {
         return 0;
     }
 }
+
+/**
+ * advance command class
+ */
+@Command(name = "advance")
+class Advance implements Callable<Integer> {
+    @Parameters(index = "0", description = "Source country name")
+    String d_countryNameFrom;
+
+    @Parameters(index = "1", description = "Destination country name")
+    String d_countryNameTo;
+    @Parameters(index = "2", description = "Number of army units")
+    int d_num;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            //TODO: Implement handleAdvanceArmy
+//            GameEngine.get_instance().handleAdvanceArmy(d_countryID, d_num);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}
+
+/**
+ * bomb command class
+ */
+@Command(name = "bomb")
+class Bomb implements Callable<Integer> {
+    @Parameters(index = "0", description = "Target Country ID")
+    int d_countryId;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            //TODO: Implement handleBomb
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}
+
+/**
+ * blockade command class
+ */
+@Command(name = "blockade")
+class Blockade implements Callable<Integer> {
+    @Parameters(index = "0", description = "Target Country ID")
+    int d_countryId;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            //TODO: Implement handleBlockade
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}
+
+/**
+ * airlift command class
+ */
+@Command(name = "airlift")
+class Airlift implements Callable<Integer> {
+    @Parameters(index = "0", description = "Source country ID")
+    int d_sourceCountryId;
+    @Parameters(index = "1", description = "Destination country Id")
+    int d_targetCountryId;
+    @Parameters(index = "2", description = "Number of army units")
+    int d_num;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            //TODO: Implement handleAirlift
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}
+
+/**
+ * negotiate command class
+ */
+@Command(name = "negotiate")
+class Negotiate implements Callable<Integer> {
+    @Parameters(index = "0", description = "Target Player Id")
+    int d_targetPlayerId;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            //TODO: Implement handleNegotiate
+//            GameEngine.get_instance().handleNegotiate();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}

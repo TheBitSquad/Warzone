@@ -55,6 +55,9 @@ public class AdvanceOrder extends Order{
         return new Pair<>(l_expectedAttackersSurviving, l_expectedDefendersSurviving);
     }
 
+    /**
+     * Executes the Order
+     */
     @Override
     public void execute(){
         Map l_gameMap; Player l_currentPlayer;

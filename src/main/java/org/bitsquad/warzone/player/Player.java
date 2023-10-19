@@ -150,4 +150,12 @@ public class Player {
     public void addCountryOwned(Country p_country) {
         this.d_countriesOwned.add(p_country);
     }
+
+    /**
+     * Removes a country from countries owned
+     * @param p_country Country object
+     */
+    public void removeCountryOwned(Country p_country){
+        this.d_countriesOwned.remove(p_country);
+    }
 }

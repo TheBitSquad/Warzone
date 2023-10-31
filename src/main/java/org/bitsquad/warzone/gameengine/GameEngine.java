@@ -188,7 +188,7 @@ public class GameEngine {
 
         // Issue the deployment order
         Order l_deployOrder = new DeployOrder(
-                l_currentPlayer.getId(),
+                l_currentPlayer,
                 -1,
                 p_targetCountryID,
                 p_armyUnits

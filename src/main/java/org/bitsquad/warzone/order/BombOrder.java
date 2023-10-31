@@ -4,6 +4,7 @@ import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
 
@@ -14,11 +15,11 @@ public class BombOrder extends Order{
 
     /**
      * Parameterized Constructor
-     * @param p_playerId Player ID
+     * @param p_player Player instance
      * @param p_targetCountryID Target Country ID
      */
-    public BombOrder(int p_playerId, int p_targetCountryID){
-        super(p_playerId, -1, p_targetCountryID, 0);
+    public BombOrder(Player p_player, int p_targetCountryID){
+        super(p_player, -1, p_targetCountryID, 0);
     }
 
     /**
@@ -38,6 +39,6 @@ public class BombOrder extends Order{
 
         // Make changes to the map
         Country l_targetCountry = l_allCountries.get(getTargetCountryId());
-        l_targetCountry.setArmyValue((int)Math.floor(l_targetCountry.getArmyValue()/2));
+        l_targetCountry.setArmyValue((int)Math.floor(1.0*l_targetCountry.getArmyValue()/2));
     }
 }

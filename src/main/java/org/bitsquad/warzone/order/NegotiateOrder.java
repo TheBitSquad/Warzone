@@ -1,4 +1,5 @@
 package org.bitsquad.warzone.order;
+import org.bitsquad.warzone.player.Player;
 
 /**
  * Represents the Negotiate Card Order
@@ -8,11 +9,11 @@ public class NegotiateOrder extends Order{
 
     /**
      * Parameterized Constructor
-     * @param p_sourcePlayerId Source Player ID
+     * @param p_player Source Player instance
      * @param p_targetPlayerId Target Player ID
      */
-    public NegotiateOrder(int p_sourcePlayerId, int p_targetPlayerId){
-        super(p_sourcePlayerId, -1, -1, 0);
+    public NegotiateOrder(Player p_player, int p_targetPlayerId){
+        super(p_player, -1, -1, 0);
         this.d_targetPlayerId = p_targetPlayerId;
     }
 

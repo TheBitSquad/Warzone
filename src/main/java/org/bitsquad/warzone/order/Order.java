@@ -1,13 +1,7 @@
 package org.bitsquad.warzone.order;
 
-import org.bitsquad.warzone.continent.Continent;
-import org.bitsquad.warzone.country.Country;
-import org.bitsquad.warzone.gameengine.GameEngine;
-import org.bitsquad.warzone.map.Map;
+
 import org.bitsquad.warzone.player.Player;
-
-import java.util.HashMap;
-
 
 /**
  * A new interface for Order, to implement the Command Pattern
@@ -28,7 +22,7 @@ interface GameOrder{
  * All other Orders extend this class, it acts as the Command Interface for the Command Pattern
  */
 public abstract class Order implements GameOrder{
-    private int d_playerId;
+    private Player d_playerInstance;
     private int d_sourceCountryId;
     private int d_targetCountryId;
     private int d_noOfArmyUnits;
@@ -36,13 +30,13 @@ public abstract class Order implements GameOrder{
     /**
      * Parametrized Constructor Order
      * 
-     * @param p_playerId        Player ID
+     * @param p_player  Instance of the player
      * @param p_sourceCountryId Source Country ID
      * @param p_targetCountryId Target Country ID
      * @param p_noOfArmyUnits   No of Army Units
      */
-    public Order(int p_playerId, int p_sourceCountryId, int p_targetCountryId, int p_noOfArmyUnits) {
-        this.d_playerId = p_playerId;
+    public Order(Player p_player, int p_sourceCountryId, int p_targetCountryId, int p_noOfArmyUnits) {
+        this.d_playerInstance = p_player;
         this.d_sourceCountryId = p_sourceCountryId;
         this.d_targetCountryId = p_targetCountryId;
         this.d_noOfArmyUnits = p_noOfArmyUnits;
@@ -55,27 +49,18 @@ public abstract class Order implements GameOrder{
     @Override
     public String toString() {
         return "Order: " +
-                "d_playerId=" + d_playerId +
+                "d_playerId=" + d_playerInstance +
                 ", d_targetCountryId=" + d_targetCountryId +
                 ", d_noOfArmyUnits=" + d_noOfArmyUnits;
     }
 
     /**
-     * Setter for Player Id
+     * Getter for Player
      * 
-     * @param p_playerId Setting the player ID
+     * @return Returns the player instance
      */
-    public void setPlayerId(int p_playerId) {
-        d_playerId = p_playerId;
-    }
-
-    /**
-     * Getter for Player Id
-     * 
-     * @return Returns the player Id
-     */
-    public int getPlayerId() {
-        return d_playerId;
+    public Player getPlayer() {
+        return d_playerInstance;
     }
 
     /**

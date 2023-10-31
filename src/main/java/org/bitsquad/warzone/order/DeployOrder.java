@@ -4,6 +4,7 @@ import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
 
@@ -14,13 +15,13 @@ public class DeployOrder extends Order{
 
     /**
      * Parameterized constructor
-     * @param p_playerId player ID
+     * @param p_player player instance
      * @param p_sourceCountryId source country ID
      * @param p_targetCountryID target country ID
      * @param p_armyUnits number of army units
      */
-    public DeployOrder(int p_playerId, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
-        super(p_playerId, p_sourceCountryId, p_targetCountryID, p_armyUnits);
+    public DeployOrder(Player p_player, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
+        super(p_player, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
     /**

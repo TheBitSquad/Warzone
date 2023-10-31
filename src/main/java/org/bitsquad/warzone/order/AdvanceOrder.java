@@ -18,13 +18,13 @@ public class AdvanceOrder extends Order{
 
     /**
      * Parameterized constructor
-     * @param p_playerId player ID
+     * @param p_player player instance
      * @param p_sourceCountryId source country ID
      * @param p_targetCountryID target country ID
      * @param p_armyUnits number of army units
      */
-    public AdvanceOrder(int p_playerId, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
-        super(p_playerId, p_sourceCountryId, p_targetCountryID, p_armyUnits);
+    public AdvanceOrder(Player p_player, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
+        super(p_player, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
     /**
@@ -62,7 +62,7 @@ public class AdvanceOrder extends Order{
     public void execute(){
         Map l_gameMap; Player l_currentPlayer;
         l_gameMap = GameEngine.get_instance().getGameMap();
-        l_currentPlayer = GameEngine.get_instance().getCurrentPlayer();
+        l_currentPlayer = this.getPlayer();
 
         // Get all countries
         HashMap<Integer, Country> l_allCountries = new HashMap<>();

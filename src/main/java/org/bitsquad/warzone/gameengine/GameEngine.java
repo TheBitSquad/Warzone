@@ -3,6 +3,8 @@ package org.bitsquad.warzone.gameengine;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.order.AirliftOrder;
+import org.bitsquad.warzone.order.BombOrder;
 import org.bitsquad.warzone.order.DeployOrder;
 import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;
@@ -108,111 +110,12 @@ public class GameEngine {
     }
 
     /**
-     * Handler method for loadmap command
-     * @param p_filename filename of map file
-     * @throws Exception if the map is invalid or IOError
-     */
-    public void handleLoadMap(String p_filename) throws Exception {
-        boolean resp = this.d_gameMap.loadMap(p_filename);
-        if (resp) {
-            this.d_currentPhase = PHASE.STARTUP;
-        } else {
-            throw new Exception("Invalid map or filename");
-        }
-    }
-
-    /**
-     * Handler for assigncountries command
-     * @throws Exception
-     */
-    public void handleAssignCountries() throws Exception{
-        if(!this.d_gameMap.validateMap()){
-            throw new Exception("Not a valid map cannot begin gameplay");
-        }
-        if(this.d_gamePlayers.size() == 0){
-            throw new Exception("No players have been added yet");
-        }
-
-        // Create a map of whole countries
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : d_gameMap.getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-
-        // Split countries between players
-        ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
-        Collections.shuffle(l_countryIDs);
-
-        if(l_countryIDs.size() == 0){
-            throw new Exception("No countries have been added");
-        }
-        int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
-        for (int i = 0; i < l_countryIDs.size(); i++) {
-            int assignee = Math.min(i / l_intervals, d_gamePlayers.size() - 1);
-            d_gamePlayers.get(assignee).addCountryOwned(l_allCountries.get(l_countryIDs.get(i)));
-            l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(d_gamePlayers.get(assignee).getId());
-        }
-
-        // Change the current phase
-        this.d_currentPhase = PHASE.PLAY;
-        nextRound();
-    }
-
-    /**
-     * Handler method for deploy army command
-     * @param p_targetCountryID ID of target country
-     * @param p_armyUnits number of army units
-     * @throws Exception
-     */
-    public void handleDeployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
-        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
-
-        // Check whether the player has the sufficient army units or not
-        int l_newAvailableArmyUnits = l_currentPlayer.getAvailableArmyUnits() - p_armyUnits;
-        if (l_newAvailableArmyUnits < 0) {
-            throw new Exception("insufficient army units");
-        }
-
-        // Check if the country ID is owned by player
-        boolean l_hasCountry = false;
-        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_country.getCountryId() == p_targetCountryID) {
-                l_hasCountry = true;
-                break;
-            }
-        }
-        if (!l_hasCountry) {
-            throw new Exception("can not deploy to enemy territory");
-        }
-
-        // Issue the deployment order
-        Order l_deployOrder = new DeployOrder(
-                l_currentPlayer,
-                -1,
-                p_targetCountryID,
-                p_armyUnits
-        );
-        l_currentPlayer.setCurrentOrder(l_deployOrder);
-        l_currentPlayer.issueOrder();
-        l_currentPlayer.setAvailableArmyUnits(l_newAvailableArmyUnits);
-
-        // Change the turn
-        if (l_currentPlayer.getAvailableArmyUnits() == 0) {
-            // IF we are on the last player
-            if (this.d_currentPlayerIndex + 1 == this.d_gamePlayers.size()) {
-                executeOrders();
-                nextRound();
-            } else {
-                setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
-            }
-        }
-    }
-
-    /**
      * Executes orders in Round-Robin fashion
      */
-    private void executeOrders() {
+    public void executeOrders() {
+        // TODO: Modify so that all deploy orders are executed first then the rest
+        // TODO: Modify so that policies are first checked then order is discarded or executed.
+        // TODO: Modify to check if an order is valid, before executing (Since the game changes at runtime)
         System.out.println("Executing Orders");
         Order l_orderToExecute;
 
@@ -274,6 +177,225 @@ public class GameEngine {
     }
 
     /**
+     * Handler method for loadmap command
+     * @param p_filename filename of map file
+     * @throws Exception if the map is invalid or IOError
+     */
+    public void handleLoadMap(String p_filename) throws Exception {
+        boolean resp = this.d_gameMap.loadMap(p_filename);
+        if (resp) {
+            this.d_currentPhase = PHASE.STARTUP;
+        } else {
+            throw new Exception("Invalid map or filename");
+        }
+    }
+
+    /**
+     * Handler method for deploy army command
+     * @param p_targetCountryID ID of target country
+     * @param p_armyUnits number of army units
+     * @throws Exception
+     */
+    public void handleDeployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
+        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
+
+        // Check whether the player has the sufficient army units or not
+        int l_newAvailableArmyUnits = l_currentPlayer.getAvailableArmyUnits() - p_armyUnits;
+        if (l_newAvailableArmyUnits < 0) {
+            throw new Exception("insufficient army units");
+        }
+
+        // Check if the country ID is owned by player
+        boolean l_hasCountry = false;
+        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
+            if (l_country.getCountryId() == p_targetCountryID) {
+                l_hasCountry = true;
+                break;
+            }
+        }
+        if (!l_hasCountry) {
+            throw new Exception("can not deploy to enemy territory");
+        }
+
+        // Issue the deployment order
+        Order l_deployOrder = new DeployOrder(
+                l_currentPlayer,
+                -1,
+                p_targetCountryID,
+                p_armyUnits
+        );
+        l_currentPlayer.setCurrentOrder(l_deployOrder);
+        l_currentPlayer.issueOrder();
+        l_currentPlayer.setAvailableArmyUnits(l_newAvailableArmyUnits);
+
+        // Change the turn
+        if (l_currentPlayer.getAvailableArmyUnits() == 0) {
+            // IF we are on the last player
+            if (this.d_currentPlayerIndex + 1 == this.d_gamePlayers.size()) {
+                executeOrders();
+                nextRound();
+            } else {
+                setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
+            }
+        }
+    }
+
+    /**
+     * Handler for assigncountries command
+     * @throws Exception
+     */
+    public void handleAssignCountries() throws Exception{
+        if(!this.d_gameMap.validateMap()){
+            throw new Exception("Not a valid map cannot begin gameplay");
+        }
+        if(this.d_gamePlayers.size() == 0){
+            throw new Exception("No players have been added yet");
+        }
+
+        // Create a map of whole countries
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+        for (Continent l_continent : d_gameMap.getContinents().values()) {
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+        }
+
+        // Split countries between players
+        ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
+        Collections.shuffle(l_countryIDs);
+
+        if(l_countryIDs.size() == 0){
+            throw new Exception("No countries have been added");
+        }
+        int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
+        for (int i = 0; i < l_countryIDs.size(); i++) {
+            int assignee = Math.min(i / l_intervals, d_gamePlayers.size() - 1);
+            d_gamePlayers.get(assignee).addCountryOwned(l_allCountries.get(l_countryIDs.get(i)));
+            l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(d_gamePlayers.get(assignee).getId());
+        }
+
+        // Change the current phase
+        this.d_currentPhase = PHASE.PLAY;
+        nextRound();
+    }
+
+    /**
+     * Handler method for the editcontinent command
+     * @param p_addArray
+     * @param p_removeIds
+     */
+    public void handleEditContinent(int p_addArray[], int p_removeIds[]){
+        if (p_addArray != null) {
+            for (int i = 0; i < p_addArray.length; i += 2) {
+                int l_continent_id = p_addArray[i];
+                int l_continent_value = p_addArray[i + 1];
+                GameEngine.get_instance().getGameMap().addContinent(l_continent_id, l_continent_value);
+            }
+        }
+        if (p_removeIds != null) {
+            for (int i = 0; i < p_removeIds.length; i++) {
+                GameEngine.get_instance().getGameMap().removeContinent(p_removeIds[i]);
+            }
+        }
+    }
+
+    /**
+     * Handler method for editcountry command
+     * @param p_addIds
+     * @param p_removeIds
+     */
+    public void handleEditCountry(int p_addIds[], int p_removeIds[]){
+        if (p_addIds != null) {
+            for (int i = 0; i < p_addIds.length; i += 2) {
+                int l_countryId = p_addIds[i];
+                int l_continentId = p_addIds[i + 1];
+                boolean resp = GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
+                if(!resp){
+                    System.out.printf("Cannot add country %d to continent %d\n", l_countryId, l_continentId);
+                } else {
+                    System.out.printf("Added country: %d to %d\n", l_countryId, l_continentId);
+                }
+            }
+        }
+        if (p_removeIds != null) {
+            for (int i = 0; i < p_removeIds.length; i++) {
+                GameEngine.get_instance().getGameMap().removeCountry(p_removeIds[i]);
+            }
+        }
+    }
+
+    /**
+     * Handler method for editneighbor command
+     * @param p_addIds
+     * @param p_removeIds
+     */
+    public void handleEditNeighbor(int p_addIds[], int p_removeIds[]){
+        if (p_addIds != null) {
+            for (int i = 0; i < p_addIds.length; i += 2) {
+                GameEngine.get_instance().getGameMap().addNeighbor(p_addIds[i], p_addIds[i+1]);
+            }
+        }
+        if (p_removeIds != null) {
+            for (int i = 0; i < p_removeIds.length; i += 2) {
+                GameEngine.get_instance().getGameMap().removeNeighbor(p_removeIds[i], p_removeIds[i+1]);
+            }
+        }
+    }
+
+    /**
+     * Handler method for savemap command
+     * @param p_filename
+     * @throws Exception
+     */
+    public void handleSaveMap(String p_filename) throws Exception{
+        this.d_gameMap.saveMap(p_filename);
+    }
+
+    /**
+     * Handler method for editmap command
+     * @param p_filename
+     */
+    public void handleEditMap(String p_filename){
+        this.d_gameMap.editMap(p_filename);
+    }
+
+    /**
+     * Handler method for the validatemap command
+     */
+    public void handleValidateMap(){
+        if(this.d_gameMap.validateMap()){
+            System.out.println("Valid map");
+        } else {
+            System.out.println("Invalid map");
+        }
+    }
+
+    /**
+     * Handler method for the gameplayer command
+     * @param p_addNames
+     * @param p_removeNames
+     */
+    public void handleGamePlayer(String p_addNames[], String p_removeNames[]){
+        if (p_addNames != null) {
+            for (String l_addName : p_addNames) {
+                try {
+                    this.handleAddPlayer(l_addName);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        if (p_removeNames != null) {
+            for (String l_removeName : p_removeNames) {
+                try {
+                    this.handleRemovePlayer(l_removeName);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
      * Handler method for gamplayer -add command
      * @param p_playerName name of the player
      * @throws Exception
@@ -301,5 +423,134 @@ public class GameEngine {
             }
         }
         throw new Exception("Player does not exist!");
+    }
+
+    /**
+     * Handler method for advance command
+     * @param p_countryNameFrom
+     * @param p_targetCountryName
+     * @param p_armyUnits
+     * @throws Exception
+     */
+    public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception{
+        // TODO: Implement Handle Advance
+    }
+
+    /**
+     * Handler method for bomb command
+     * @param p_countryId
+     * @throws Exception
+     */
+    public void handleBomb(int p_countryId) throws Exception{
+        // TODO: Implement Handle Bomb
+        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
+        // Check if player has bomb card
+        // TODO: Implement check for card
+
+        // Check if the target country is owned by player
+        Country l_targetCountry = null;
+        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
+            if (l_country.getCountryId() == p_countryId) {
+                l_targetCountry = l_country;
+                break;
+            }
+        }
+        if (l_targetCountry == null) {
+            String l_errStr = "";
+            if(l_targetCountry == null){
+                l_errStr += "Player is bombing own country: " + p_countryId + ". ";
+            }
+            throw new Exception(l_errStr);
+        }
+
+        // Check if target country exists
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+        for (Continent l_continent : this.d_gameMap.getContinents().values()) {
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+        }
+        if(!l_allCountries.containsKey(p_countryId)){
+            throw new Exception("Target Country does not exist!");
+        }
+
+        // Issue the bomb order
+        l_currentPlayer.setCurrentOrder(new BombOrder(l_currentPlayer, p_countryId));
+        l_currentPlayer.issueOrder();
+    }
+
+    /**
+     * Handler method for blockade command
+     * @param p_targetCountryId
+     * @throws Exception
+     */
+    public void handleBlockade(int p_targetCountryId) throws Exception{
+        // TODO: Implement handle blockade
+    }
+
+    /**
+     * Handler method for airlift command
+     * @param p_sourceCountryId
+     * @param p_targetCountryId
+     * @param p_numArmies
+     * @throws Exception
+     */
+    public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
+        // TODO: Implement handle airlift
+        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
+        // Check if player has airlift card
+        // TODO: Implement check for card
+
+        // Check if the source and target country is owned by player
+        Country l_sourceCountry = null, l_targetCountry = null;
+        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
+            if(l_sourceCountry != null && l_targetCountry != null) break;
+
+            if (l_country.getCountryId() == p_targetCountryId) {
+                l_targetCountry = l_country;
+            } else if (l_country.getCountryId() == p_sourceCountryId){
+                l_sourceCountry = l_country;
+            }
+        }
+        if (l_sourceCountry == null || l_targetCountry == null) {
+            String l_errStr = "";
+            if(l_sourceCountry == null){
+                l_errStr += "Player doesn't own source country: " + p_sourceCountryId + ". ";
+            }
+            if(l_targetCountry == null){
+                l_errStr += "Player doesn't own target country: " + p_targetCountryId + ". ";
+            }
+            throw new Exception(l_errStr);
+        }
+
+        // Check whether the player has the sufficient army units or not
+        int l_newAvailableArmyUnits = l_sourceCountry.getArmyValue() - p_numArmies;
+        if (l_newAvailableArmyUnits < 0) {
+            throw new Exception("Insufficient army units in country: " + p_sourceCountryId);
+        }
+
+        // Issue the airlift order
+        l_currentPlayer.setCurrentOrder(new AirliftOrder(l_currentPlayer, p_sourceCountryId, p_targetCountryId, p_numArmies));
+        l_currentPlayer.issueOrder();
+    }
+
+    /**
+     * Handler method for the negotiate command
+     * @param p_targetPlayerId
+     * @throws Exception
+     */
+    public void handleNegotiate(int p_targetPlayerId) throws Exception{
+        // TODO: Implement handle negotiate
+    }
+
+    /**
+     * Handler method for commit command
+     */
+    public void handleCommit(){
+        // TODO: Implement handle commit
+        this.setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
+        if(this.d_currentPlayerIndex == 0){
+            // We've taken orders from all players
+            // Change state to Order Execution
+        }
     }
 }

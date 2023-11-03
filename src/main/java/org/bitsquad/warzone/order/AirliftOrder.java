@@ -44,7 +44,7 @@ public class AirliftOrder extends Order{
         Country l_sourceCountry = l_allCountries.get(getSourceCountryId());
         Country l_targetCountry = l_allCountries.get(getTargetCountryId());
 
-        l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - getNoOfArmyUnits());
-        l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() + getNoOfArmyUnits());
+        l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - this.getNoOfArmyUnits());
+        l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() + this.getNoOfArmyUnits());
     }
 }

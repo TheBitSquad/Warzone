@@ -1,4 +1,4 @@
-package org.bitsquad.warzone.gameengine;
+package org.bitsquad.warzone.gameengine.policy;
 
 import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;

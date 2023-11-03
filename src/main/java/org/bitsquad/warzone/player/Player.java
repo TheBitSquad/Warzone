@@ -158,4 +158,12 @@ public class Player {
     public void removeCountryOwned(Country p_country){
         this.d_countriesOwned.remove(p_country);
     }
+
+    /**
+     * Helper method to check if the next order to be executed is a Deploy order
+     * @return
+     */
+    public Boolean isNextDeploy(){
+        return this.d_orderList.get(0).getClass().getSimpleName().equalsIgnoreCase("DeployOrder");
+    }
 }

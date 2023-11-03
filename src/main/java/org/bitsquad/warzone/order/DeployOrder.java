@@ -24,6 +24,21 @@ public class DeployOrder extends Order{
         super(p_player, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
+    @Override
+    public boolean isValid(){
+        // Check if the destination country belongs to the player
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+        for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+        }
+        Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
+        if(l_sourceCountry.getOwnedByPlayerId() != this.getPlayer().getId()){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Executes the Order
      */

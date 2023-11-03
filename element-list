@@ -3,6 +3,8 @@ org.bitsquad.warzone.cli
 org.bitsquad.warzone.continent
 org.bitsquad.warzone.country
 org.bitsquad.warzone.gameengine
+org.bitsquad.warzone.gameengine.phase
+org.bitsquad.warzone.gameengine.policy
 org.bitsquad.warzone.map
 org.bitsquad.warzone.order
 org.bitsquad.warzone.player

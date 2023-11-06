@@ -12,6 +12,10 @@ public class BlockadeOrder extends Order{
         super(p_player, -1, p_targetCountryId, 0);
     }
 
+    @Override
+    public boolean isValid(){
+        return true;
+    }
     /**
      * Executes the Order
      */

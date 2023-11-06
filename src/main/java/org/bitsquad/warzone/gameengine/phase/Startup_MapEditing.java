@@ -2,7 +2,7 @@ package org.bitsquad.warzone.gameengine.phase;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
 
-// TODO
+// TODO: Implement mapediting handler methods. Copy from gameengine
 public class Startup_MapEditing extends Startup {
     public Startup_MapEditing(GameEngine p_gameEngine){
         super(p_gameEngine);

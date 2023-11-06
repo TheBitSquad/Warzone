@@ -3,10 +3,7 @@ package org.bitsquad.warzone.gameengine;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.map.Map;
-import org.bitsquad.warzone.order.AirliftOrder;
-import org.bitsquad.warzone.order.BombOrder;
-import org.bitsquad.warzone.order.DeployOrder;
-import org.bitsquad.warzone.order.Order;
+import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.*;
@@ -113,9 +110,9 @@ public class GameEngine {
      * Executes orders in Round-Robin fashion
      */
     public void executeOrders() {
-        // TODO: Modify so that all deploy orders are executed first then the rest
-        // TODO: Modify so that policies are first checked then order is discarded or executed.
-        // TODO: Modify to check if an order is valid, before executing (Since the game changes at runtime)
+        // TODO: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
+        // TODO: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
+        // TODO: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
         System.out.println("Executing Orders");
         Order l_orderToExecute;
 
@@ -433,7 +430,51 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception{
-        // TODO: Implement Handle Advance
+        Player l_currentPlayer = this.getCurrentPlayer();
+
+        // Check if valid source country
+        Country l_sourceCountry = null, l_targetCountry = null;
+        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
+            if (l_country.getCountryName() == p_countryNameFrom) {
+                l_sourceCountry = l_country;
+                break;
+            }
+        }
+        if(l_sourceCountry == null){
+            throw new Exception("Player does not own the source country");
+        }
+
+        // Check if valid target country
+        HashMap<Integer, Country> l_allCountries = new HashMap<>();
+        for (Continent l_continent : this.d_gameMap.getContinents().values()) {
+            HashMap<Integer, Country> l_countries = l_continent.getCountries();
+            l_allCountries.putAll(l_countries);
+        }
+        Iterator<Country> l_it = l_allCountries.values().iterator();
+        while(l_it.hasNext()){
+            Country l_tempCountry = l_it.next();
+            if(l_tempCountry.getCountryName() == p_targetCountryName){
+                l_targetCountry = l_tempCountry;
+                break;
+            }
+        }
+        if(l_targetCountry == null){
+            throw new Exception("Target country doesn't exist");
+        }
+
+        // Check for valid army units
+        if(l_sourceCountry.getArmyValue() < p_armyUnits){
+            throw new Exception("Insufficient army units in the country");
+        }
+
+        l_currentPlayer.setCurrentOrder(
+                new AdvanceOrder(l_currentPlayer,
+                        l_sourceCountry.getCountryId(),
+                        l_targetCountry.getCountryId(),
+                        p_armyUnits
+                )
+        );
+        l_currentPlayer.issueOrder();
     }
 
     /**
@@ -442,10 +483,9 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleBomb(int p_countryId) throws Exception{
-        // TODO: Implement Handle Bomb
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has bomb card
-        // TODO: Implement check for card
+        // TODO: HandleBomb-Implement check for card
 
         // Check if the target country is owned by player
         Country l_targetCountry = null;
@@ -495,10 +535,9 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
-        // TODO: Implement handle airlift
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has airlift card
-        // TODO: Implement check for card
+        // TODO: handleAirlift: Implement check for card
 
         // Check if the source and target country is owned by player
         Country l_sourceCountry = null, l_targetCountry = null;

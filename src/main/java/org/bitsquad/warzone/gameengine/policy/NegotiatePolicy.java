@@ -27,7 +27,7 @@ public class NegotiatePolicy implements Policy{
      */
     @Override
     public boolean check(Order p_order){
-        // TODO: Implement
+        // TODO: NegotiatePolicy-Implement check
         return true;
     }
 }

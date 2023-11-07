@@ -6,8 +6,8 @@ import org.bitsquad.warzone.order.DeployOrder;
 import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;
 
-class IssueOrder_PreDeploy extends IssueOrder{
-    IssueOrder_PreDeploy(GameEngine p_gameEngine){
+public class IssueOrder_PreDeploy extends IssueOrder{
+    public IssueOrder_PreDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
 

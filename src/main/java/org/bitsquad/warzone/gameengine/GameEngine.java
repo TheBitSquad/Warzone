@@ -132,7 +132,6 @@ public class GameEngine {
                     l_orderToExecute = l_player.nextOrder();
                 }
                 if (l_orderToExecute != null) {
-                    l_isAllOrderSetsEmpty = false;
                     System.out.println("Executing: " + l_orderToExecute);
                     if(this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()){
                         l_orderToExecute.execute();
@@ -161,6 +160,8 @@ public class GameEngine {
      */
     private void nextRound() {
         System.out.println("New Round!");
+        // TODO: here we should generate some random cards
+        
         // Assign reinforcement units
         for (Player l_player : this.d_gamePlayers) {
             // Calculate the reinforcement

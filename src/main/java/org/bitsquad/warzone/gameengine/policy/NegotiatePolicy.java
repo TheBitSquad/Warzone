@@ -7,8 +7,8 @@ import org.bitsquad.warzone.player.Player;
  * Implements the Negotiate Policy
  */
 public class NegotiatePolicy implements Policy{
-    private Player d_PlayerA;
-    private Player d_PlayerB;
+    private Player d_playerA;
+    private Player d_playerB;
 
     /**
      * Parameterized constructor
@@ -16,8 +16,8 @@ public class NegotiatePolicy implements Policy{
      * @param p_playerB Player
      */
     public NegotiatePolicy(Player p_playerA, Player p_playerB){
-        this.d_PlayerA = p_playerA;
-        this.d_PlayerB = p_playerB;
+        this.d_playerA = p_playerA;
+        this.d_playerB = p_playerB;
     }
 
     /**
@@ -27,7 +27,17 @@ public class NegotiatePolicy implements Policy{
      */
     @Override
     public boolean check(Order p_order){
-        // TODO: NegotiatePolicy-Implement check
+        String l_orderType = p_order.getClass().getName();
+        if (l_orderType.equals("BombOrder") || l_orderType.equals("AdvanceOrder")) {
+            int l_playerID = p_order.getPlayer().getId();
+            int l_targetCountryID = p_order.getTargetCountryId();
+            if (l_playerID == d_playerA.getId()){
+                return !d_playerB.hasCountryWithID(l_targetCountryID);
+            } else if (l_playerID == d_playerB.getId()){
+                return !d_playerA.hasCountryWithID(l_targetCountryID);
+            }
+        }
+
         return true;
     }
 }

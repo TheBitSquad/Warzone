@@ -86,6 +86,16 @@ public class Player {
         return d_countriesOwned;
     }
 
+    public boolean hasCountryWithID(int p_countryID) {
+        for (Country l_country : d_countriesOwned) {
+            if (l_country.getCountryId() == p_countryID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Setter method for player countries owned
      *
@@ -145,6 +155,7 @@ public class Player {
 
     /**
      * Adds a country to the countries owned
+     *
      * @param p_country Country object
      */
     public void addCountryOwned(Country p_country) {
@@ -153,18 +164,20 @@ public class Player {
 
     /**
      * Removes a country from countries owned
+     *
      * @param p_country Country object
      */
-    public void removeCountryOwned(Country p_country){
+    public void removeCountryOwned(Country p_country) {
         this.d_countriesOwned.remove(p_country);
     }
 
     /**
      * Helper method to check if the next order to be executed is a Deploy order
+     *
      * @return
      */
-    public Boolean isNextDeploy(){
-        if(this.d_orderList.isEmpty()) return false;
+    public Boolean isNextDeploy() {
+        if (this.d_orderList.isEmpty()) return false;
         return this.d_orderList.get(0).getClass().getSimpleName().equalsIgnoreCase("DeployOrder");
     }
 }

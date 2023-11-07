@@ -4,6 +4,8 @@ import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.policy.BlockadePolicy;
+import org.bitsquad.warzone.gameengine.policy.NegotiatePolicy;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
@@ -494,7 +496,7 @@ public class GameEngine {
         // Check if valid source country
         Country l_sourceCountry = null, l_targetCountry = null;
         for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_country.getCountryName() == p_countryNameFrom) {
+            if (l_country.getCountryName().equals(p_countryNameFrom)) {
                 l_sourceCountry = l_country;
                 break;
             }
@@ -589,11 +591,17 @@ public class GameEngine {
      */
     public void handleBlockade(int p_targetCountryId) throws Exception {
         // Check if player has Blockade card
-        if (!getCurrentPlayer().hasCard(Card.BlockadeCard)) {
+        Player l_currentPlayer = getCurrentPlayer();
+        if (!l_currentPlayer.hasCard(Card.BlockadeCard)) {
             throw new Exception("The player does not have the card");
         }
 
-        // TODO: Implement handle blockade
+        // Check if the player owns the country
+        if (!l_currentPlayer.hasCountryWithID(p_targetCountryId)) {
+            throw new Exception("The player does not own the country");
+        }
+
+        d_policyManager.addPolicy(new BlockadePolicy(l_currentPlayer, l_currentPlayer.getCountryByID(p_targetCountryId)));
     }
 
     /**
@@ -656,7 +664,13 @@ public class GameEngine {
         if (!getCurrentPlayer().hasCard(Card.DiplomacyCard)) {
             throw new Exception("The player does not have the card");
         }
-        // TODO: Implement handle negotiate
+
+        Player l_targetPlayer = getPlayerByID(p_targetPlayerId);
+        if (l_targetPlayer.getId() == getCurrentPlayer().getId()) {
+            throw new Exception("The target player can not be the player itself");
+        }
+
+        d_policyManager.addPolicy(new NegotiatePolicy(getCurrentPlayer(), l_targetPlayer));
     }
 
     /**
@@ -669,5 +683,14 @@ public class GameEngine {
             // We've taken orders from all players
             // Change state to Order Execution
         }
+    }
+
+    private Player getPlayerByID(int p_playerID) throws Exception {
+        for (Player l_player : d_gamePlayers) {
+            if (l_player.getId() == p_playerID) {
+                return l_player;
+            }
+        }
+        throw new Exception("can not find a player with such ID");
     }
 }

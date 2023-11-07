@@ -93,6 +93,16 @@ public class Player {
         return d_countriesOwned;
     }
 
+    public Country getCountryByID(int p_countryID) throws Exception {
+        for (Country l_country : d_countriesOwned) {
+            if (l_country.getCountryId() == p_countryID) {
+                return l_country;
+            }
+        }
+
+        throw new Exception("there is not such country for this user");
+    }
+
     public boolean hasCountryWithID(int p_countryID) {
         for (Country l_country : d_countriesOwned) {
             if (l_country.getCountryId() == p_countryID) {

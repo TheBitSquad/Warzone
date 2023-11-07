@@ -22,7 +22,7 @@ interface GameOrder{
  * All other Orders extend this class, it acts as the Command Interface for the Command Pattern
  */
 public abstract class Order implements GameOrder{
-    private Player d_playerInstance;
+    protected Player d_playerInstance;
     private int d_sourceCountryId;
     private int d_targetCountryId;
     private int d_noOfArmyUnits;

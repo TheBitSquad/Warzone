@@ -1,5 +1,7 @@
 package org.bitsquad.warzone.gameengine;
 
+import org.bitsquad.warzone.card.Card;
+import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
@@ -160,18 +162,25 @@ public class GameEngine {
      */
     private void nextRound() {
         System.out.println("New Round!");
-        // TODO: here we should generate some random cards
-        
-        // Assign reinforcement units
+
         for (Player l_player : this.d_gamePlayers) {
+            // Assign random cards
+            if (l_player.hasNewTerritory()) {
+                Card l_generatedCard = CardGenerator.generateRandomCard();
+                int l_numberOfCard = l_player.getCurrentCards().get(l_generatedCard);
+                l_player.getCurrentCards().put(l_generatedCard, l_numberOfCard + 1);
+            }
+
+            // Assign reinforcement units
             // Calculate the reinforcement
             int l_numberReinforcement = getNumberOfReinforcementUnits(l_player);
-
             // Add the army
             l_player.setAvailableArmyUnits(l_player.getAvailableArmyUnits() + l_numberReinforcement);
-
             System.out.println(l_player.getName() + ": Reinforcements: " + l_numberReinforcement +
                     ". Total Units available to deploy: " + l_player.getAvailableArmyUnits());
+
+            // Clear the state of players
+            l_player.clearState();
         }
         setCurrentPlayerIndex(0);
     }

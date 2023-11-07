@@ -101,7 +101,7 @@ public class AdvanceOrder extends Order{
 
             if(l_defenderSurvivors == 0 && l_attackSurvivors > 0){
                 // Conquered a country successfully
-                // TODO: Update capture new territory
+                d_playerInstance.setHasNewTerritory(true);
 
                 // Update country army values
                 l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - getNoOfArmyUnits());

@@ -24,6 +24,8 @@ public class Player {
     // d_currentOrder contains the current order to be issued next
     private Order d_currentOrder;
     private HashMap<Card, Integer> d_currentCards;
+    // d_hasNewTerritory specifies whether player has captured a new country or not
+    private boolean d_hasNewTerritory = false;
 
     /**
      * Constructor
@@ -140,6 +142,14 @@ public class Player {
         return d_currentCards;
     }
 
+    public boolean hasNewTerritory() {
+        return d_hasNewTerritory;
+    }
+
+    public void setHasNewTerritory(boolean p_hasNewTerritory) {
+        d_hasNewTerritory = p_hasNewTerritory;
+    }
+
     /**
      * Issues the current order
      */
@@ -187,5 +197,12 @@ public class Player {
     public Boolean isNextDeploy() {
         if (this.d_orderList.isEmpty()) return false;
         return this.d_orderList.get(0).getClass().getSimpleName().equalsIgnoreCase("DeployOrder");
+    }
+
+    /**
+     * Clears the state of the player for executing the next turn of the game
+     */
+    public void clearState() {
+        d_hasNewTerritory = false;
     }
 }

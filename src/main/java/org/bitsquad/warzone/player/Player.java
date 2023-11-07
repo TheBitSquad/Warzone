@@ -164,6 +164,7 @@ public class Player {
      * @return
      */
     public Boolean isNextDeploy(){
+        if(this.d_orderList.isEmpty()) return false;
         return this.d_orderList.get(0).getClass().getSimpleName().equalsIgnoreCase("DeployOrder");
     }
 }

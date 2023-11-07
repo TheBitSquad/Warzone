@@ -2,6 +2,7 @@ package org.bitsquad.warzone.gameengine;
 
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
@@ -23,10 +24,13 @@ public class GameEngine {
     private PHASE d_currentPhase;
     private int d_currentPlayerIndex;
 
+    PolicyManager d_policyManager;
+
     GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
         d_currentPhase = PHASE.MAP;
+        d_policyManager = new PolicyManager();
     }
 
     /**
@@ -111,12 +115,32 @@ public class GameEngine {
      */
     public void executeOrders() {
         // TODO: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
-        // TODO: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
-        // TODO: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
+        // Completed: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
+        // Completed: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
         System.out.println("Executing Orders");
-        Order l_orderToExecute;
+        Order l_orderToExecute = null;
 
         boolean l_isAllOrderSetsEmpty = false;
+        boolean l_allDeployCommandsCompleted = false;
+
+        while(!l_allDeployCommandsCompleted){
+            l_allDeployCommandsCompleted = false;
+            for (Player l_player : this.d_gamePlayers) {
+                l_orderToExecute = null;
+                if(l_player.isNextDeploy()){
+                    l_allDeployCommandsCompleted = false;
+                    l_orderToExecute = l_player.nextOrder();
+                }
+                if (l_orderToExecute != null) {
+                    l_isAllOrderSetsEmpty = false;
+                    System.out.println("Executing: " + l_orderToExecute);
+                    if(this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()){
+                        l_orderToExecute.execute();
+                    }
+                }
+            }
+        }
+
         while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
             for (Player l_player : this.d_gamePlayers) {
@@ -124,7 +148,9 @@ public class GameEngine {
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
                     System.out.println("Executing: " + l_orderToExecute);
-                    l_orderToExecute.execute();
+                    if(this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()){
+                        l_orderToExecute.execute();
+                    }
                 }
             }
         }

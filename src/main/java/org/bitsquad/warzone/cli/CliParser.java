@@ -9,24 +9,31 @@ import java.util.*;
  *  This class represents the implementation of the command line interface, which processes user input commands
  */
 public class CliParser {
-    static HashMap<String, GameEngine.PHASE> CommandClassPhaseMap = new HashMap<>();
+    static List<String> CommandClassNames = new LinkedList<>();
     static {
         // Add to the map to return the class/object for a lookup.
-        CommandClassPhaseMap.put("EditContinent", GameEngine.PHASE.MAP);
-        CommandClassPhaseMap.put("EditCountry", GameEngine.PHASE.MAP);
-        CommandClassPhaseMap.put("EditNeighbor", GameEngine.PHASE.MAP);
+        CommandClassNames.add("EditContinent");
+        CommandClassNames.add("EditCountry");
+        CommandClassNames.add("EditNeighbor");
 
-        CommandClassPhaseMap.put("SaveMap", GameEngine.PHASE.MAP);
-        CommandClassPhaseMap.put("EditMap", GameEngine.PHASE.MAP);
-        CommandClassPhaseMap.put("ValidateMap", GameEngine.PHASE.MAP);
+        CommandClassNames.add("SaveMap");
+        CommandClassNames.add("EditMap");
+        CommandClassNames.add("ValidateMap");
+        CommandClassNames.add("ShowMap");
+        CommandClassNames.add("LoadMap");
+        
+        CommandClassNames.add("GamePlayer");
+        CommandClassNames.add("AssignCountries");
 
-        CommandClassPhaseMap.put("ShowMap", GameEngine.PHASE.DEFAULT);
+        CommandClassNames.add("Deploy");
+        CommandClassNames.add("Advance");
 
-        CommandClassPhaseMap.put("LoadMap", GameEngine.PHASE.MAP);
-        CommandClassPhaseMap.put("GamePlayer", GameEngine.PHASE.STARTUP);
-        CommandClassPhaseMap.put("AssignCountries", GameEngine.PHASE.STARTUP);
+        CommandClassNames.add("Bomb");
+        CommandClassNames.add("Airlift");
+        CommandClassNames.add("Negotiate");
+        CommandClassNames.add("Blockade");
 
-        CommandClassPhaseMap.put("Deploy", GameEngine.PHASE.PLAY);
+        CommandClassNames.add("Commit");
     }
 
     /**
@@ -36,9 +43,8 @@ public class CliParser {
      */
     private String commandClassName(String p_commandName){
         String l_requiredKey = null;
-        Set<String> l_keys = CommandClassPhaseMap.keySet();
 
-        for(String key: l_keys) {
+        for(String key: CommandClassNames) {
             if(key.equalsIgnoreCase(p_commandName)) {
                 l_requiredKey = key;
                 break;
@@ -70,7 +76,7 @@ public class CliParser {
      * @throws CommandLine.ParameterException
      */
     public void parseCommandString(String p_ip) throws ClassNotFoundException, CommandLine.ParameterException {
-        if(p_ip == null) {
+        if (p_ip == null) {
             System.err.println("No command was inputted");
             return;
         }
@@ -80,23 +86,9 @@ public class CliParser {
         Class l_command = getFullyQualifiedClassName(commandClassName(l_commandName));
         Object l_obj = null;
 
-        if(l_command == null) {
+        if (l_command == null) {
             System.err.println(l_ip_arr[0] + " is not a valid command");
             return;
-        }
-
-        if(CommandClassPhaseMap.get(commandClassName(l_commandName)) != GameEngine.PHASE.DEFAULT){
-            if(l_commandName.equalsIgnoreCase("assigncountries") || l_commandName.equalsIgnoreCase("gameplayer")){
-
-                if(GameEngine.get_instance().getCurrentPhase() != GameEngine.PHASE.MAP &&
-                        GameEngine.get_instance().getCurrentPhase() != GameEngine.PHASE.STARTUP){
-                    System.err.println("Command not valid in current phase!");
-                    return;
-                }
-            }else if(CommandClassPhaseMap.get(commandClassName(l_commandName)) != GameEngine.get_instance().getCurrentPhase()){
-                System.err.println("Command not valid in current phase!");
-                return;
-            }
         }
 
         try {
@@ -107,12 +99,11 @@ public class CliParser {
 
         CommandLine l_cmd = new CommandLine(l_obj);
 
-        if(l_ip_arr.length > 1){
+        if (l_ip_arr.length > 1) {
             String[] l_command_args = Arrays.copyOfRange(l_ip_arr, 1, l_ip_arr.length);
             int l_resp = l_cmd.execute(l_command_args);
         } else {
             int l_resp = l_cmd.execute();
         }
-
     }
 }

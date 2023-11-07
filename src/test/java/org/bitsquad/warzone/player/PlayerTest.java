@@ -2,6 +2,7 @@ package org.bitsquad.warzone.player;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.bitsquad.warzone.order.DeployOrder;
 import org.bitsquad.warzone.order.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,19 +38,19 @@ class PlayerTest {
      */
     @Test
     void testIssueOrder() {
-        Order l_order1 = new Order(d_player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
+        Order l_order1 = new DeployOrder(d_player1, 2, 10);
         d_player1.setCurrentOrder(l_order1);
         d_player1.issueOrder();
 
         assertEquals(1, d_player1.getOrderList().size());
-        assertEquals(0, d_player1.getCurrentOrder().getSourceCountryId());
+        assertEquals(2, d_player1.nextOrder().getTargetCountryId());
 
-        Order l_order2 = new Order(d_player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
+        Order l_order2 = new DeployOrder(d_player1, 4, 20);
         d_player1.setCurrentOrder(l_order2);
         d_player1.issueOrder();
 
-        assertEquals(2, d_player1.getOrderList().size());
-        assertEquals(0, d_player1.getCurrentOrder().getSourceCountryId());
+        assertEquals(1, d_player1.getOrderList().size());
+        assertEquals(4, d_player1.nextOrder().getTargetCountryId());
     }
 
     /**
@@ -57,14 +58,14 @@ class PlayerTest {
      */
     @Test
     void testNextOrder() {
-        Order l_order1 = new Order(d_player1.getId(), 1, 2, 10, Order.TYPEOFACTION.DEPLOY);
-        Order l_order2 = new Order(d_player1.getId(), 3, 4, 20, Order.TYPEOFACTION.BOMB);
+        Order l_order1 = new DeployOrder(d_player1, 2, 10);
+        Order l_order2 = new DeployOrder(d_player1, 4, 20);
         d_player1.setCurrentOrder(l_order1);
         d_player1.issueOrder();
         d_player1.setCurrentOrder(l_order2);
         d_player1.issueOrder();
 
-        assertEquals(1, d_player1.nextOrder().getSourceCountryId());
+        assertEquals(2, d_player1.nextOrder().getTargetCountryId());
         assertEquals(4, d_player1.nextOrder().getTargetCountryId());
         assertNull(d_player1.nextOrder());
     }

@@ -17,6 +17,7 @@ public class Country {
 
     public Country(){
         this.d_neighbors = new ArrayList<Integer>();
+        d_armyValue = 0;
     }
 
     /**
@@ -28,6 +29,7 @@ public class Country {
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
         this.d_neighbors = new ArrayList<Integer>();
+        d_armyValue = 0;
     }
 
     /**
@@ -43,6 +45,7 @@ public class Country {
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
         this.d_countryName = p_countryName;
+        d_armyValue = 0;
         this.d_armyValue= p_armyValue;
         this.d_ownedByPlayerId = p_ownedByPlayerId;
         this.d_neighbors = p_neighbors;

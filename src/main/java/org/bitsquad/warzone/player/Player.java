@@ -1,9 +1,12 @@
 package org.bitsquad.warzone.player;
 
+import org.bitsquad.warzone.card.Card;
+import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.order.Order;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a player in the game
@@ -21,6 +24,9 @@ public class Player {
     private ArrayList<Order> d_orderList;
     // d_currentOrder contains the current order to be issued next
     private Order d_currentOrder;
+    private HashMap<Card, Integer> d_currentCards;
+    // d_hasNewTerritory specifies whether player has captured a new country or not
+    private boolean d_hasNewTerritory = false;
 
     /**
      * Constructor
@@ -33,15 +39,10 @@ public class Player {
         this.d_availableArmyUnits = 0;
         this.d_countriesOwned = new ArrayList<>();
         this.d_orderList = new ArrayList<>();
+        this.d_currentCards = new HashMap<>();
 
         // Initialize the current order
-        this.d_currentOrder = new Order(
-                this.d_id,
-                0,
-                0,
-                0,
-                Order.TYPEOFACTION.DEPLOY
-        );
+        this.d_currentOrder = null;
 
         // Add one to the total number of players
         Player.LastPlayerID += 1;
@@ -92,6 +93,25 @@ public class Player {
         return d_countriesOwned;
     }
 
+    public Country getCountryByID(int p_countryID) {
+        for (Country l_country : d_countriesOwned) {
+            if (l_country.getCountryId() == p_countryID) {
+                return l_country;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasCountryWithID(int p_countryID) {
+        for (Country l_country : d_countriesOwned) {
+            if (l_country.getCountryId() == p_countryID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Setter method for player countries owned
      *
@@ -128,18 +148,28 @@ public class Player {
         this.d_currentOrder = p_currentOrder;
     }
 
+    public HashMap<Card, Integer> getCurrentCards() {
+        return d_currentCards;
+    }
+
+    public boolean hasCard(Card p_card) {
+        return d_currentCards.get(p_card) > 0;
+    }
+
+    public boolean hasNewTerritory() {
+        return d_hasNewTerritory;
+    }
+
+    public void setHasNewTerritory(boolean p_hasNewTerritory) {
+        d_hasNewTerritory = p_hasNewTerritory;
+    }
+
     /**
      * Issues the current order
      */
     public void issueOrder() {
         this.d_orderList.add(this.d_currentOrder);
-        this.d_currentOrder = new Order(
-                this.d_id,
-                0,
-                0,
-                0,
-                Order.TYPEOFACTION.DEPLOY
-        );
+        this.d_currentOrder = null;
     }
 
     /**
@@ -157,9 +187,36 @@ public class Player {
 
     /**
      * Adds a country to the countries owned
+     *
      * @param p_country Country object
      */
     public void addCountryOwned(Country p_country) {
         this.d_countriesOwned.add(p_country);
+    }
+
+    /**
+     * Removes a country from countries owned
+     *
+     * @param p_country Country object
+     */
+    public void removeCountryOwned(Country p_country) {
+        this.d_countriesOwned.remove(p_country);
+    }
+
+    /**
+     * Helper method to check if the next order to be executed is a Deploy order
+     *
+     * @return
+     */
+    public Boolean isNextDeploy() {
+        if (this.d_orderList.isEmpty()) return false;
+        return this.d_orderList.get(0).getClass().getSimpleName().equalsIgnoreCase("DeployOrder");
+    }
+
+    /**
+     * Clears the state of the player for executing the next turn of the game
+     */
+    public void clearState() {
+        d_hasNewTerritory = false;
     }
 }

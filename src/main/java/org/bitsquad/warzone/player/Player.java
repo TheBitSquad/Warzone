@@ -1,9 +1,11 @@
 package org.bitsquad.warzone.player;
 
+import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.order.Order;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a player in the game
@@ -21,6 +23,7 @@ public class Player {
     private ArrayList<Order> d_orderList;
     // d_currentOrder contains the current order to be issued next
     private Order d_currentOrder;
+    private HashMap<Card, Integer> d_currentCards;
 
     /**
      * Constructor
@@ -33,6 +36,7 @@ public class Player {
         this.d_availableArmyUnits = 0;
         this.d_countriesOwned = new ArrayList<>();
         this.d_orderList = new ArrayList<>();
+        this.d_currentCards = new HashMap<>();
 
         // Initialize the current order
         this.d_currentOrder = null;
@@ -130,6 +134,10 @@ public class Player {
      */
     public void setCurrentOrder(Order p_currentOrder) {
         this.d_currentOrder = p_currentOrder;
+    }
+
+    public HashMap<Card, Integer> getCurrentCards() {
+        return d_currentCards;
     }
 
     /**

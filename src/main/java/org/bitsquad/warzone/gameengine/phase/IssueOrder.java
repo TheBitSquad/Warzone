@@ -34,4 +34,5 @@ abstract class IssueOrder extends Phase{
     public void handleAssignCountries(){
         this.printInvalidCommandMessage();
     }
+    public void executeOrders(){this.printInvalidCommandMessage();}
 }

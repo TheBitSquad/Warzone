@@ -24,13 +24,9 @@ public class BombOrder extends Order{
 
     @Override
     public boolean isValid(){
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-        Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
-        return l_targetCountry.getOwnedByPlayerId() != this.getPlayer().getId();
+        // Check that the player isn't bombing it's own country
+        Country l_targetCountry = this.getPlayer().getCountryByID(this.getTargetCountryId());
+        return l_targetCountry == null;
     }
 
     /**

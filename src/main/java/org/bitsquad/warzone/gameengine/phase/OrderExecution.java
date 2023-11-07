@@ -59,9 +59,9 @@ public class OrderExecution extends Phase{
     }
 
     public void executeOrders(){
-        // Remember to call this when creating the state
-        // this.d_gameEngine.executeOrders();
-        // TODO: Change State
-        // this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+         this.d_gameEngine.executeOrders();
+         this.d_gameEngine.nextRound();
+         // FUTURE: Add check for player win condition.
+         this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
     }
 }

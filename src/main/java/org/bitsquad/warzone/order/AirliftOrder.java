@@ -29,16 +29,10 @@ public class AirliftOrder extends Order{
     @Override
     public boolean isValid(){
         // Check if both source and final countries belong to the player
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-        Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
-        Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
+        Country l_sourceCountry = this.getPlayer().getCountryByID(this.getSourceCountryId());
+        Country l_targetCountry = this.getPlayer().getCountryByID(this.getTargetCountryId());
 
-        if(l_sourceCountry.getOwnedByPlayerId() != this.getPlayer().getId()
-                || l_targetCountry.getOwnedByPlayerId() != this.getPlayer().getId()){
+        if(l_sourceCountry == null || l_targetCountry == null){
             return false;
         } else if (l_sourceCountry.getArmyValue() < this.getNoOfArmyUnits()){
             return false;
@@ -53,16 +47,8 @@ public class AirliftOrder extends Order{
     public void execute(){
         Map l_gameMap;
         l_gameMap = GameEngine.get_instance().getGameMap();
-
-        // Get all countries
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : l_gameMap.getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-
-        Country l_sourceCountry = l_allCountries.get(getSourceCountryId());
-        Country l_targetCountry = l_allCountries.get(getTargetCountryId());
+        Country l_sourceCountry = this.getPlayer().getCountryByID(this.getSourceCountryId());
+        Country l_targetCountry = this.getPlayer().getCountryByID(this.getTargetCountryId());
 
         l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - this.getNoOfArmyUnits());
         l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() + this.getNoOfArmyUnits());

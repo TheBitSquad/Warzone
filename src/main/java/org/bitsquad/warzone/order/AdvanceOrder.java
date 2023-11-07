@@ -29,13 +29,16 @@ public class AdvanceOrder extends Order{
 
     @Override
     public boolean isValid(){
+        // Completed: Check if countries are neighbors or not, and the source country belongs to the player
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
         for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
             l_allCountries.putAll(l_countries);
         }
         Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
-        return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId();
+        Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
+
+        return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId() && l_sourceCountry.getNeighbors().contains(l_targetCountry);
     }
     /**
      * Helper class Pair

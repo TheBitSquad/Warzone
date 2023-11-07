@@ -4,6 +4,8 @@ import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.phase.Phase;
+import org.bitsquad.warzone.gameengine.phase.Startup_MapEditing;
 import org.bitsquad.warzone.gameengine.policy.BlockadePolicy;
 import org.bitsquad.warzone.gameengine.policy.NegotiatePolicy;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
@@ -21,21 +23,29 @@ import java.util.concurrent.ExecutionException;
  */
 public class GameEngine {
     private static GameEngine d_instance;
-
-    public enum PHASE {DEFAULT, MAP, STARTUP, PLAY}
-
+    private Phase d_gamePhase;
     private Map d_gameMap;
     private List<Player> d_gamePlayers;
-    private PHASE d_currentPhase;
     private int d_currentPlayerIndex;
-
     PolicyManager d_policyManager;
 
     GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
-        d_currentPhase = PHASE.MAP;
         d_policyManager = new PolicyManager();
+        d_gamePhase = new Startup_MapEditing(this);
+    }
+
+    public void setPhase(Phase p_newPhase){
+        this.d_gamePhase = p_newPhase;
+    }
+
+    public PolicyManager getPolicyManager() {
+        return d_policyManager;
+    }
+
+    public int getCurrentPlayerIndex() {
+        return d_currentPlayerIndex;
     }
 
     /**
@@ -43,10 +53,12 @@ public class GameEngine {
      *
      * @param p_currentPlayerIndex is the current player index
      */
-    private void setCurrentPlayerIndex(int p_currentPlayerIndex) {
-        System.out.println("Current player: " + d_gamePlayers.get(p_currentPlayerIndex).getName() +
-                "Player id: " + d_gamePlayers.get(p_currentPlayerIndex).getId());
+    public void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
+    }
+
+    public void setCurrentPlayerIndexToNextPlayer(){
+        this.setCurrentPlayerIndex((this.getCurrentPlayerIndex() + 1) % this.d_gamePlayers.size());
     }
 
     /**
@@ -95,24 +107,6 @@ public class GameEngine {
     }
 
     /**
-     * Gets the current game phase
-     *
-     * @return current game phases
-     */
-    public PHASE getCurrentPhase() {
-        return d_currentPhase;
-    }
-
-    /**
-     * Setter for current game phase
-     *
-     * @param p_currentPhase game phase
-     */
-    public void setCurrentPhase(PHASE p_currentPhase) {
-        this.d_currentPhase = p_currentPhase;
-    }
-
-    /**
      * Singleton instance getter
      *
      * @return instance of GameEngine
@@ -128,7 +122,7 @@ public class GameEngine {
      * Executes orders in Round-Robin fashion
      */
     public void executeOrders() {
-        // TODO: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
+        // Completed: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
         // Completed: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
         // Completed: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
         System.out.println("Executing Orders");
@@ -172,14 +166,14 @@ public class GameEngine {
     /**
      * Sets up the start of a new round
      */
-    private void nextRound() {
+    public void nextRound() {
         System.out.println("New Round!");
 
         for (Player l_player : this.d_gamePlayers) {
             // Assign random cards
             if (l_player.hasNewTerritory()) {
                 Card l_generatedCard = CardGenerator.generateRandomCard();
-                int l_numberOfCard = l_player.getCurrentCards().get(l_generatedCard);
+                int l_numberOfCard = l_player.getCurrentCards().getOrDefault(l_generatedCard, 0);
                 l_player.getCurrentCards().put(l_generatedCard, l_numberOfCard + 1);
             }
 
@@ -194,6 +188,7 @@ public class GameEngine {
             // Clear the state of players
             l_player.clearState();
         }
+        d_policyManager.clearPolicies();
         setCurrentPlayerIndex(0);
     }
 
@@ -229,12 +224,7 @@ public class GameEngine {
      * @throws Exception if the map is invalid or IOError
      */
     public void handleLoadMap(String p_filename) throws Exception {
-        boolean resp = this.d_gameMap.loadMap(p_filename);
-        if (resp) {
-            this.d_currentPhase = PHASE.STARTUP;
-        } else {
-            throw new Exception("Invalid map or filename");
-        }
+        d_gamePhase.handleLoadMap(p_filename);
     }
 
     /**
@@ -245,47 +235,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleDeployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
-        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
-
-        // Check whether the player has the sufficient army units or not
-        int l_newAvailableArmyUnits = l_currentPlayer.getAvailableArmyUnits() - p_armyUnits;
-        if (l_newAvailableArmyUnits < 0) {
-            throw new Exception("insufficient army units");
-        }
-
-        // Check if the country ID is owned by player
-        boolean l_hasCountry = false;
-        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_country.getCountryId() == p_targetCountryID) {
-                l_hasCountry = true;
-                break;
-            }
-        }
-        if (!l_hasCountry) {
-            throw new Exception("can not deploy to enemy territory");
-        }
-
-        // Issue the deployment order
-        Order l_deployOrder = new DeployOrder(
-                l_currentPlayer,
-                -1,
-                p_targetCountryID,
-                p_armyUnits
-        );
-        l_currentPlayer.setCurrentOrder(l_deployOrder);
-        l_currentPlayer.issueOrder();
-        l_currentPlayer.setAvailableArmyUnits(l_newAvailableArmyUnits);
-
-        // Change the turn
-        if (l_currentPlayer.getAvailableArmyUnits() == 0) {
-            // IF we are on the last player
-            if (this.d_currentPlayerIndex + 1 == this.d_gamePlayers.size()) {
-                executeOrders();
-                nextRound();
-            } else {
-                setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
-            }
-        }
+        this.d_gamePhase.handleDeployArmy(p_targetCountryID, p_armyUnits);
     }
 
     /**
@@ -294,37 +244,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAssignCountries() throws Exception {
-        if (!this.d_gameMap.validateMap()) {
-            throw new Exception("Not a valid map cannot begin gameplay");
-        }
-        if (this.d_gamePlayers.size() == 0) {
-            throw new Exception("No players have been added yet");
-        }
-
-        // Create a map of whole countries
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : d_gameMap.getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-
-        // Split countries between players
-        ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
-        Collections.shuffle(l_countryIDs);
-
-        if (l_countryIDs.size() == 0) {
-            throw new Exception("No countries have been added");
-        }
-        int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
-        for (int i = 0; i < l_countryIDs.size(); i++) {
-            int assignee = Math.min(i / l_intervals, d_gamePlayers.size() - 1);
-            d_gamePlayers.get(assignee).addCountryOwned(l_allCountries.get(l_countryIDs.get(i)));
-            l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(d_gamePlayers.get(assignee).getId());
-        }
-
-        // Change the current phase
-        this.d_currentPhase = PHASE.PLAY;
-        nextRound();
+        this.d_gamePhase.handleAssignCountries();
     }
 
     /**
@@ -334,18 +254,7 @@ public class GameEngine {
      * @param p_removeIds
      */
     public void handleEditContinent(int p_addArray[], int p_removeIds[]) {
-        if (p_addArray != null) {
-            for (int i = 0; i < p_addArray.length; i += 2) {
-                int l_continent_id = p_addArray[i];
-                int l_continent_value = p_addArray[i + 1];
-                GameEngine.get_instance().getGameMap().addContinent(l_continent_id, l_continent_value);
-            }
-        }
-        if (p_removeIds != null) {
-            for (int i = 0; i < p_removeIds.length; i++) {
-                GameEngine.get_instance().getGameMap().removeContinent(p_removeIds[i]);
-            }
-        }
+        this.d_gamePhase.handleEditContinent(p_addArray, p_removeIds);
     }
 
     /**
@@ -355,23 +264,7 @@ public class GameEngine {
      * @param p_removeIds
      */
     public void handleEditCountry(int p_addIds[], int p_removeIds[]) {
-        if (p_addIds != null) {
-            for (int i = 0; i < p_addIds.length; i += 2) {
-                int l_countryId = p_addIds[i];
-                int l_continentId = p_addIds[i + 1];
-                boolean resp = GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
-                if (!resp) {
-                    System.out.printf("Cannot add country %d to continent %d\n", l_countryId, l_continentId);
-                } else {
-                    System.out.printf("Added country: %d to %d\n", l_countryId, l_continentId);
-                }
-            }
-        }
-        if (p_removeIds != null) {
-            for (int i = 0; i < p_removeIds.length; i++) {
-                GameEngine.get_instance().getGameMap().removeCountry(p_removeIds[i]);
-            }
-        }
+        this.d_gamePhase.handleEditCountry(p_addIds, p_removeIds);
     }
 
     /**
@@ -381,16 +274,7 @@ public class GameEngine {
      * @param p_removeIds
      */
     public void handleEditNeighbor(int p_addIds[], int p_removeIds[]) {
-        if (p_addIds != null) {
-            for (int i = 0; i < p_addIds.length; i += 2) {
-                GameEngine.get_instance().getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
-            }
-        }
-        if (p_removeIds != null) {
-            for (int i = 0; i < p_removeIds.length; i += 2) {
-                GameEngine.get_instance().getGameMap().removeNeighbor(p_removeIds[i], p_removeIds[i + 1]);
-            }
-        }
+        this.d_gamePhase.handleEditNeighbor(p_addIds, p_removeIds);
     }
 
     /**
@@ -416,11 +300,7 @@ public class GameEngine {
      * Handler method for the validatemap command
      */
     public void handleValidateMap() {
-        if (this.d_gameMap.validateMap()) {
-            System.out.println("Valid map");
-        } else {
-            System.out.println("Invalid map");
-        }
+        this.d_gamePhase.handleValidateMap();
     }
 
     /**
@@ -430,24 +310,7 @@ public class GameEngine {
      * @param p_removeNames
      */
     public void handleGamePlayer(String p_addNames[], String p_removeNames[]) {
-        if (p_addNames != null) {
-            for (String l_addName : p_addNames) {
-                try {
-                    this.handleAddPlayer(l_addName);
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }
-        if (p_removeNames != null) {
-            for (String l_removeName : p_removeNames) {
-                try {
-                    this.handleRemovePlayer(l_removeName);
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }
+        this.d_gamePhase.handleGamePlayer(p_addNames, p_removeNames);
     }
 
     /**
@@ -491,51 +354,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception {
-        Player l_currentPlayer = this.getCurrentPlayer();
-
-        // Check if valid source country
-        Country l_sourceCountry = null, l_targetCountry = null;
-        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_country.getCountryName().equals(p_countryNameFrom)) {
-                l_sourceCountry = l_country;
-                break;
-            }
-        }
-        if (l_sourceCountry == null) {
-            throw new Exception("Player does not own the source country");
-        }
-
-        // Check if valid target country
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : this.d_gameMap.getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-        Iterator<Country> l_it = l_allCountries.values().iterator();
-        while (l_it.hasNext()) {
-            Country l_tempCountry = l_it.next();
-            if (l_tempCountry.getCountryName() == p_targetCountryName) {
-                l_targetCountry = l_tempCountry;
-                break;
-            }
-        }
-        if (l_targetCountry == null) {
-            throw new Exception("Target country doesn't exist");
-        }
-
-        // Check for valid army units
-        if (l_sourceCountry.getArmyValue() < p_armyUnits) {
-            throw new Exception("Insufficient army units in the country");
-        }
-
-        l_currentPlayer.setCurrentOrder(
-                new AdvanceOrder(l_currentPlayer,
-                        l_sourceCountry.getCountryId(),
-                        l_targetCountry.getCountryId(),
-                        p_armyUnits
-                )
-        );
-        l_currentPlayer.issueOrder();
+        this.d_gamePhase.handleAdvance(p_countryNameFrom, p_targetCountryName, p_armyUnits);
     }
 
     /**
@@ -545,42 +364,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleBomb(int p_countryId) throws Exception {
-        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
-        // Check if player has bomb card
-        if (!getCurrentPlayer().hasCard(Card.BombCard)) {
-            throw new Exception("The player does not have the card");
-        }
-        // TODO: HandleBomb-Implement check for card
-
-        // Check if the target country is owned by player
-        Country l_targetCountry = null;
-        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_country.getCountryId() == p_countryId) {
-                l_targetCountry = l_country;
-                break;
-            }
-        }
-        if (l_targetCountry == null) {
-            String l_errStr = "";
-            if (l_targetCountry == null) {
-                l_errStr += "Player is bombing own country: " + p_countryId + ". ";
-            }
-            throw new Exception(l_errStr);
-        }
-
-        // Check if target country exists
-        HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : this.d_gameMap.getContinents().values()) {
-            HashMap<Integer, Country> l_countries = l_continent.getCountries();
-            l_allCountries.putAll(l_countries);
-        }
-        if (!l_allCountries.containsKey(p_countryId)) {
-            throw new Exception("Target Country does not exist!");
-        }
-
-        // Issue the bomb order
-        l_currentPlayer.setCurrentOrder(new BombOrder(l_currentPlayer, p_countryId));
-        l_currentPlayer.issueOrder();
+        this.d_gamePhase.handleBomb(p_countryId);
     }
 
     /**
@@ -590,18 +374,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleBlockade(int p_targetCountryId) throws Exception {
-        // Check if player has Blockade card
-        Player l_currentPlayer = getCurrentPlayer();
-        if (!l_currentPlayer.hasCard(Card.BlockadeCard)) {
-            throw new Exception("The player does not have the card");
-        }
-
-        // Check if the player owns the country
-        if (!l_currentPlayer.hasCountryWithID(p_targetCountryId)) {
-            throw new Exception("The player does not own the country");
-        }
-
-        d_policyManager.addPolicy(new BlockadePolicy(l_currentPlayer, l_currentPlayer.getCountryByID(p_targetCountryId)));
+        this.d_gamePhase.handleBlockade(p_targetCountryId);
     }
 
     /**
@@ -613,44 +386,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception {
-        Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
-        // Check if player has airlift card
-        if (!getCurrentPlayer().hasCard(Card.AirliftCard)) {
-            throw new Exception("The player does not have the card");
-        }
-        // TODO: handleAirlift: Implement check for card
-
-        // Check if the source and target country is owned by player
-        Country l_sourceCountry = null, l_targetCountry = null;
-        for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if (l_sourceCountry != null && l_targetCountry != null) break;
-
-            if (l_country.getCountryId() == p_targetCountryId) {
-                l_targetCountry = l_country;
-            } else if (l_country.getCountryId() == p_sourceCountryId) {
-                l_sourceCountry = l_country;
-            }
-        }
-        if (l_sourceCountry == null || l_targetCountry == null) {
-            String l_errStr = "";
-            if (l_sourceCountry == null) {
-                l_errStr += "Player doesn't own source country: " + p_sourceCountryId + ". ";
-            }
-            if (l_targetCountry == null) {
-                l_errStr += "Player doesn't own target country: " + p_targetCountryId + ". ";
-            }
-            throw new Exception(l_errStr);
-        }
-
-        // Check whether the player has the sufficient army units or not
-        int l_newAvailableArmyUnits = l_sourceCountry.getArmyValue() - p_numArmies;
-        if (l_newAvailableArmyUnits < 0) {
-            throw new Exception("Insufficient army units in country: " + p_sourceCountryId);
-        }
-
-        // Issue the airlift order
-        l_currentPlayer.setCurrentOrder(new AirliftOrder(l_currentPlayer, p_sourceCountryId, p_targetCountryId, p_numArmies));
-        l_currentPlayer.issueOrder();
+        this.d_gamePhase.handleAirlift(p_sourceCountryId, p_targetCountryId, p_numArmies);
     }
 
     /**
@@ -660,37 +396,22 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleNegotiate(int p_targetPlayerId) throws Exception {
-        // Check if player has Diplomacy card
-        if (!getCurrentPlayer().hasCard(Card.DiplomacyCard)) {
-            throw new Exception("The player does not have the card");
-        }
-
-        Player l_targetPlayer = getPlayerByID(p_targetPlayerId);
-        if (l_targetPlayer.getId() == getCurrentPlayer().getId()) {
-            throw new Exception("The target player can not be the player itself");
-        }
-
-        d_policyManager.addPolicy(new NegotiatePolicy(getCurrentPlayer(), l_targetPlayer));
+        this.d_gamePhase.handleNegotiate(p_targetPlayerId);
     }
 
     /**
      * Handler method for commit command
      */
     public void handleCommit() {
-        // TODO: Implement handle commit
-        this.setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
-        if (this.d_currentPlayerIndex == 0) {
-            // We've taken orders from all players
-            // Change state to Order Execution
-        }
+        this.d_gamePhase.handleCommit();
     }
 
-    private Player getPlayerByID(int p_playerID) throws Exception {
+    public Player getPlayerByID(int p_playerID) {
         for (Player l_player : d_gamePlayers) {
             if (l_player.getId() == p_playerID) {
                 return l_player;
             }
         }
-        throw new Exception("can not find a player with such ID");
+        return null;
     }
 }

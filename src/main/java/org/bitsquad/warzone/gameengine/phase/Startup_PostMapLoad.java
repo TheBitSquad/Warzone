@@ -16,9 +16,6 @@ class Startup_PostMapLoad extends Startup{
     public void handleSaveMap(String p_filename){
         this.printInvalidCommandMessage();
     }
-    public void handleValidateMap(){
-        this.printInvalidCommandMessage();
-    }
     public void handleEditContinent(int[] p_addArray, int[] p_removeIds){
         this.printInvalidCommandMessage();
     }

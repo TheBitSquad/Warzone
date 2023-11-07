@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.player;
 
 import org.bitsquad.warzone.card.Card;
+import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.order.Order;
 
@@ -140,6 +141,10 @@ public class Player {
 
     public HashMap<Card, Integer> getCurrentCards() {
         return d_currentCards;
+    }
+
+    public boolean hasCard(Card p_card) {
+        return d_currentCards.get(p_card) > 0;
     }
 
     public boolean hasNewTerritory() {

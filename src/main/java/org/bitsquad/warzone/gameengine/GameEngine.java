@@ -10,6 +10,7 @@ import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Represents the Game engine.
@@ -544,6 +545,9 @@ public class GameEngine {
     public void handleBomb(int p_countryId) throws Exception {
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has bomb card
+        if (!getCurrentPlayer().hasCard(Card.BombCard)) {
+            throw new Exception("The player does not have the card");
+        }
         // TODO: HandleBomb-Implement check for card
 
         // Check if the target country is owned by player
@@ -584,6 +588,11 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleBlockade(int p_targetCountryId) throws Exception {
+        // Check if player has Blockade card
+        if (!getCurrentPlayer().hasCard(Card.BlockadeCard)) {
+            throw new Exception("The player does not have the card");
+        }
+
         // TODO: Implement handle blockade
     }
 
@@ -598,6 +607,9 @@ public class GameEngine {
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception {
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has airlift card
+        if (!getCurrentPlayer().hasCard(Card.AirliftCard)) {
+            throw new Exception("The player does not have the card");
+        }
         // TODO: handleAirlift: Implement check for card
 
         // Check if the source and target country is owned by player
@@ -640,6 +652,10 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleNegotiate(int p_targetPlayerId) throws Exception {
+        // Check if player has Diplomacy card
+        if (!getCurrentPlayer().hasCard(Card.DiplomacyCard)) {
+            throw new Exception("The player does not have the card");
+        }
         // TODO: Implement handle negotiate
     }
 

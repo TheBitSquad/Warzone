@@ -24,19 +24,13 @@ public class BombOrder extends Order{
 
     @Override
     public boolean isValid(){
-        // TODO: Check if the target country doesnt belong to the player ??
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
         for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
             l_allCountries.putAll(l_countries);
         }
-        Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
-        if(l_sourceCountry.getOwnedByPlayerId() != this.getPlayer().getId()){
-            return false;
-        } else if (l_sourceCountry.getArmyValue() < this.getNoOfArmyUnits()){
-            return false;
-        }
-        return true;
+        Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
+        return l_targetCountry.getOwnedByPlayerId() != this.getPlayer().getId();
     }
 
     /**

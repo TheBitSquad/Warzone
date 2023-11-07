@@ -29,21 +29,13 @@ public class AdvanceOrder extends Order{
 
     @Override
     public boolean isValid(){
-        // Check if the source country belongs to the player. If that exists then the command is valid.
-        // TODO: Decide if number of army units in the country are less, then what do we do?
-        // Is such an order valid or not?
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
         for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
             l_allCountries.putAll(l_countries);
         }
         Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
-        if(l_sourceCountry.getOwnedByPlayerId() != this.getPlayer().getId()){
-            return false;
-        } else if (l_sourceCountry.getArmyValue() < this.getNoOfArmyUnits()){
-            return false;
-        }
-        return true;
+        return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId();
     }
     /**
      * Helper class Pair
@@ -91,6 +83,7 @@ public class AdvanceOrder extends Order{
 
         Country l_sourceCountry = l_allCountries.get(getSourceCountryId());
         Country l_targetCountry = l_allCountries.get(getTargetCountryId());
+        this.setNoOfArmyUnits(Math.min(l_sourceCountry.getArmyValue(), this.getNoOfArmyUnits()));
 
         if(l_currentPlayer.getCountriesOwned().contains(l_targetCountry)){
             // Advance army units from source to target

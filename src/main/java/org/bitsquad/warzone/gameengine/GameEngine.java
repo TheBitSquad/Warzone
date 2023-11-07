@@ -37,6 +37,7 @@ public class GameEngine {
 
     /**
      * Sets the currentPlayer
+     *
      * @param p_currentPlayerIndex is the current player index
      */
     private void setCurrentPlayerIndex(int p_currentPlayerIndex) {
@@ -47,6 +48,7 @@ public class GameEngine {
 
     /**
      * Getter method for game map
+     *
      * @return gamemap the map of the current game engine
      */
     public Map getGameMap() {
@@ -55,6 +57,7 @@ public class GameEngine {
 
     /**
      * Setter for game map
+     *
      * @param p_gameMap the map
      */
     public void setGameMap(Map p_gameMap) {
@@ -63,6 +66,7 @@ public class GameEngine {
 
     /**
      * Getter for game players list
+     *
      * @return list of game players
      */
     public List<Player> getGamePlayers() {
@@ -71,6 +75,7 @@ public class GameEngine {
 
     /**
      * Setter for game players
+     *
      * @param p_gamePlayers list of game players
      */
     public void setGamePlayers(List<Player> p_gamePlayers) {
@@ -79,14 +84,16 @@ public class GameEngine {
 
     /**
      * Returns the current player object
+     *
      * @return Player
      */
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return this.d_gamePlayers.get(this.d_currentPlayerIndex);
     }
 
     /**
      * Gets the current game phase
+     *
      * @return current game phases
      */
     public PHASE getCurrentPhase() {
@@ -95,6 +102,7 @@ public class GameEngine {
 
     /**
      * Setter for current game phase
+     *
      * @param p_currentPhase game phase
      */
     public void setCurrentPhase(PHASE p_currentPhase) {
@@ -103,6 +111,7 @@ public class GameEngine {
 
     /**
      * Singleton instance getter
+     *
      * @return instance of GameEngine
      */
     public static GameEngine get_instance() {
@@ -125,17 +134,17 @@ public class GameEngine {
         boolean l_isAllOrderSetsEmpty = false;
         boolean l_allDeployCommandsCompleted = false;
 
-        while(!l_allDeployCommandsCompleted){
+        while (!l_allDeployCommandsCompleted) {
             l_allDeployCommandsCompleted = false;
             for (Player l_player : this.d_gamePlayers) {
                 l_orderToExecute = null;
-                if(l_player.isNextDeploy()){
+                if (l_player.isNextDeploy()) {
                     l_allDeployCommandsCompleted = false;
                     l_orderToExecute = l_player.nextOrder();
                 }
                 if (l_orderToExecute != null) {
                     System.out.println("Executing: " + l_orderToExecute);
-                    if(this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()){
+                    if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
                     }
                 }
@@ -149,7 +158,7 @@ public class GameEngine {
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
                     System.out.println("Executing: " + l_orderToExecute);
-                    if(this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()){
+                    if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
                     }
                 }
@@ -187,6 +196,7 @@ public class GameEngine {
 
     /**
      * Calculates number of reinforcement units for a player
+     *
      * @param p_player Player Objec
      * @return int number of reinforcement units
      */
@@ -211,6 +221,7 @@ public class GameEngine {
 
     /**
      * Handler method for loadmap command
+     *
      * @param p_filename filename of map file
      * @throws Exception if the map is invalid or IOError
      */
@@ -225,8 +236,9 @@ public class GameEngine {
 
     /**
      * Handler method for deploy army command
+     *
      * @param p_targetCountryID ID of target country
-     * @param p_armyUnits number of army units
+     * @param p_armyUnits       number of army units
      * @throws Exception
      */
     public void handleDeployArmy(int p_targetCountryID, int p_armyUnits) throws Exception {
@@ -275,13 +287,14 @@ public class GameEngine {
 
     /**
      * Handler for assigncountries command
+     *
      * @throws Exception
      */
-    public void handleAssignCountries() throws Exception{
-        if(!this.d_gameMap.validateMap()){
+    public void handleAssignCountries() throws Exception {
+        if (!this.d_gameMap.validateMap()) {
             throw new Exception("Not a valid map cannot begin gameplay");
         }
-        if(this.d_gamePlayers.size() == 0){
+        if (this.d_gamePlayers.size() == 0) {
             throw new Exception("No players have been added yet");
         }
 
@@ -296,7 +309,7 @@ public class GameEngine {
         ArrayList<Integer> l_countryIDs = new ArrayList<>(l_allCountries.keySet());
         Collections.shuffle(l_countryIDs);
 
-        if(l_countryIDs.size() == 0){
+        if (l_countryIDs.size() == 0) {
             throw new Exception("No countries have been added");
         }
         int l_intervals = l_countryIDs.size() / this.d_gamePlayers.size();
@@ -313,10 +326,11 @@ public class GameEngine {
 
     /**
      * Handler method for the editcontinent command
+     *
      * @param p_addArray
      * @param p_removeIds
      */
-    public void handleEditContinent(int p_addArray[], int p_removeIds[]){
+    public void handleEditContinent(int p_addArray[], int p_removeIds[]) {
         if (p_addArray != null) {
             for (int i = 0; i < p_addArray.length; i += 2) {
                 int l_continent_id = p_addArray[i];
@@ -333,16 +347,17 @@ public class GameEngine {
 
     /**
      * Handler method for editcountry command
+     *
      * @param p_addIds
      * @param p_removeIds
      */
-    public void handleEditCountry(int p_addIds[], int p_removeIds[]){
+    public void handleEditCountry(int p_addIds[], int p_removeIds[]) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
                 int l_countryId = p_addIds[i];
                 int l_continentId = p_addIds[i + 1];
                 boolean resp = GameEngine.get_instance().getGameMap().addCountry(l_countryId, l_continentId);
-                if(!resp){
+                if (!resp) {
                     System.out.printf("Cannot add country %d to continent %d\n", l_countryId, l_continentId);
                 } else {
                     System.out.printf("Added country: %d to %d\n", l_countryId, l_continentId);
@@ -358,44 +373,47 @@ public class GameEngine {
 
     /**
      * Handler method for editneighbor command
+     *
      * @param p_addIds
      * @param p_removeIds
      */
-    public void handleEditNeighbor(int p_addIds[], int p_removeIds[]){
+    public void handleEditNeighbor(int p_addIds[], int p_removeIds[]) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
-                GameEngine.get_instance().getGameMap().addNeighbor(p_addIds[i], p_addIds[i+1]);
+                GameEngine.get_instance().getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
             }
         }
         if (p_removeIds != null) {
             for (int i = 0; i < p_removeIds.length; i += 2) {
-                GameEngine.get_instance().getGameMap().removeNeighbor(p_removeIds[i], p_removeIds[i+1]);
+                GameEngine.get_instance().getGameMap().removeNeighbor(p_removeIds[i], p_removeIds[i + 1]);
             }
         }
     }
 
     /**
      * Handler method for savemap command
+     *
      * @param p_filename
      * @throws Exception
      */
-    public void handleSaveMap(String p_filename) throws Exception{
+    public void handleSaveMap(String p_filename) throws Exception {
         this.d_gameMap.saveMap(p_filename);
     }
 
     /**
      * Handler method for editmap command
+     *
      * @param p_filename
      */
-    public void handleEditMap(String p_filename){
+    public void handleEditMap(String p_filename) {
         this.d_gameMap.editMap(p_filename);
     }
 
     /**
      * Handler method for the validatemap command
      */
-    public void handleValidateMap(){
-        if(this.d_gameMap.validateMap()){
+    public void handleValidateMap() {
+        if (this.d_gameMap.validateMap()) {
             System.out.println("Valid map");
         } else {
             System.out.println("Invalid map");
@@ -404,10 +422,11 @@ public class GameEngine {
 
     /**
      * Handler method for the gameplayer command
+     *
      * @param p_addNames
      * @param p_removeNames
      */
-    public void handleGamePlayer(String p_addNames[], String p_removeNames[]){
+    public void handleGamePlayer(String p_addNames[], String p_removeNames[]) {
         if (p_addNames != null) {
             for (String l_addName : p_addNames) {
                 try {
@@ -430,13 +449,14 @@ public class GameEngine {
 
     /**
      * Handler method for gamplayer -add command
+     *
      * @param p_playerName name of the player
      * @throws Exception
      */
     public void handleAddPlayer(String p_playerName) throws Exception {
         // Check if a player is already present
-        for(Player l_player: this.d_gamePlayers){
-            if(l_player.getName().equalsIgnoreCase(p_playerName)){
+        for (Player l_player : this.d_gamePlayers) {
+            if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 throw new Exception("Player already exists!");
             }
         }
@@ -445,12 +465,13 @@ public class GameEngine {
 
     /**
      * Handler method of remove player command
+     *
      * @param p_playerName Player name
      * @throws Exception
      */
     public void handleRemovePlayer(String p_playerName) throws Exception {
-        for(Player l_player: this.d_gamePlayers){
-            if(l_player.getName().equalsIgnoreCase(p_playerName)){
+        for (Player l_player : this.d_gamePlayers) {
+            if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 this.d_gamePlayers.remove(l_player);
                 return;
             }
@@ -460,12 +481,13 @@ public class GameEngine {
 
     /**
      * Handler method for advance command
+     *
      * @param p_countryNameFrom
      * @param p_targetCountryName
      * @param p_armyUnits
      * @throws Exception
      */
-    public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception{
+    public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception {
         Player l_currentPlayer = this.getCurrentPlayer();
 
         // Check if valid source country
@@ -476,7 +498,7 @@ public class GameEngine {
                 break;
             }
         }
-        if(l_sourceCountry == null){
+        if (l_sourceCountry == null) {
             throw new Exception("Player does not own the source country");
         }
 
@@ -487,19 +509,19 @@ public class GameEngine {
             l_allCountries.putAll(l_countries);
         }
         Iterator<Country> l_it = l_allCountries.values().iterator();
-        while(l_it.hasNext()){
+        while (l_it.hasNext()) {
             Country l_tempCountry = l_it.next();
-            if(l_tempCountry.getCountryName() == p_targetCountryName){
+            if (l_tempCountry.getCountryName() == p_targetCountryName) {
                 l_targetCountry = l_tempCountry;
                 break;
             }
         }
-        if(l_targetCountry == null){
+        if (l_targetCountry == null) {
             throw new Exception("Target country doesn't exist");
         }
 
         // Check for valid army units
-        if(l_sourceCountry.getArmyValue() < p_armyUnits){
+        if (l_sourceCountry.getArmyValue() < p_armyUnits) {
             throw new Exception("Insufficient army units in the country");
         }
 
@@ -515,10 +537,11 @@ public class GameEngine {
 
     /**
      * Handler method for bomb command
+     *
      * @param p_countryId
      * @throws Exception
      */
-    public void handleBomb(int p_countryId) throws Exception{
+    public void handleBomb(int p_countryId) throws Exception {
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has bomb card
         // TODO: HandleBomb-Implement check for card
@@ -533,7 +556,7 @@ public class GameEngine {
         }
         if (l_targetCountry == null) {
             String l_errStr = "";
-            if(l_targetCountry == null){
+            if (l_targetCountry == null) {
                 l_errStr += "Player is bombing own country: " + p_countryId + ". ";
             }
             throw new Exception(l_errStr);
@@ -545,7 +568,7 @@ public class GameEngine {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
             l_allCountries.putAll(l_countries);
         }
-        if(!l_allCountries.containsKey(p_countryId)){
+        if (!l_allCountries.containsKey(p_countryId)) {
             throw new Exception("Target Country does not exist!");
         }
 
@@ -556,21 +579,23 @@ public class GameEngine {
 
     /**
      * Handler method for blockade command
+     *
      * @param p_targetCountryId
      * @throws Exception
      */
-    public void handleBlockade(int p_targetCountryId) throws Exception{
+    public void handleBlockade(int p_targetCountryId) throws Exception {
         // TODO: Implement handle blockade
     }
 
     /**
      * Handler method for airlift command
+     *
      * @param p_sourceCountryId
      * @param p_targetCountryId
      * @param p_numArmies
      * @throws Exception
      */
-    public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
+    public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception {
         Player l_currentPlayer = d_gamePlayers.get(d_currentPlayerIndex);
         // Check if player has airlift card
         // TODO: handleAirlift: Implement check for card
@@ -578,20 +603,20 @@ public class GameEngine {
         // Check if the source and target country is owned by player
         Country l_sourceCountry = null, l_targetCountry = null;
         for (Country l_country : l_currentPlayer.getCountriesOwned()) {
-            if(l_sourceCountry != null && l_targetCountry != null) break;
+            if (l_sourceCountry != null && l_targetCountry != null) break;
 
             if (l_country.getCountryId() == p_targetCountryId) {
                 l_targetCountry = l_country;
-            } else if (l_country.getCountryId() == p_sourceCountryId){
+            } else if (l_country.getCountryId() == p_sourceCountryId) {
                 l_sourceCountry = l_country;
             }
         }
         if (l_sourceCountry == null || l_targetCountry == null) {
             String l_errStr = "";
-            if(l_sourceCountry == null){
+            if (l_sourceCountry == null) {
                 l_errStr += "Player doesn't own source country: " + p_sourceCountryId + ". ";
             }
-            if(l_targetCountry == null){
+            if (l_targetCountry == null) {
                 l_errStr += "Player doesn't own target country: " + p_targetCountryId + ". ";
             }
             throw new Exception(l_errStr);
@@ -610,20 +635,21 @@ public class GameEngine {
 
     /**
      * Handler method for the negotiate command
+     *
      * @param p_targetPlayerId
      * @throws Exception
      */
-    public void handleNegotiate(int p_targetPlayerId) throws Exception{
+    public void handleNegotiate(int p_targetPlayerId) throws Exception {
         // TODO: Implement handle negotiate
     }
 
     /**
      * Handler method for commit command
      */
-    public void handleCommit(){
+    public void handleCommit() {
         // TODO: Implement handle commit
         this.setCurrentPlayerIndex(this.d_currentPlayerIndex + 1);
-        if(this.d_currentPlayerIndex == 0){
+        if (this.d_currentPlayerIndex == 0) {
             // We've taken orders from all players
             // Change state to Order Execution
         }

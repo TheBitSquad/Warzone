@@ -13,4 +13,3 @@ public interface Policy {
      */
     public boolean check(Order p_order);
 }
-

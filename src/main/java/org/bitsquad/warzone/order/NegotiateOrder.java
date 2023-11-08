@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.order;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.gameengine.policy.NegotiatePolicy;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.Iterator;
@@ -31,13 +32,14 @@ public class NegotiateOrder extends Order{
      */
     @Override
     public void execute(){
-        Iterator<Player> l_gamePlayerIterator = GameEngine.get_instance().getGamePlayers().iterator();
+        Iterator<Player> l_gamePlayerIterator = GameEngine.getInstance().getGamePlayers().iterator();
         while(l_gamePlayerIterator.hasNext()){
             Player l_player = l_gamePlayerIterator.next();
             if(l_player.getId() == this.d_targetPlayerId){
-                GameEngine.get_instance().getPolicyManager().addPolicy(new NegotiatePolicy(this.getPlayer(), l_player));
+                GameEngine.getInstance().getPolicyManager().addPolicy(new NegotiatePolicy(this.getPlayer(), l_player));
                 break;
             }
         }
+        LogEntryBuffer.getInstance().log("Diplomacy applied between players " + this.getPlayer().getName() + " and " + GameEngine.getInstance().getPlayerByID(this.d_targetPlayerId).getName());
     }
 }

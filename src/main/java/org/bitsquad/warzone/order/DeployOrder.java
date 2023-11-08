@@ -1,12 +1,10 @@
 package org.bitsquad.warzone.order;
 
-import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
-
-import java.util.HashMap;
 
 /**
  * This class represents the Deploy Order
@@ -36,10 +34,12 @@ public class DeployOrder extends Order{
     @Override
     public void execute(){
         Map l_gameMap;
-        l_gameMap = GameEngine.get_instance().getGameMap();
+        l_gameMap = GameEngine.getInstance().getGameMap();
 
         // Make changes to the map
         Country l_country = this.getPlayer().getCountryByID(this.getTargetCountryId());
         l_country.setArmyValue(l_country.getArmyValue() + getNoOfArmyUnits());
+
+        LogEntryBuffer.getInstance().log("Deployed " + this.getNoOfArmyUnits() + " number of armies in country " + this.getTargetCountryId());
     }
 }

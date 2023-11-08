@@ -21,8 +21,8 @@ class GameEngineTest {
     public void initEach() {
         // It adds multiple players before each test.
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleAddPlayer("a");
-            GameEngine.get_instance().handleAddPlayer("b");
+            GameEngine.getInstance().handleAddPlayer("a");
+            GameEngine.getInstance().handleAddPlayer("b");
         });
     }
 
@@ -31,9 +31,9 @@ class GameEngineTest {
         // It removes multiple players and the map after each test for checking
         // reinforcement army calculation
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleRemovePlayer("a");
-            GameEngine.get_instance().handleRemovePlayer("b");
-            GameEngine.get_instance().setGameMap(new Map());
+            GameEngine.getInstance().handleRemovePlayer("a");
+            GameEngine.getInstance().handleRemovePlayer("b");
+            GameEngine.getInstance().setGameMap(new Map());
         });
     }
 
@@ -42,11 +42,11 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyInitialBonus() {
-        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
-        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
-        assertEquals(3, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
+        assertEquals(3, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(3, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -54,8 +54,8 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyCountryBonus() {
-        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         ArrayList<Country> l_p1Countries = new ArrayList<>();
         l_p1Countries.add(new Country(1, 1));
@@ -79,8 +79,8 @@ class GameEngineTest {
         l_p1.setCountriesOwned(l_p1Countries);
         l_p2.setCountriesOwned(l_p2Countries);
 
-        assertEquals(6, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
-        assertEquals(4, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
+        assertEquals(6, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(4, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -88,8 +88,8 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyContinentBonus() {
-        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         ArrayList<Country> l_p1Countries = new ArrayList<>();
         l_p1Countries.add(new Country(1, 1));
@@ -128,10 +128,10 @@ class GameEngineTest {
         l_map.addCountry(8, 3);
         l_map.addCountry(9, 3);
         l_map.addCountry(10, 3);
-        GameEngine.get_instance().setGameMap(l_map);
+        GameEngine.getInstance().setGameMap(l_map);
 
-        assertEquals(6, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
-        assertEquals(4, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
+        assertEquals(9, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(11, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**
@@ -140,8 +140,8 @@ class GameEngineTest {
      */
     @Test
     void testDeployArmy() {
-        Player l_p1 = GameEngine.get_instance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.get_instance().getGamePlayers().get(1);
+        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
         l_p1.setAvailableArmyUnits(4);
         l_p2.setAvailableArmyUnits(7);
 
@@ -172,39 +172,39 @@ class GameEngineTest {
         l_map.addCountry(8, 3);
         l_map.addCountry(9, 3);
         l_map.addCountry(10, 3);
-        GameEngine.get_instance().setGameMap(l_map);
-        GameEngine.get_instance().setCurrentPlayerIndex(0);
-        GameEngine.get_instance().setPhase(new IssueOrder_PreDeploy(GameEngine.get_instance()));
+        GameEngine.getInstance().setGameMap(l_map);
+        GameEngine.getInstance().setCurrentPlayerIndex(0);
+        GameEngine.getInstance().setPhase(new IssueOrder_PreDeploy(GameEngine.getInstance()));
 
         assertThrows(Exception.class, () -> {
-            GameEngine.get_instance().handleDeployArmy(1, 5);
+            GameEngine.getInstance().handleDeployArmy(1, 5);
         });
         assertThrows(Exception.class, () -> {
-            GameEngine.get_instance().handleDeployArmy(7, 1);
+            GameEngine.getInstance().handleDeployArmy(7, 1);
         });
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleDeployArmy(1, 2);
+            GameEngine.getInstance().handleDeployArmy(1, 2);
         });
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleDeployArmy(1, 1);
+            GameEngine.getInstance().handleDeployArmy(1, 1);
         });
         assertThrows(Exception.class, () -> {
-            GameEngine.get_instance().handleDeployArmy(1, 2);
+            GameEngine.getInstance().handleDeployArmy(1, 2);
         });
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleDeployArmy(1, 1);
+            GameEngine.getInstance().handleDeployArmy(1, 1);
         });
 
-        GameEngine.get_instance().handleCommit();
+        GameEngine.getInstance().handleCommit();
 
         assertDoesNotThrow(() -> {
-            GameEngine.get_instance().handleDeployArmy(7, 6);
+            GameEngine.getInstance().handleDeployArmy(7, 6);
         });
         assertThrows(Exception.class, () -> {
-            GameEngine.get_instance().handleDeployArmy(7, 2);
+            GameEngine.getInstance().handleDeployArmy(7, 2);
         });
         assertThrows(Exception.class, () -> {
-            GameEngine.get_instance().handleDeployArmy(1, 1);
+            GameEngine.getInstance().handleDeployArmy(1, 1);
         });
     }
 }

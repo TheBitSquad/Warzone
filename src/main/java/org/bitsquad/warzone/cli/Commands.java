@@ -34,7 +34,7 @@ class EditContinent implements Callable<Integer> {
      */
     public Integer call() {
         validate();
-        GameEngine.get_instance().handleEditContinent(d_addArray, d_removeIds);
+        GameEngine.getInstance().handleEditContinent(d_addArray, d_removeIds);
         return 0;
     }
 
@@ -79,7 +79,7 @@ class EditCountry implements Callable<Integer> {
      */
     public Integer call() {
         validate();
-        GameEngine.get_instance().handleEditCountry(d_addIds, d_removeIds);
+        GameEngine.getInstance().handleEditCountry(d_addIds, d_removeIds);
         return 0;
     }
 
@@ -127,7 +127,7 @@ class EditNeighbor implements Callable<Integer> {
      */
     public Integer call() {
         validate();
-        GameEngine.get_instance().handleEditNeighbor(d_addIds, d_removeIds);
+        GameEngine.getInstance().handleEditNeighbor(d_addIds, d_removeIds);
         return 0;
     }
 
@@ -162,7 +162,7 @@ class ShowMap implements Callable<Integer> {
      * @return exit code
      */
     public Integer call() {
-        GameEngine.get_instance().getGameMap().visualizeGraph();
+        GameEngine.getInstance().getGameMap().visualizeGraph();
         return 0;
     }
 }
@@ -182,7 +182,7 @@ class SaveMap implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleSaveMap(d_filename);
+            GameEngine.getInstance().handleSaveMap(d_filename);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -205,7 +205,7 @@ class EditMap implements Callable<Integer> {
      * @return exit code
      */
     public Integer call() {
-        GameEngine.get_instance().handleEditMap(d_filename);
+        GameEngine.getInstance().handleEditMap(d_filename);
         return 0;
     }
 }
@@ -220,7 +220,7 @@ class ValidateMap implements Callable<Integer> {
      * @return exit code
      */
     public Integer call() {
-        GameEngine.get_instance().handleValidateMap();
+        GameEngine.getInstance().handleValidateMap();
         return 0;
     }
 }
@@ -241,7 +241,7 @@ class LoadMap implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleLoadMap(d_filename);
+            GameEngine.getInstance().handleLoadMap(d_filename);
         } catch (Exception e) {
             System.err.println(e);
             return 1;
@@ -270,7 +270,7 @@ class GamePlayer implements Callable<Integer> {
      */
     public Integer call() {
         validate();
-        GameEngine.get_instance().handleGamePlayer(d_add_names, d_remove_names);
+        GameEngine.getInstance().handleGamePlayer(d_add_names, d_remove_names);
         return 0;
     }
 
@@ -307,7 +307,7 @@ class AssignCountries implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleAssignCountries();
+            GameEngine.getInstance().handleAssignCountries();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -331,7 +331,7 @@ class Deploy implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleDeployArmy(d_countryID, d_num);
+            GameEngine.getInstance().handleDeployArmy(d_countryID, d_num);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -359,7 +359,7 @@ class Advance implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleAdvance(d_countryNameFrom, d_countryNameTo, d_num);
+            GameEngine.getInstance().handleAdvance(d_countryNameFrom, d_countryNameTo, d_num);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -382,7 +382,7 @@ class Bomb implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleBomb(d_countryId);
+            GameEngine.getInstance().handleBomb(d_countryId);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -405,7 +405,7 @@ class Blockade implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleBlockade(d_countryId);
+            GameEngine.getInstance().handleBlockade(d_countryId);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -432,7 +432,7 @@ class Airlift implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleAirlift(d_sourceCountryId, d_targetCountryId, d_num);
+            GameEngine.getInstance().handleAirlift(d_sourceCountryId, d_targetCountryId, d_num);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -455,7 +455,7 @@ class Negotiate implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleNegotiate(d_targetPlayerId);
+            GameEngine.getInstance().handleNegotiate(d_targetPlayerId);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;
@@ -475,7 +475,7 @@ class Commit implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.get_instance().handleCommit();
+            GameEngine.getInstance().handleCommit();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return 1;

@@ -1,13 +1,23 @@
 package org.bitsquad.warzone.logger;
 
+import org.bitsquad.warzone.gameengine.GameEngine;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class LogEntryBuffer extends LogObservable {
+    private static LogEntryBuffer d_instance;
     private StringBuilder d_logBuffer;
     private HashMap<String, Object> d_fields = new HashMap<>();
 
-    public LogEntryBuffer() {
+    public static LogEntryBuffer getInstance(){
+        if (d_instance == null) {
+            d_instance = new LogEntryBuffer();
+        }
+        return d_instance;
+    }
+
+    private LogEntryBuffer() {
         d_logBuffer = new StringBuilder();
     }
 

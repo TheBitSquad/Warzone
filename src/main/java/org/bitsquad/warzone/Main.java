@@ -1,6 +1,10 @@
 package org.bitsquad.warzone;
 
 import org.bitsquad.warzone.cli.CliParser;
+import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
+import org.bitsquad.warzone.logger.LogFileWriter;
+import org.bitsquad.warzone.logger.LogStdoutWriter;
 
 import java.util.Scanner;
 
@@ -13,7 +17,14 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("Hello and welcome to WARZONE!");
+        // Setup the logger
+        LogEntryBuffer l_logger = LogEntryBuffer.getInstance();
+        LogFileWriter l_logFileWriter = new LogFileWriter("warzone.log");
+        LogStdoutWriter l_logStdoutWriter = new LogStdoutWriter();
+        l_logger.addObserver(l_logFileWriter);
+        l_logger.addObserver(l_logStdoutWriter);
+
+        // Setup the CLI parser
         CliParser parser = new CliParser();
         Scanner scanner = new Scanner(System.in);
 

@@ -1,14 +1,12 @@
 package org.bitsquad.warzone.gameengine.phase;
 
-import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.order.DeployOrder;
-import org.bitsquad.warzone.order.Order;
 import org.bitsquad.warzone.player.Player;
 
-public class IssueOrder_PreDeploy extends IssueOrder{
-    public IssueOrder_PreDeploy(GameEngine p_gameEngine){
+public class IssueOrderPreDeploy extends IssueOrder{
+    public IssueOrderPreDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
 
@@ -37,7 +35,7 @@ public class IssueOrder_PreDeploy extends IssueOrder{
         LogEntryBuffer.getInstance().log("Deploy Order created. Target: " + p_targetCountryId + ", Army units: " + p_armyUnits);
 
         if (l_currentPlayer.getAvailableArmyUnits() == 0) {
-             this.d_gameEngine.setPhase(new IssueOrder_PostDeploy(this.d_gameEngine));
+             this.d_gameEngine.setPhase(new IssueOrderPostDeploy(this.d_gameEngine));
         }
     }
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits){

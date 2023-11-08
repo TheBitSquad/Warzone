@@ -75,7 +75,7 @@ abstract class Startup extends Phase {
         }
 
         this.d_gameEngine.nextRound();
-        this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+        this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
     }
 
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits) {

@@ -5,7 +5,7 @@ import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.phase.Phase;
-import org.bitsquad.warzone.gameengine.phase.Startup_MapEditing;
+import org.bitsquad.warzone.gameengine.phase.StartupMapEditing;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
@@ -31,7 +31,7 @@ public class GameEngine {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
         d_policyManager = new PolicyManager();
-        d_gamePhase = new Startup_MapEditing(this);
+        d_gamePhase = new StartupMapEditing(this);
     }
 
     public void setPhase(Phase p_newPhase) {

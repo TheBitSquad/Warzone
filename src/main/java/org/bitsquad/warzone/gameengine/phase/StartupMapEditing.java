@@ -3,8 +3,8 @@ package org.bitsquad.warzone.gameengine.phase;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 
-public class Startup_MapEditing extends Startup {
-    public Startup_MapEditing(GameEngine p_gameEngine) {
+public class StartupMapEditing extends Startup {
+    public StartupMapEditing(GameEngine p_gameEngine) {
         super(p_gameEngine);
     }
 
@@ -12,7 +12,7 @@ public class Startup_MapEditing extends Startup {
         boolean resp = this.d_gameEngine.getGameMap().loadMap(p_filename);
         if (resp) {
             LogEntryBuffer.getInstance().log("Map loaded");
-            this.d_gameEngine.setPhase(new Startup_PostMapLoad(this.d_gameEngine));
+            this.d_gameEngine.setPhase(new StartupPostMapLoad(this.d_gameEngine));
         } else {
             throw new Exception("Invalid map or filename");
         }

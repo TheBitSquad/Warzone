@@ -132,7 +132,7 @@ public class GameEngine {
         boolean l_allDeployCommandsCompleted = false;
 
         while (!l_allDeployCommandsCompleted) {
-            l_allDeployCommandsCompleted = false;
+            l_allDeployCommandsCompleted = true;
             for (Player l_player : this.d_gamePlayers) {
                 l_orderToExecute = null;
                 if (l_player.isNextDeploy()) {

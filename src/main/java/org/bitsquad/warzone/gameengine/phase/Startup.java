@@ -71,6 +71,8 @@ abstract class Startup extends Phase {
             l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(this.d_gameEngine.getGamePlayers().get(assignee).getId());
         }
 
+        // TODO: Add reinforcement units before beginning the first round.
+        this.d_gameEngine.nextRound();
          this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
     }
 

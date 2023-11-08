@@ -1,7 +1,6 @@
 package org.bitsquad.warzone.gameengine.phase;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
-import org.bitsquad.warzone.logger.LogEntryBuffer;
 
 public class OrderExecution extends Phase {
 
@@ -77,6 +76,6 @@ public class OrderExecution extends Phase {
         this.d_gameEngine.executeOrders();
         this.d_gameEngine.nextRound();
         // FUTURE: Add check for player win condition.
-        this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+        this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
     }
 }

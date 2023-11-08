@@ -9,10 +9,9 @@ import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
-class IssueOrder_PostDeploy extends IssueOrder{
-    IssueOrder_PostDeploy(GameEngine p_gameEngine){
+class IssueOrderPostDeploy extends IssueOrder{
+    IssueOrderPostDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits){
@@ -176,9 +175,7 @@ class IssueOrder_PostDeploy extends IssueOrder{
             // Change the phase to pre deploy for the next player
             LogEntryBuffer.getInstance().log("Player committed. Next player's turn");
             this.d_gameEngine.setCurrentPlayerIndexToNextPlayer();
-            LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.d_gameEngine.getCurrentPlayer().getId());
-
-            this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+            this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
         }
     }
 }

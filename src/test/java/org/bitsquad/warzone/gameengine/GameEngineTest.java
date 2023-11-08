@@ -3,7 +3,7 @@ package org.bitsquad.warzone.gameengine;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.bitsquad.warzone.country.Country;
-import org.bitsquad.warzone.gameengine.phase.IssueOrder_PreDeploy;
+import org.bitsquad.warzone.gameengine.phase.IssueOrderPreDeploy;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.AfterEach;
@@ -174,7 +174,7 @@ class GameEngineTest {
         l_map.addCountry(10, 3);
         GameEngine.getInstance().setGameMap(l_map);
         GameEngine.getInstance().setCurrentPlayerIndex(0);
-        GameEngine.getInstance().setPhase(new IssueOrder_PreDeploy(GameEngine.getInstance()));
+        GameEngine.getInstance().setPhase(new IssueOrderPreDeploy(GameEngine.getInstance()));
 
         assertThrows(Exception.class, () -> {
             GameEngine.getInstance().handleDeployArmy(1, 5);

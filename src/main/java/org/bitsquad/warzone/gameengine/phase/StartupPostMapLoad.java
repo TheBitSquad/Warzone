@@ -2,8 +2,8 @@ package org.bitsquad.warzone.gameengine.phase;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
 
-class Startup_PostMapLoad extends Startup{
-    Startup_PostMapLoad(GameEngine p_gameEngine){
+class StartupPostMapLoad extends Startup{
+    StartupPostMapLoad(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
 

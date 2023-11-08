@@ -70,7 +70,7 @@ public class StartupMapEditing extends Startup {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
                 this.d_gameEngine.getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
-                LogEntryBuffer.getInstance().log("Neighbor " + p_removeIds[i] + " and " + p_removeIds[i + 1] + " added");
+                LogEntryBuffer.getInstance().log("Neighbor " + p_addIds[i] + " and " + p_addIds[i + 1] + " added");
             }
         }
         if (p_removeIds != null) {

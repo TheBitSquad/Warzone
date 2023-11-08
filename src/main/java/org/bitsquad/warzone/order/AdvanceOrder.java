@@ -31,6 +31,7 @@ public class AdvanceOrder extends Order{
     @Override
     public boolean isValid(){
         // Completed: Check if countries are neighbors or not, and the source country belongs to the player
+        // and that the number of army units are less than that available in the country
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
         for (Continent l_continent : GameEngine.getInstance().getGameMap().getContinents().values()) {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
@@ -40,7 +41,8 @@ public class AdvanceOrder extends Order{
         Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
 
         return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId()
-                && l_sourceCountry.getNeighbors().contains(this.getTargetCountryId());
+                && l_sourceCountry.getNeighbors().contains(this.getTargetCountryId())
+                && l_sourceCountry.getArmyValue() >= this.getNoOfArmyUnits();
     }
     /**
      * Helper class Pair

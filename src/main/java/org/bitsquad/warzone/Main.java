@@ -35,7 +35,7 @@ public class Main {
             try {
                 parser.parseCommandString(ip);
             } catch (Exception e) {
-                System.err.println(e.getMessage());
+                LogEntryBuffer.getInstance().log(e.getMessage());
             }
         }
     }

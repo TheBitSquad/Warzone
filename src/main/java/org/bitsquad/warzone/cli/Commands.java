@@ -4,6 +4,7 @@
 package org.bitsquad.warzone.cli;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 
@@ -163,6 +164,7 @@ class ShowMap implements Callable<Integer> {
      */
     public Integer call() {
         GameEngine.getInstance().getGameMap().visualizeGraph();
+        LogEntryBuffer.getInstance().log("Showing Map");
         return 0;
     }
 }
@@ -184,7 +186,7 @@ class SaveMap implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleSaveMap(d_filename);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
         }
         return 0;
     }
@@ -243,7 +245,7 @@ class LoadMap implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleLoadMap(d_filename);
         } catch (Exception e) {
-            System.err.println(e);
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -309,7 +311,7 @@ class AssignCountries implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleAssignCountries();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
         }
         return 0;
     }
@@ -333,7 +335,7 @@ class Deploy implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleDeployArmy(d_countryID, d_num);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -361,7 +363,7 @@ class Advance implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleAdvance(d_countryNameFrom, d_countryNameTo, d_num);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -384,7 +386,7 @@ class Bomb implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleBomb(d_countryId);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -407,7 +409,7 @@ class Blockade implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleBlockade(d_countryId);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -434,7 +436,7 @@ class Airlift implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleAirlift(d_sourceCountryId, d_targetCountryId, d_num);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -457,7 +459,7 @@ class Negotiate implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleNegotiate(d_targetPlayerId);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;
@@ -477,7 +479,7 @@ class Commit implements Callable<Integer> {
         try {
             GameEngine.getInstance().handleCommit();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LogEntryBuffer.getInstance().log(e.getMessage());
             return 1;
         }
         return 0;

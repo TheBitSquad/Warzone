@@ -28,6 +28,15 @@ public class Country {
     public Country(int p_countryId, int p_continentId){
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;
+        this.d_countryName = "";
+        this.d_neighbors = new ArrayList<Integer>();
+        d_armyValue = 0;
+    }
+
+    public Country(int p_countryId, String p_countryName, int p_continentId){
+        this.d_countryId = p_countryId;
+        this.d_continentId= p_continentId;
+        this.d_countryName = p_countryName;
         this.d_neighbors = new ArrayList<Integer>();
         d_armyValue = 0;
     }

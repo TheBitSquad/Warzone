@@ -5,7 +5,7 @@ import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.phase.Phase;
-import org.bitsquad.warzone.gameengine.phase.Startup_MapEditing;
+import org.bitsquad.warzone.gameengine.phase.StartupMapEditing;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
@@ -31,11 +31,12 @@ public class GameEngine {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
         d_policyManager = new PolicyManager();
-        d_gamePhase = new Startup_MapEditing(this);
+        d_gamePhase = new StartupMapEditing(this);
     }
 
     public void setPhase(Phase p_newPhase) {
         this.d_gamePhase = p_newPhase;
+        LogEntryBuffer.getInstance().log("Phase changed. Current Phase: " + this.d_gamePhase.getClass().getSimpleName());
     }
 
     public PolicyManager getPolicyManager() {
@@ -53,6 +54,7 @@ public class GameEngine {
      */
     public void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
+        LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getName());
     }
 
     public void setCurrentPlayerIndexToNextPlayer() {
@@ -116,6 +118,10 @@ public class GameEngine {
         return d_instance;
     }
 
+    public void handleExecuteOrders(){
+        this.d_gamePhase.handleExecuteOrders();
+    }
+
     /**
      * Executes orders in Round-Robin fashion
      */
@@ -148,6 +154,7 @@ public class GameEngine {
             }
         }
 
+        l_isAllOrderSetsEmpty = false;
         while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
             for (Player l_player : this.d_gamePlayers) {

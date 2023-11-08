@@ -8,6 +8,6 @@ import java.util.Observer;
 public class LogStdoutWriter implements LogObserver {
     @Override
     public void notify(String p_message) {
-        System.out.println(p_message);
+        System.out.print(p_message);
     }
 }

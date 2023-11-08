@@ -49,7 +49,7 @@ public abstract class Order implements GameOrder{
     @Override
     public String toString() {
         return "Order: " +
-                "d_playerId=" + d_playerInstance +
+                "d_playerId=" + d_playerInstance.getId() +
                 ", d_targetCountryId=" + d_targetCountryId +
                 ", d_noOfArmyUnits=" + d_noOfArmyUnits;
     }

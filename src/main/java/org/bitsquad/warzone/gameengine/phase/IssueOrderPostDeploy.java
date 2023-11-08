@@ -4,14 +4,14 @@ import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
-class IssueOrder_PostDeploy extends IssueOrder{
-    IssueOrder_PostDeploy(GameEngine p_gameEngine){
+class IssueOrderPostDeploy extends IssueOrder{
+    IssueOrderPostDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits){
@@ -61,6 +61,7 @@ class IssueOrder_PostDeploy extends IssueOrder{
                 )
         );
         l_currentPlayer.issueOrder();
+        LogEntryBuffer.getInstance().log("Advance Order created. Source: " + p_countryNameFrom + " Target: " + p_targetCountryName + ", Army units: " + p_armyUnits);
     }
     public void handleBomb(int p_targetCountryId) throws Exception{
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
@@ -88,6 +89,8 @@ class IssueOrder_PostDeploy extends IssueOrder{
         // Issue the bomb order
         l_currentPlayer.setCurrentOrder(new BombOrder(l_currentPlayer, p_targetCountryId));
         l_currentPlayer.issueOrder();
+        LogEntryBuffer.getInstance().log("Bomb Order created. Target: " + p_targetCountryId);
+
     }
     public void handleBlockade(int p_targetCountryId) throws Exception{
         // Check if player has Blockade card
@@ -104,6 +107,8 @@ class IssueOrder_PostDeploy extends IssueOrder{
         // Issue Blockade order
         l_currentPlayer.setCurrentOrder(new BlockadeOrder(l_currentPlayer, p_targetCountryId));
         l_currentPlayer.issueOrder();
+        LogEntryBuffer.getInstance().log("Blockade Order created. Target: " + p_targetCountryId);
+
     }
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
@@ -136,6 +141,8 @@ class IssueOrder_PostDeploy extends IssueOrder{
         // Issue the airlift order
         l_currentPlayer.setCurrentOrder(new AirliftOrder(l_currentPlayer, p_sourceCountryId, p_targetCountryId, p_numArmies));
         l_currentPlayer.issueOrder();
+        LogEntryBuffer.getInstance().log("Airlift Order created. Source: " + p_sourceCountryId + " Target: " + p_targetCountryId + ", Army units: " + p_numArmies);
+
     }
     public void handleNegotiate(int p_targetPlayerId) throws Exception{
         // Check if player has Diplomacy card
@@ -153,18 +160,22 @@ class IssueOrder_PostDeploy extends IssueOrder{
 
         l_currentPlayer.setCurrentOrder(new NegotiateOrder(l_currentPlayer, p_targetPlayerId));
         l_currentPlayer.issueOrder();
+        LogEntryBuffer.getInstance().log("Negotiate Order created. Source player: " + l_currentPlayer.getId() + ", Target player:" + l_targetPlayer.getId());
+
     }
     public void handleCommit(){
         if (this.d_gameEngine.getCurrentPlayerIndex() == this.d_gameEngine.getGamePlayers().size() - 1) {
+            LogEntryBuffer.getInstance().log("All Players committed");
             // We've taken orders from all players
             // Change state to Order Execution
             this.d_gameEngine.setPhase(new OrderExecution(this.d_gameEngine));
             // Execute the orders here itself.
-            this.d_gameEngine.executeOrders();
+            this.d_gameEngine.handleExecuteOrders();
         } else {
             // Change the phase to pre deploy for the next player
+            LogEntryBuffer.getInstance().log("Player committed. Next player's turn");
             this.d_gameEngine.setCurrentPlayerIndexToNextPlayer();
-            this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+            this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
         }
     }
 }

@@ -36,6 +36,7 @@ public class GameEngine {
 
     public void setPhase(Phase p_newPhase) {
         this.d_gamePhase = p_newPhase;
+        LogEntryBuffer.getInstance().log("Phase changed. Current Phase: " + this.d_gamePhase.getClass().getSimpleName());
     }
 
     public PolicyManager getPolicyManager() {
@@ -196,6 +197,7 @@ public class GameEngine {
         }
         d_policyManager.clearPolicies();
         setCurrentPlayerIndex(0);
+        LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getId());
     }
 
     /**

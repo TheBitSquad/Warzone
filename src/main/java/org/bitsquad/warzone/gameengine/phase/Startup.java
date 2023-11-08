@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.HashMap;
 
 abstract class Startup extends Phase {
-    Startup(GameEngine p_gameEngine){
+    Startup(GameEngine p_gameEngine) {
         super(p_gameEngine);
     }
 
-    public void handleValidateMap(){
+    public void handleValidateMap() {
         if (this.d_gameEngine.getGameMap().validateMap()) {
             LogEntryBuffer.getInstance().log("Valid map");
         } else {
@@ -22,13 +22,14 @@ abstract class Startup extends Phase {
         }
     }
 
-    public void handleGamePlayer(String[] p_addNames, String[] p_removeNames){
+    public void handleGamePlayer(String[] p_addNames, String[] p_removeNames) {
         if (p_addNames != null) {
             for (String l_addName : p_addNames) {
                 try {
                     this.d_gameEngine.handleAddPlayer(l_addName);
+                    LogEntryBuffer.getInstance().log("new player " + l_addName + " is added");
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+                    LogEntryBuffer.getInstance().log(e.getMessage());
                 }
             }
         }
@@ -36,14 +37,15 @@ abstract class Startup extends Phase {
             for (String l_removeName : p_removeNames) {
                 try {
                     this.d_gameEngine.handleRemovePlayer(l_removeName);
+                    LogEntryBuffer.getInstance().log("removed player " + l_removeName);
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+                    LogEntryBuffer.getInstance().log(e.getMessage());
                 }
             }
         }
     }
 
-    public void handleAssignCountries() throws Exception{
+    public void handleAssignCountries() throws Exception {
         if (!this.d_gameEngine.getGameMap().validateMap()) {
             throw new Exception("Not a valid map cannot begin gameplay");
         }
@@ -72,31 +74,39 @@ abstract class Startup extends Phase {
             l_allCountries.get(l_countryIDs.get(i)).setOwnedByPlayerId(this.d_gameEngine.getGamePlayers().get(assignee).getId());
         }
 
-        // TODO: Add reinforcement units before beginning the first round.
         this.d_gameEngine.nextRound();
-         this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
+        this.d_gameEngine.setPhase(new IssueOrder_PreDeploy(this.d_gameEngine));
     }
 
-    public void handleDeployArmy(int p_targetCountryId, int p_armyUnits){
+    public void handleDeployArmy(int p_targetCountryId, int p_armyUnits) {
         this.printInvalidCommandMessage();
     }
-    public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits){
+
+    public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) {
         this.printInvalidCommandMessage();
     }
-    public void handleBomb(int p_countryId){
+
+    public void handleBomb(int p_countryId) {
         this.printInvalidCommandMessage();
     }
-    public void handleBlockade(int p_targetCountryId){
+
+    public void handleBlockade(int p_targetCountryId) {
         this.printInvalidCommandMessage();
     }
-    public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies){
+
+    public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) {
         this.printInvalidCommandMessage();
     }
-    public void handleNegotiate(int p_targetPlayerId){
+
+    public void handleNegotiate(int p_targetPlayerId) {
         this.printInvalidCommandMessage();
     }
-    public void handleCommit(){
+
+    public void handleCommit() {
         this.printInvalidCommandMessage();
     }
-    public void handleExecuteOrders(){this.printInvalidCommandMessage();}
+
+    public void handleExecuteOrders() {
+        this.printInvalidCommandMessage();
+    }
 }

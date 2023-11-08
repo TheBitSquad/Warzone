@@ -10,6 +10,7 @@ import com.mxgraph.util.mxUtils;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.ext.JGraphXAdapter;
@@ -282,7 +283,7 @@ public class Map {
             return validateMap();
         }
         catch (IOException e){
-            System.err.println("Unable to load the map," + e.getMessage());
+            LogEntryBuffer.getInstance().log("Unable to load the map," + e.getMessage());
         }
         return false;
     }
@@ -340,7 +341,7 @@ public class Map {
                 l_bufferedWriter.close();
             }
             catch(IOException e){
-                System.err.println("Error creating new file" + e.getMessage());
+                LogEntryBuffer.getInstance().log("Error creating new file" + e.getMessage());
             }
         }
     }

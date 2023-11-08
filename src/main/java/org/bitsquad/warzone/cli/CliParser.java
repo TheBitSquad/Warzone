@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.cli;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import picocli.CommandLine;
 
 import java.util.*;
@@ -77,7 +78,7 @@ public class CliParser {
      */
     public void parseCommandString(String p_ip) throws ClassNotFoundException, CommandLine.ParameterException {
         if (p_ip == null) {
-            System.err.println("No command was inputted");
+            LogEntryBuffer.getInstance().log("No command was inputted");
             return;
         }
         String[] l_ip_arr = p_ip.split(" ");
@@ -87,14 +88,14 @@ public class CliParser {
         Object l_obj = null;
 
         if (l_command == null) {
-            System.err.println(l_ip_arr[0] + " is not a valid command");
+            LogEntryBuffer.getInstance().log(l_ip_arr[0] + " is not a valid command");
             return;
         }
 
         try {
             l_obj = l_command.getDeclaredConstructor().newInstance();
         } catch (Exception ex) {
-            System.err.println(ex.getMessage());
+            LogEntryBuffer.getInstance().log(ex.getMessage());
         }
 
         CommandLine l_cmd = new CommandLine(l_obj);

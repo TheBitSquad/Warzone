@@ -118,6 +118,10 @@ public class GameEngine {
         return d_instance;
     }
 
+    public void handleExecuteOrders(){
+        this.d_gamePhase.handleExecuteOrders();
+    }
+
     /**
      * Executes orders in Round-Robin fashion
      */
@@ -148,6 +152,7 @@ public class GameEngine {
             }
         }
 
+        l_isAllOrderSetsEmpty = false;
         while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
             for (Player l_player : this.d_gamePlayers) {

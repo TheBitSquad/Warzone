@@ -97,5 +97,5 @@ abstract class Startup extends Phase {
     public void handleCommit(){
         this.printInvalidCommandMessage();
     }
-    public void executeOrders(){this.printInvalidCommandMessage();}
+    public void handleExecuteOrders(){this.printInvalidCommandMessage();}
 }

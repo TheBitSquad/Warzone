@@ -87,7 +87,7 @@ public class Continent {
     * @param p_countryName the name of the country
     */
     public void addCountry(int p_countryId, String p_countryName) {
-        d_countries.putIfAbsent(p_countryId, new Country(p_countryId, d_continentId));
+        d_countries.putIfAbsent(p_countryId, new Country(p_countryId, p_countryName, d_continentId));
     }
 
     /**

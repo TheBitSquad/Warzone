@@ -26,7 +26,7 @@ public abstract class Phase {
     abstract public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception;
     abstract public void handleNegotiate(int p_targetPlayerId) throws Exception;
     abstract public void handleCommit();
-    abstract public void executeOrders();
+    abstract public void handleExecuteOrders();
     public void printInvalidCommandMessage(){
         System.out.println("Invalid command in " + this.getClass().getSimpleName() + " phase.");
     }

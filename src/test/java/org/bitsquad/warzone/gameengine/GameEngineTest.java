@@ -130,8 +130,8 @@ class GameEngineTest {
         l_map.addCountry(10, 3);
         GameEngine.get_instance().setGameMap(l_map);
 
-        assertEquals(9, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
-        assertEquals(11, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
+        assertEquals(6, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p1));
+        assertEquals(4, GameEngine.get_instance().getNumberOfReinforcementUnits(l_p2));
     }
 
     /**

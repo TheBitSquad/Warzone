@@ -110,6 +110,23 @@ public class Map {
         }
     }
 
+    public boolean addCountry(int p_countryId, String p_countryName, int p_continentId){
+        // Check if the country is present in any continent
+        for(Continent l_continent: d_continents.values()){
+            if(l_continent.getCountries().containsKey(p_countryId)){
+                return false;
+            }
+        }
+        // Check if the continent exists
+        if(d_continents.containsKey(p_continentId)){
+            Continent l_continent = d_continents.get(p_continentId);
+            l_continent.addCountry(p_countryId, p_countryName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Removes a country from the map
      * @param p_countryId Country Id
@@ -206,7 +223,7 @@ public class Map {
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
-                addCountry(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[2]));
+                this.addCountry(Integer.parseInt(l_data[0]), l_data[1], Integer.parseInt(l_data[2]));
                 l_lines = p_bufferedReader.readLine();
             }
         }

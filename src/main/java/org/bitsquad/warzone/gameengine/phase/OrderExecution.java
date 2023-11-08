@@ -58,7 +58,7 @@ public class OrderExecution extends Phase{
         printInvalidCommandMessage();
     }
 
-    public void executeOrders(){
+    public void handleExecuteOrders(){
          this.d_gameEngine.executeOrders();
          this.d_gameEngine.nextRound();
          // FUTURE: Add check for player win condition.

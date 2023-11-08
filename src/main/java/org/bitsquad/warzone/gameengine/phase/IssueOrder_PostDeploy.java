@@ -160,7 +160,7 @@ class IssueOrder_PostDeploy extends IssueOrder{
             // Change state to Order Execution
             this.d_gameEngine.setPhase(new OrderExecution(this.d_gameEngine));
             // Execute the orders here itself.
-            this.d_gameEngine.executeOrders();
+            this.d_gameEngine.handleExecuteOrders();
         } else {
             // Change the phase to pre deploy for the next player
             this.d_gameEngine.setCurrentPlayerIndexToNextPlayer();

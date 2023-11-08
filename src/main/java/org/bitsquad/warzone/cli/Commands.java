@@ -164,6 +164,7 @@ class ShowMap implements Callable<Integer> {
      */
     public Integer call() {
         GameEngine.getInstance().getGameMap().visualizeGraph();
+        LogEntryBuffer.getInstance().log("Showing Map");
         return 0;
     }
 }

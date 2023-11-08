@@ -117,5 +117,9 @@ public abstract class Order implements GameOrder{
         return d_noOfArmyUnits;
     }
 
+    /**
+     * Checks if a particular method is valid or not
+     * @return boolean
+     */
     abstract public boolean isValid();
 }

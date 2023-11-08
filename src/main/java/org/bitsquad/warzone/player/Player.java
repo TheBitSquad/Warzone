@@ -16,7 +16,6 @@ import java.util.HashMap;
  */
 public class Player {
     private static int LastPlayerID = 0;
-
     private int d_id;
     private String d_name;
     private int d_availableArmyUnits;
@@ -93,6 +92,11 @@ public class Player {
         return d_countriesOwned;
     }
 
+    /**
+     * Used to fetch a player owned country using Country ID
+     * @param p_countryID
+     * @return Country
+     */
     public Country getCountryByID(int p_countryID) {
         for (Country l_country : d_countriesOwned) {
             if (l_country.getCountryId() == p_countryID) {
@@ -102,6 +106,11 @@ public class Player {
         return null;
     }
 
+    /**
+     * Used to check if player has a particular country
+     * @param p_countryID
+     * @return boolean
+     */
     public boolean hasCountryWithID(int p_countryID) {
         for (Country l_country : d_countriesOwned) {
             if (l_country.getCountryId() == p_countryID) {
@@ -148,18 +157,35 @@ public class Player {
         this.d_currentOrder = p_currentOrder;
     }
 
+    /**
+     * Getter for the cards which a player holds
+     * @return HashMap
+     */
     public HashMap<Card, Integer> getCurrentCards() {
         return d_currentCards;
     }
 
+    /**
+     * Checks if a player has a card
+     * @param p_card
+     * @return boolean
+     */
     public boolean hasCard(Card p_card) {
         return d_currentCards.get(p_card) > 0;
     }
 
+    /**
+     * Tells if a player has a new territory
+     * @return boolean
+     */
     public boolean hasNewTerritory() {
         return d_hasNewTerritory;
     }
 
+    /**
+     * Sets if the player has gained a new territory
+     * @param p_hasNewTerritory
+     */
     public void setHasNewTerritory(boolean p_hasNewTerritory) {
         d_hasNewTerritory = p_hasNewTerritory;
     }

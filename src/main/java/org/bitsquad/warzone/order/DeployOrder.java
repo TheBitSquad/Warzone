@@ -21,6 +21,10 @@ public class DeployOrder extends Order{
         super(p_player, -1, p_targetCountryID, p_armyUnits);
     }
 
+    /**
+     * Checks if the order is valid
+     * @return boolean
+     */
     @Override
     public boolean isValid(){
         // Check if the destination country belongs to the player

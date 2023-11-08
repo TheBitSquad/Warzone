@@ -15,6 +15,9 @@ public class Country {
     private int d_ownedByPlayerId;
     private ArrayList<Integer> d_neighbors;
 
+    /**
+     * Default Constructor
+     */
     public Country(){
         this.d_neighbors = new ArrayList<Integer>();
         d_armyValue = 0;
@@ -33,6 +36,12 @@ public class Country {
         d_armyValue = 0;
     }
 
+    /**
+     * Parameterized constructor
+     * @param p_countryId Country ID
+     * @param p_countryName Country Name
+     * @param p_continentId Continent ID
+     */
     public Country(int p_countryId, String p_countryName, int p_continentId){
         this.d_countryId = p_countryId;
         this.d_continentId= p_continentId;

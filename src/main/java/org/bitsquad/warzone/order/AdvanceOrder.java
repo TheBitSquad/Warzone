@@ -28,6 +28,10 @@ public class AdvanceOrder extends Order{
         super(p_player, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
+    /**
+     * Checks if the order is valid
+     * @return boolean
+     */
     @Override
     public boolean isValid(){
         // Completed: Check if countries are neighbors or not, and the source country belongs to the player

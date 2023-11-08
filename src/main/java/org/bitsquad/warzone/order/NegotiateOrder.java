@@ -22,6 +22,10 @@ public class NegotiateOrder extends Order{
         this.d_targetPlayerId = p_targetPlayerId;
     }
 
+    /**
+     * Checks if the order is valid
+     * @return boolean
+     */
     @Override
     public boolean isValid(){
         return true;

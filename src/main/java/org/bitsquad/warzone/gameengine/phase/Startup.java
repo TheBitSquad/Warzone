@@ -9,11 +9,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * Startup Phase implementation
+ */
 abstract class Startup extends Phase {
+
+    /**
+     * Parameterized constructor
+     * @param p_gameEngine
+     */
     Startup(GameEngine p_gameEngine) {
         super(p_gameEngine);
     }
 
+    /**
+     * Handler method for validatemap command
+     */
     public void handleValidateMap() {
         if (this.d_gameEngine.getGameMap().validateMap()) {
             LogEntryBuffer.getInstance().log("Valid map");
@@ -22,6 +33,11 @@ abstract class Startup extends Phase {
         }
     }
 
+    /**
+     * Handler method for gameplayer command
+     * @param p_addNames names to add
+     * @param p_removeNames names to remove
+     */
     public void handleGamePlayer(String[] p_addNames, String[] p_removeNames) {
         if (p_addNames != null) {
             for (String l_addName : p_addNames) {
@@ -45,6 +61,10 @@ abstract class Startup extends Phase {
         }
     }
 
+    /**
+     * Handler method for assigncountries command
+     * @throws Exception
+     */
     public void handleAssignCountries() throws Exception {
         if (!this.d_gameEngine.getGameMap().validateMap()) {
             throw new Exception("Not a valid map cannot begin gameplay");
@@ -78,34 +98,69 @@ abstract class Startup extends Phase {
         this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
     }
 
+    /**
+     * Handler method for deploy command
+     * @param p_targetCountryId Target Country ID
+     * @param p_armyUnits Number of army units
+     */
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for advance command
+     * @param p_countryNameFrom Source Country Name
+     * @param p_targetCountryName Target Country Name
+     * @param p_armyUnits Number of army units
+     */
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for bomb command
+     * @param p_countryId Country ID
+     */
     public void handleBomb(int p_countryId) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for blockade command
+     * @param p_targetCountryId target Country ID
+     */
     public void handleBlockade(int p_targetCountryId) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for airlift command
+     * @param p_sourceCountryId
+     * @param p_targetCountryId
+     * @param p_numArmies
+     */
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for negotiate command
+     * @param p_targetPlayerId Target Player ID
+     */
     public void handleNegotiate(int p_targetPlayerId) {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for commit command
+     */
     public void handleCommit() {
         this.printInvalidCommandMessage();
     }
 
+    /**
+     * Handler method for execute orders
+     */
     public void handleExecuteOrders() {
         this.printInvalidCommandMessage();
     }

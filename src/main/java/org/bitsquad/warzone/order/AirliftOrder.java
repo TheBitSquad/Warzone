@@ -25,6 +25,10 @@ public class AirliftOrder extends Order {
         super(p_player, p_sourceCountryId, p_targetCountryId, p_armyUnits);
     }
 
+    /**
+     * Checks if the order is valid
+     * @return boolean
+     */
     @Override
     public boolean isValid() {
         // Check if both source and final countries belong to the player

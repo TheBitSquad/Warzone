@@ -24,6 +24,10 @@ public class BombOrder extends Order {
         super(p_player, -1, p_targetCountryID, 0);
     }
 
+    /**
+     * Checks if the order is valid
+     * @return boolean
+     */
     @Override
     public boolean isValid() {
         // Check that the player isn't bombing it's own country

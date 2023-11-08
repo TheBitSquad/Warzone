@@ -27,6 +27,9 @@ public class GameEngine {
     private int d_currentPlayerIndex;
     PolicyManager d_policyManager;
 
+    /**
+     * Default Constructor
+     */
     private GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
@@ -34,15 +37,27 @@ public class GameEngine {
         d_gamePhase = new StartupMapEditing(this);
     }
 
+    /**
+     * Sets the phase
+     * @param p_newPhase
+     */
     public void setPhase(Phase p_newPhase) {
         this.d_gamePhase = p_newPhase;
         LogEntryBuffer.getInstance().log("Phase changed. Current Phase: " + this.d_gamePhase.getClass().getSimpleName());
     }
 
+    /**
+     * Getter for PolicyManager instance
+     * @return PolicyManager
+     */
     public PolicyManager getPolicyManager() {
         return d_policyManager;
     }
 
+    /**
+     * Returns the currentPlayerIndex
+     * @return int
+     */
     public int getCurrentPlayerIndex() {
         return d_currentPlayerIndex;
     }
@@ -57,6 +72,9 @@ public class GameEngine {
         LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getName());
     }
 
+    /**
+     * Increments the player index to the next logical one
+     */
     public void setCurrentPlayerIndexToNextPlayer() {
         this.setCurrentPlayerIndex((this.getCurrentPlayerIndex() + 1) % this.d_gamePlayers.size());
     }
@@ -118,6 +136,9 @@ public class GameEngine {
         return d_instance;
     }
 
+    /**
+     * Handler for executing orders
+     */
     public void handleExecuteOrders(){
         this.d_gamePhase.handleExecuteOrders();
     }
@@ -420,6 +441,11 @@ public class GameEngine {
         this.d_gamePhase.handleCommit();
     }
 
+    /**
+     * Used to get player instance using the player ID
+     * @param p_playerID Player ID
+     * @return Player instance
+     */
     public Player getPlayerByID(int p_playerID) {
         for (Player l_player : d_gamePlayers) {
             if (l_player.getId() == p_playerID) {

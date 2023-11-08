@@ -10,13 +10,34 @@ import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
 
+/**
+ * IssueOrder Post Deploy Phase implementation
+ */
 class IssueOrderPostDeploy extends IssueOrder{
+    /**
+     * Parameterized constructor
+     * @param p_gameEngine
+     */
     IssueOrderPostDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
+
+    /**
+     * Handler method for deploy command
+     * @param p_targetCountryId Target Country ID
+     * @param p_armyUnits Number of army units
+     */
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits){
         this.printInvalidCommandMessage();
     }
+
+    /**
+     * Handler method for advance command
+     * @param p_countryNameFrom Source Country Name
+     * @param p_targetCountryName Target Country Name
+     * @param p_armyUnits Number of army units
+     * @throws Exception
+     */
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception{
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
 
@@ -63,6 +84,12 @@ class IssueOrderPostDeploy extends IssueOrder{
         l_currentPlayer.issueOrder();
         LogEntryBuffer.getInstance().log("Advance Order created. Source: " + p_countryNameFrom + " Target: " + p_targetCountryName + ", Army units: " + p_armyUnits);
     }
+
+    /**
+     * Handler method for bomb command
+     * @param p_targetCountryId Country ID
+     * @throws Exception
+     */
     public void handleBomb(int p_targetCountryId) throws Exception{
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         // Check if player has bomb card
@@ -92,6 +119,12 @@ class IssueOrderPostDeploy extends IssueOrder{
         LogEntryBuffer.getInstance().log("Bomb Order created. Target: " + p_targetCountryId);
 
     }
+
+    /**
+     * Handler method for bloackade command
+     * @param p_targetCountryId target Country ID
+     * @throws Exception
+     */
     public void handleBlockade(int p_targetCountryId) throws Exception{
         // Check if player has Blockade card
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
@@ -110,6 +143,14 @@ class IssueOrderPostDeploy extends IssueOrder{
         LogEntryBuffer.getInstance().log("Blockade Order created. Target: " + p_targetCountryId);
 
     }
+
+    /**
+     * Handler method for airlift command
+     * @param p_sourceCountryId Source Country ID
+     * @param p_targetCountryId Target Country ID
+     * @param p_numArmies
+     * @throws Exception
+     */
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         // Check if player has airlift card
@@ -144,6 +185,12 @@ class IssueOrderPostDeploy extends IssueOrder{
         LogEntryBuffer.getInstance().log("Airlift Order created. Source: " + p_sourceCountryId + " Target: " + p_targetCountryId + ", Army units: " + p_numArmies);
 
     }
+
+    /**
+     * Handler method for negotiate command
+     * @param p_targetPlayerId Target Player ID
+     * @throws Exception
+     */
     public void handleNegotiate(int p_targetPlayerId) throws Exception{
         // Check if player has Diplomacy card
         Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
@@ -163,6 +210,10 @@ class IssueOrderPostDeploy extends IssueOrder{
         LogEntryBuffer.getInstance().log("Negotiate Order created. Source player: " + l_currentPlayer.getId() + ", Target player:" + l_targetPlayer.getId());
 
     }
+
+    /**
+     * Handler method for commit command
+     */
     public void handleCommit(){
         if (this.d_gameEngine.getCurrentPlayerIndex() == this.d_gameEngine.getGamePlayers().size() - 1) {
             LogEntryBuffer.getInstance().log("All Players committed");

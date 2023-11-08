@@ -3,11 +3,23 @@ package org.bitsquad.warzone.gameengine.phase;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 
+/**
+ * Startup Map Editing phase implementation
+ */
 public class StartupMapEditing extends Startup {
+    /**
+     * Parameterized constructor
+     * @param p_gameEngine GameEngine
+     */
     public StartupMapEditing(GameEngine p_gameEngine) {
         super(p_gameEngine);
     }
 
+    /**
+     * Handler method for loadmap command
+     * @param p_filename String filename
+     * @throws Exception
+     */
     public void handleLoadMap(String p_filename) throws Exception {
         boolean resp = this.d_gameEngine.getGameMap().loadMap(p_filename);
         if (resp) {
@@ -18,16 +30,30 @@ public class StartupMapEditing extends Startup {
         }
     }
 
+    /**
+     * Handler method for editmap command
+     * @param p_filename String filename
+     */
     public void handleEditMap(String p_filename) {
         this.d_gameEngine.getGameMap().editMap(p_filename);
         LogEntryBuffer.getInstance().log("Map edited");
     }
 
+    /**
+     * Handler method for savemap command
+     * @param p_filename String filename
+     * @throws Exception
+     */
     public void handleSaveMap(String p_filename) throws Exception {
         this.d_gameEngine.getGameMap().saveMap(p_filename);
         LogEntryBuffer.getInstance().log("Map saved");
     }
 
+    /**
+     * Handler method for editcontinent command
+     * @param p_addArray ids and values to add
+     * @param p_removeIds ids to remove
+     */
     public void handleEditContinent(int[] p_addArray, int[] p_removeIds) {
         if (p_addArray != null) {
             for (int i = 0; i < p_addArray.length; i += 2) {
@@ -45,6 +71,11 @@ public class StartupMapEditing extends Startup {
         }
     }
 
+    /**
+     * Handler method for editcountry command
+     * @param p_addIds ids to add
+     * @param p_removeIds ids to remove
+     */
     public void handleEditCountry(int[] p_addIds, int[] p_removeIds) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
@@ -66,6 +97,11 @@ public class StartupMapEditing extends Startup {
         }
     }
 
+    /**
+     * Handler method for editneighbor command
+     * @param p_addIds
+     * @param p_removeIds
+     */
     public void handleEditNeighbor(int[] p_addIds, int[] p_removeIds) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {

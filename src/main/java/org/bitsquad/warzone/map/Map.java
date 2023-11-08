@@ -110,6 +110,13 @@ public class Map {
         }
     }
 
+    /**
+     * Adds a country to the map
+     * @param p_countryId Country ID
+     * @param p_countryName Country Name
+     * @param p_continentId ContinentID
+     * @return boolean
+     */
     public boolean addCountry(int p_countryId, String p_countryName, int p_continentId){
         // Check if the country is present in any continent
         for(Continent l_continent: d_continents.values()){

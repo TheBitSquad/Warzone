@@ -14,8 +14,8 @@ import java.util.HashMap;
  */
 public class AdvanceOrder extends Order{
 
-    private static float d_attackerSurviveProbability = 0.6f;
-    private static float d_defenderSurviveProbability = 0.7f;
+    private static float d_attackerKillsDefenderProbability = 0.6f;
+    private static float d_defenderKillsAttackerProbability = 0.7f;
 
     /**
      * Parameterized constructor
@@ -63,11 +63,21 @@ public class AdvanceOrder extends Order{
      * @return Pair<Integer>
      */
     private Pair<Integer> getExpectedSurvivors(int p_numAttackers, int p_numDefenders){
-        int l_expectedAttackersSurviving = (int) Math.floor(
-                p_numAttackers * (1 - Math.pow(d_defenderSurviveProbability, p_numDefenders)));
-        int l_expectedDefendersSurviving = (int) Math.floor(
-                p_numDefenders * (1 - Math.pow(d_attackerSurviveProbability, p_numAttackers)));
-        return new Pair<>(l_expectedAttackersSurviving, l_expectedDefendersSurviving);
+        int l_attackSurvivors = p_numAttackers;
+        int l_defenderSurvivors = p_numDefenders;
+
+        for(int i = 0; i<p_numAttackers; i++){
+            if(Math.random() <= d_attackerKillsDefenderProbability) {
+                l_defenderSurvivors--;
+            }
+        }
+
+        for(int i = 0; i<p_numDefenders; i++){
+            if(Math.random() <= d_defenderKillsAttackerProbability){
+                l_attackSurvivors--;
+            }
+        }
+        return new Pair<>(Math.max(l_attackSurvivors, 0), Math.max(l_defenderSurvivors, 0));
     }
 
     /**

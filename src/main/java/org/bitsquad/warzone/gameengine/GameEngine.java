@@ -164,6 +164,12 @@ public class GameEngine {
                     LogEntryBuffer.getInstance().log("Executing: " + l_orderToExecute);
                     if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
+                    } else {
+                        if(!this.d_policyManager.checkPolicies(l_orderToExecute))
+                            LogEntryBuffer.getInstance().log("The order violates current round policies.");
+                        else if(!l_orderToExecute.isValid()){
+                            LogEntryBuffer.getInstance().log("The order is invalid");
+                        }
                     }
                 }
             }

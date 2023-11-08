@@ -39,7 +39,8 @@ public class AdvanceOrder extends Order{
         Country l_sourceCountry = l_allCountries.get(this.getSourceCountryId());
         Country l_targetCountry = l_allCountries.get(this.getTargetCountryId());
 
-        return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId() && l_sourceCountry.getNeighbors().contains(l_targetCountry);
+        return l_sourceCountry.getOwnedByPlayerId() == this.getPlayer().getId()
+                && l_sourceCountry.getNeighbors().contains(this.getTargetCountryId());
     }
     /**
      * Helper class Pair

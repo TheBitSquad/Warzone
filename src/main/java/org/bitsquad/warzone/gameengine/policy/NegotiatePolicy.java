@@ -27,7 +27,7 @@ public class NegotiatePolicy implements Policy{
      */
     @Override
     public boolean check(Order p_order){
-        String l_orderType = p_order.getClass().getName();
+        String l_orderType = p_order.getClass().getSimpleName();
         if (l_orderType.equals("BombOrder") || l_orderType.equals("AdvanceOrder")) {
             int l_playerID = p_order.getPlayer().getId();
             int l_targetCountryID = p_order.getTargetCountryId();

@@ -54,6 +54,7 @@ public class GameEngine {
      */
     public void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
+        LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getName());
     }
 
     public void setCurrentPlayerIndexToNextPlayer() {
@@ -197,7 +198,6 @@ public class GameEngine {
         }
         d_policyManager.clearPolicies();
         setCurrentPlayerIndex(0);
-        LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getId());
     }
 
     /**

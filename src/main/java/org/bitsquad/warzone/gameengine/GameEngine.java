@@ -6,15 +6,13 @@ import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.phase.Phase;
 import org.bitsquad.warzone.gameengine.phase.Startup_MapEditing;
-import org.bitsquad.warzone.gameengine.policy.BlockadePolicy;
-import org.bitsquad.warzone.gameengine.policy.NegotiatePolicy;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Represents the Game engine.
@@ -29,14 +27,14 @@ public class GameEngine {
     private int d_currentPlayerIndex;
     PolicyManager d_policyManager;
 
-    GameEngine() {
+    private GameEngine() {
         d_gameMap = new Map();
         d_gamePlayers = new ArrayList<>();
         d_policyManager = new PolicyManager();
         d_gamePhase = new Startup_MapEditing(this);
     }
 
-    public void setPhase(Phase p_newPhase){
+    public void setPhase(Phase p_newPhase) {
         this.d_gamePhase = p_newPhase;
     }
 
@@ -57,7 +55,7 @@ public class GameEngine {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
     }
 
-    public void setCurrentPlayerIndexToNextPlayer(){
+    public void setCurrentPlayerIndexToNextPlayer() {
         this.setCurrentPlayerIndex((this.getCurrentPlayerIndex() + 1) % this.d_gamePlayers.size());
     }
 
@@ -111,7 +109,7 @@ public class GameEngine {
      *
      * @return instance of GameEngine
      */
-    public static GameEngine get_instance() {
+    public static GameEngine getInstance() {
         if (d_instance == null) {
             d_instance = new GameEngine();
         }
@@ -125,7 +123,7 @@ public class GameEngine {
         // Completed: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
         // Completed: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
         // Completed: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
-        System.out.println("Executing Orders");
+        LogEntryBuffer.getInstance().log("Executing Orders");
         Order l_orderToExecute = null;
 
         boolean l_isAllOrderSetsEmpty = false;
@@ -140,9 +138,11 @@ public class GameEngine {
                     l_orderToExecute = l_player.nextOrder();
                 }
                 if (l_orderToExecute != null) {
-                    System.out.println("Executing: " + l_orderToExecute);
+                    LogEntryBuffer.getInstance().log("Executing: " + l_orderToExecute);
                     if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
+                    } else {
+                        LogEntryBuffer.getInstance().log("the order is invalid");
                     }
                 }
             }
@@ -154,7 +154,7 @@ public class GameEngine {
                 l_orderToExecute = l_player.nextOrder();
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
-                    System.out.println("Executing: " + l_orderToExecute);
+                    LogEntryBuffer.getInstance().log("Executing: " + l_orderToExecute);
                     if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
                     }
@@ -167,7 +167,7 @@ public class GameEngine {
      * Sets up the start of a new round
      */
     public void nextRound() {
-        System.out.println("New Round!");
+        LogEntryBuffer.getInstance().log("New Round!");
 
         for (Player l_player : this.d_gamePlayers) {
             // Assign random cards
@@ -175,6 +175,7 @@ public class GameEngine {
                 Card l_generatedCard = CardGenerator.generateRandomCard();
                 int l_numberOfCard = l_player.getCurrentCards().getOrDefault(l_generatedCard, 0);
                 l_player.getCurrentCards().put(l_generatedCard, l_numberOfCard + 1);
+                LogEntryBuffer.getInstance().log("Award " + l_generatedCard + " to the player");
             }
 
             // Assign reinforcement units
@@ -182,7 +183,7 @@ public class GameEngine {
             int l_numberReinforcement = getNumberOfReinforcementUnits(l_player);
             // Add the army
             l_player.setAvailableArmyUnits(l_player.getAvailableArmyUnits() + l_numberReinforcement);
-            System.out.println(l_player.getName() + ": Reinforcements: " + l_numberReinforcement +
+            LogEntryBuffer.getInstance().log(l_player.getName() + ": Reinforcements: " + l_numberReinforcement +
                     ". Total Units available to deploy: " + l_player.getAvailableArmyUnits());
 
             // Clear the state of players

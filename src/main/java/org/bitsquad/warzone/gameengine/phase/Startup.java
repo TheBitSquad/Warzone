@@ -3,6 +3,7 @@ package org.bitsquad.warzone.gameengine.phase;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +16,9 @@ abstract class Startup extends Phase {
 
     public void handleValidateMap(){
         if (this.d_gameEngine.getGameMap().validateMap()) {
-            System.out.println("Valid map");
+            LogEntryBuffer.getInstance().log("Valid map");
         } else {
-            System.out.println("Invalid map");
+            LogEntryBuffer.getInstance().log("Invalid map");
         }
     }
 

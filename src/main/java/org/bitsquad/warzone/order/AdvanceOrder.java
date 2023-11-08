@@ -3,6 +3,7 @@ package org.bitsquad.warzone.order;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.player.Player;
 
@@ -31,7 +32,7 @@ public class AdvanceOrder extends Order{
     public boolean isValid(){
         // Completed: Check if countries are neighbors or not, and the source country belongs to the player
         HashMap<Integer, Country> l_allCountries = new HashMap<>();
-        for (Continent l_continent : GameEngine.get_instance().getGameMap().getContinents().values()) {
+        for (Continent l_continent : GameEngine.getInstance().getGameMap().getContinents().values()) {
             HashMap<Integer, Country> l_countries = l_continent.getCountries();
             l_allCountries.putAll(l_countries);
         }
@@ -74,7 +75,7 @@ public class AdvanceOrder extends Order{
     @Override
     public void execute(){
         Map l_gameMap; Player l_currentPlayer;
-        l_gameMap = GameEngine.get_instance().getGameMap();
+        l_gameMap = GameEngine.getInstance().getGameMap();
         l_currentPlayer = this.getPlayer();
 
         // Get all countries
@@ -92,6 +93,7 @@ public class AdvanceOrder extends Order{
             // Advance army units from source to target
             l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - this.getNoOfArmyUnits());
             l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() + this.getNoOfArmyUnits());
+            LogEntryBuffer.getInstance().log("Moved " + this.getNoOfArmyUnits() + " from " + this.getSourceCountryId() + " to " + this.getTargetCountryId());
         } else {
             // Attack the target country
             int l_attackUnits = this.getNoOfArmyUnits();
@@ -111,7 +113,7 @@ public class AdvanceOrder extends Order{
                 l_targetCountry.setArmyValue(l_attackSurvivors);
 
                 // Change country ownership
-                for(Player l_player: GameEngine.get_instance().getGamePlayers()){
+                for(Player l_player: GameEngine.getInstance().getGamePlayers()){
                     if(l_player.getId() == l_targetCountry.getOwnedByPlayerId()){
                         // Remove the target country from ownership of enemy
                         l_player.removeCountryOwned(l_targetCountry);
@@ -119,9 +121,11 @@ public class AdvanceOrder extends Order{
                 }
                 l_currentPlayer.addCountryOwned(l_targetCountry);
                 l_targetCountry.setOwnedByPlayerId(l_currentPlayer.getId());
+                LogEntryBuffer.getInstance().log("The player conquered the country " + this.getTargetCountryId() + ", number of survivors " + l_attackSurvivors);
             } else {
                 l_sourceCountry.setArmyValue(l_sourceCountry.getArmyValue() - getNoOfArmyUnits() + l_attackSurvivors);
                 l_targetCountry.setArmyValue(l_defenderSurvivors);
+                LogEntryBuffer.getInstance().log("The player attacked the country " + this.getTargetCountryId() + ", number of survivors " + l_attackSurvivors + ", number of enemy survivors " + l_defenderSurvivors);
             }
         }
     }

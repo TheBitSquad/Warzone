@@ -1,6 +1,7 @@
 package org.bitsquad.warzone.gameengine.phase;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.logger.LogEntryBuffer;
 
 /**
  * Phase interface. Represents the state in State Pattern
@@ -28,6 +29,6 @@ public abstract class Phase {
     abstract public void handleCommit();
     abstract public void executeOrders();
     public void printInvalidCommandMessage(){
-        System.out.println("Invalid command in " + this.getClass().getSimpleName() + " phase.");
+        LogEntryBuffer.getInstance().log("Invalid command in " + this.getClass().getSimpleName() + " phase.");
     }
 }

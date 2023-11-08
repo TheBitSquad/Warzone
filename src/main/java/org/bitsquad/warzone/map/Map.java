@@ -1,7 +1,6 @@
 package org.bitsquad.warzone.map;
 
 import com.mxgraph.layout.mxOrganicLayout;
-import com.mxgraph.layout.mxParallelEdgeLayout;
 import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 
@@ -446,6 +445,9 @@ public class Map {
         l_graphAdapter.getEdgeToCellMap().forEach((edge, cell) -> cell.setValue(null));
 
         mxOrganicLayout l_layout = new mxOrganicLayout(l_graphAdapter);
+        l_layout.setOptimizeEdgeLength(false);
+        l_layout.setOptimizeNodeDistribution(true);
+
         l_layout.execute(l_graphAdapter.getDefaultParent());
 
         l_frame.getContentPane().add(l_graphComponent,BorderLayout.CENTER);

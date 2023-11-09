@@ -28,7 +28,11 @@ public class NegotiateOrder extends Order{
      */
     @Override
     public boolean isValid(){
-        return true;
+        // Check if the target player exists
+        for(Player l_player: GameEngine.getInstance().getGamePlayers()){
+            if(l_player.getId() == this.d_targetPlayerId) return true;
+        }
+        return false;
     }
 
     /**

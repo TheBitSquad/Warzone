@@ -9,11 +9,3 @@ UML Class Diagram: [UML Class Diagram](https://drive.google.com/file/d/1wG4AMuCU
 Flowchart Diagram: [Flowchart Diagram](https://drive.google.com/file/d/1qkdKj3camtycs-aPsomErns_CYR2nTxI/view?usp=sharing)
 
 Javadocs are available on github pages: [W16-Warzone Javadocs](https://thebitsquad.github.io/Warzone/index.html)
-
-
----------
-To-do:
-- [ ] State Pattern to implement phases of the application
-- [ ] Observer Pattern for game log file
-- [ ] Command Patter to implement Orders
-- [ ] Implementation of advance, bomb, blockade, airlift and negotiate commands

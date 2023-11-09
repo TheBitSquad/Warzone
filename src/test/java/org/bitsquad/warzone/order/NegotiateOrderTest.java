@@ -101,7 +101,7 @@ class NegotiateOrderTest {
         Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
         Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
-        Order order1 = new NegotiateOrder(l_p1, 1);
+        Order order1 = new NegotiateOrder(l_p1, l_p2.getId());
         order1.execute();
 
         Order order2 = new AdvanceOrder(l_p1, 1, 4, 5);

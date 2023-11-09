@@ -22,8 +22,8 @@ class NegotiateOrderTest {
     /**
      * Setup
      */
-    @BeforeEach
-    void init(){
+    @BeforeAll
+    static void init(){
         assertDoesNotThrow(()->{
             GameEngine.getInstance().handleAddPlayer("aman");
             GameEngine.getInstance().handleAddPlayer("nisarg");

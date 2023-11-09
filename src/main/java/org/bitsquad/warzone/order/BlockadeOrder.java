@@ -34,7 +34,7 @@ public class BlockadeOrder extends Order {
     public void execute() {
         // Double the army units in the target country.
         Country l_targetCountry = this.getPlayer().getCountryByID(this.getTargetCountryId());
-        l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() * 2);
+        l_targetCountry.setArmyValue(l_targetCountry.getArmyValue() * 3);
 
         // Add the blockade policy to the policy manager.
         GameEngine.getInstance().getPolicyManager()

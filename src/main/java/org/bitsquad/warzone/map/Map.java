@@ -61,6 +61,10 @@ public class Map {
         d_continents.putIfAbsent(p_continentId, new Continent(p_continentId, p_bonusValue));
     }
 
+    public void addContinent(int p_continentId,String p_continentName, int p_bonusValue){
+        d_continents.putIfAbsent(p_continentId, new Continent(p_continentId,p_continentName, p_bonusValue));
+    }
+
     /**
      * Removes a continent from the map
      * @param p_continentId ID of the continent to be removed

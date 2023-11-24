@@ -12,6 +12,7 @@ import org.bitsquad.warzone.country.Country;
 public class Continent {
     
     private int d_continentId;
+    private String d_continentName;
     private int d_bonusValue;
     private HashMap<Integer, Country> d_countries;
 
@@ -33,6 +34,13 @@ public class Continent {
         this.d_countries = new HashMap<>();
     }
 
+    public Continent(int p_continentId,String p_continentName, int p_bonusValue){
+        d_continentId = p_continentId;
+        d_continentName = p_continentName;
+        d_bonusValue = p_bonusValue;
+        this.d_countries = new HashMap<>();
+    }
+
     /**
      * Getter method of continentId.
      * @return the id of the continent
@@ -47,6 +55,14 @@ public class Continent {
      */
     public void setId(int p_continentId) {
         this.d_continentId = p_continentId;
+    }
+
+    public void setName(String p_continentName){
+        this.d_continentName = p_continentName;
+    }
+
+    public String getName(){
+        return d_continentName;
     }
 
     /**

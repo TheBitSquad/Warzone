@@ -1,14 +1,12 @@
 package org.bitsquad.warzone.map;
 
 public class Adapter extends Map{
-    public static final String mapType ="domination";
-
-    ConquestMap d_conquestMap = new ConquestMap();
+    ConquestMap d_conquestMap;
 
     /**
      *
      */
-    Adapter(ConquestMap p_conquestMap){
+    public Adapter(ConquestMap p_conquestMap){
         this.d_conquestMap = p_conquestMap;
     }
 
@@ -18,5 +16,9 @@ public class Adapter extends Map{
 
     public void saveMap(String p_fileName) throws Exception {
         d_conquestMap.saveMap(p_fileName);
+    }
+
+    public void visualizeGraph(){
+        d_conquestMap.visualizeGraph();
     }
 }

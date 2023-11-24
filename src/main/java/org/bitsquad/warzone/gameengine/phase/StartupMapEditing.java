@@ -2,6 +2,14 @@ package org.bitsquad.warzone.gameengine.phase;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
+import org.bitsquad.warzone.map.Adapter;
+import org.bitsquad.warzone.map.ConquestMap;
+import org.bitsquad.warzone.map.Map;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Startup Map Editing phase implementation
@@ -21,6 +29,8 @@ public class StartupMapEditing extends Startup {
      * @throws Exception
      */
     public void handleLoadMap(String p_filename) throws Exception {
+        Map map = isConquestMap(p_filename)? new Adapter(new ConquestMap()) : new Map();
+        this.d_gameEngine.setGameMap(map);
         boolean resp = this.d_gameEngine.getGameMap().loadMap(p_filename);
         if (resp) {
             LogEntryBuffer.getInstance().log("Map loaded");
@@ -115,5 +125,18 @@ public class StartupMapEditing extends Startup {
                 LogEntryBuffer.getInstance().log("Neighbor " + p_removeIds[i] + " and " + p_removeIds[i + 1] + " removed");
             }
         }
+    }
+    public static boolean isConquestMap(String p_fileName) throws IOException {
+        File file = new File(p_fileName);
+        BufferedReader l_reader = new BufferedReader(new FileReader(file));
+        String l_lines ;
+        while ((l_lines = l_reader.readLine()) != null) {
+            if(l_lines.isEmpty())
+                continue;
+            if (l_lines.toLowerCase().contains("[territories]"))
+                return true;
+        }
+        l_reader.close();
+        return false;
     }
 }

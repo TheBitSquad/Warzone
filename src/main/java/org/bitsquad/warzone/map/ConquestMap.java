@@ -1,12 +1,25 @@
 package org.bitsquad.warzone.map;
 
+import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxUtils;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphTests;
+import org.jgrapht.ext.JGraphXAdapter;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -16,9 +29,14 @@ import java.util.HashMap;
 public class ConquestMap {
     ArrayList<String[]> d_conquestNeighbors;
     Map d_map;
+    private HashMap<Integer, Continent> d_continents;
+    private Graph<Country, DefaultEdge> d_graph;
+
     public ConquestMap(){
         d_conquestNeighbors = new ArrayList<>();
         d_map = new Map();
+        d_continents = new HashMap<Integer, Continent>();
+        d_graph = new SimpleGraph<>(DefaultEdge.class);
     }
 
     public HashMap<Integer, Continent> getContinents(){
@@ -101,7 +119,7 @@ public class ConquestMap {
                 }
                 l_bufferedReader.close();
             }
-            validateMap();
+            return validateMap();
         }
         catch (IOException e){
             LogEntryBuffer.getInstance().log("Unable to load the map," + e.getMessage());
@@ -161,9 +179,7 @@ public class ConquestMap {
         l_bufferedWriter.close();
     }
 
-    public boolean validateMap(){
-        return d_map.validateMap();
-    }
+
 
     private String getCountryByID(int p_countryId) {
         for (Continent l_continent : d_map.getContinents().values()) {
@@ -193,6 +209,14 @@ public class ConquestMap {
             }
         }
         return -1;
+    }
+
+    private boolean validateMap(){
+        return d_map.validateMap();
+    }
+
+    public void visualizeGraph(){
+        d_map.visualizeGraph();
     }
 }
 

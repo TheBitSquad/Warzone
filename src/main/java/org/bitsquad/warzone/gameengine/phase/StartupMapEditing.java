@@ -44,7 +44,9 @@ public class StartupMapEditing extends Startup {
      * Handler method for editmap command
      * @param p_filename String filename
      */
-    public void handleEditMap(String p_filename) {
+    public void handleEditMap(String p_filename) throws IOException {
+        Map map = isConquestMap(p_filename)? new Adapter(new ConquestMap()) : new Map();
+        this.d_gameEngine.setGameMap(map);
         this.d_gameEngine.getGameMap().editMap(p_filename);
         LogEntryBuffer.getInstance().log("Map edited");
     }

@@ -107,7 +107,7 @@ public class Map {
         // Check if the continent exists
         if(d_continents.containsKey(p_continentId)){
             Continent l_continent = d_continents.get(p_continentId);
-            l_continent.addCountry(p_countryId, "");
+            l_continent.addCountry(p_countryId, "Country");
             return true;
         } else {
             return false;

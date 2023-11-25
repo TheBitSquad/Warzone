@@ -12,6 +12,7 @@ import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.player.Player;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -327,8 +328,8 @@ public class GameEngine {
      *
      * @param p_filename
      */
-    public void handleEditMap(String p_filename) {
-        this.d_gameMap.editMap(p_filename);
+    public void handleEditMap(String p_filename) throws IOException {
+        this.d_gamePhase.handleEditMap(p_filename);
     }
 
     /**

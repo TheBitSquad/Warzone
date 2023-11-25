@@ -29,14 +29,10 @@ import java.util.HashMap;
 public class ConquestMap {
     ArrayList<String[]> d_conquestNeighbors;
     Map d_map;
-    private HashMap<Integer, Continent> d_continents;
-    private Graph<Country, DefaultEdge> d_graph;
 
     public ConquestMap(){
         d_conquestNeighbors = new ArrayList<>();
         d_map = new Map();
-        d_continents = new HashMap<Integer, Continent>();
-        d_graph = new SimpleGraph<>(DefaultEdge.class);
     }
 
     public HashMap<Integer, Continent> getContinents(){
@@ -47,11 +43,31 @@ public class ConquestMap {
         d_map.addContinent(p_continentId, p_continentName, p_bonusValue);
     }
 
+    public void addContinent(int p_continentId, int p_bonusValue){
+        d_map.addContinent(p_continentId,p_bonusValue);
+    }
+
+    public boolean removeContinent(int p_continentId){
+        return d_map.removeContinent(p_continentId);
+    }
+
+    public boolean addCountry(int p_countryId, int p_continentId){
+        return d_map.addCountry(p_countryId,p_continentId);
+    }
+
     public void addTerritory(int p_territoryId, String p_territoryName, int p_continentId){
         d_map.addCountry(p_territoryId, p_territoryName, p_continentId);
     }
+
+    public void removeCountry(int p_countryId){
+        d_map.removeCountry(p_countryId);
+    }
     public boolean addNeighbor(int p_sourceTerritoryId, int p_destinationTerritoryId){
         return d_map.addNeighbor(p_sourceTerritoryId,p_destinationTerritoryId);
+    }
+
+    public void removeNeighbor(int p_sourceCountryId, int p_destinationCountryId){
+        d_map.removeNeighbor(p_sourceCountryId,p_destinationCountryId);
     }
     private void loadConquestTerritories(BufferedReader p_bufferedReader) {
         int l_countryId=1;
@@ -211,7 +227,7 @@ public class ConquestMap {
         return -1;
     }
 
-    private boolean validateMap(){
+    public boolean validateMap(){
         return d_map.validateMap();
     }
 

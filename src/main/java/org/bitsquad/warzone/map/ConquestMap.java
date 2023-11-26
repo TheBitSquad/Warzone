@@ -247,21 +247,35 @@ public class ConquestMap {
         }
         BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
         StringBuilder l_stringBuilder = new StringBuilder("\n[Territories]\n");
+        String l_continentName="";
         //save continents data
         l_bufferedWriter.write("[Continents]\n");
-        for (Continent l_continents : d_map.getContinents().values())
-            l_bufferedWriter.write(l_continents.getName() + "=" + l_continents.getValue() + "\n");
+        for (Continent l_continents : d_map.getContinents().values()){
+            l_continentName= l_continents.getName();
+            if(l_continentName==null)
+                l_continentName="Continent_"+l_continents.getId();
+            l_bufferedWriter.write(l_continentName+ "=" + l_continents.getValue() + "\n");
+        }
+
         //save countries data and neighbors list
         for (Continent l_continents : d_map.getContinents().values()) {
             for (int l_countryId : l_continents.getCountries().keySet()) {
                 Country l_country = l_continents.getCountries().get(l_countryId);
-                l_stringBuilder.append(l_country.getCountryName()).append(",");
+                String l_countryName= l_country.getCountryName();
+                if(l_countryName.equals("Country"))
+                    l_countryName="Country_"+l_countryId;
+                l_stringBuilder.append(l_countryName).append(",");
                 l_stringBuilder.append("x,");
                 l_stringBuilder.append("y,");
-                l_stringBuilder.append(l_continents.getName());
+                l_continentName= l_continents.getName();
+                if(l_continentName==null)
+                    l_continentName="Continent_"+l_continents.getId();
+                l_stringBuilder.append(l_continentName);
                 for (int neighborId : l_country.getNeighbors()) {
                     String l_neighborCountry = getCountryByID(neighborId);
                     if (l_neighborCountry != null) {
+                        if(l_neighborCountry.equals("Country"))
+                            l_neighborCountry="Country_"+neighborId;
                         l_stringBuilder.append(",").append(l_neighborCountry);
                     }
                 }

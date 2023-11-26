@@ -313,16 +313,23 @@ public class Map {
         BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
         //save continents data
         l_bufferedWriter.write("[continents]\n");
-        for(Continent l_continents : d_continents.values())
-            l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
+        for(Continent l_continents : d_continents.values()){
+            String l_continentName= l_continents.getName();
+            if(l_continentName==null)
+                l_continentName="Continent_"+l_continents.getId();
+            l_bufferedWriter.write(l_continentName + " " + l_continents.getValue() + "\n");
+        }
         //save countries data and build neighbors list
         l_bufferedWriter.write("\n[countries]\n");
         for(Continent l_continents : d_continents.values()) {
             for(int l_countryId: l_continents.getCountries().keySet()){
-                l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
+                Country l_country = l_continents.getCountries().get(l_countryId);
+                String l_countryName= l_country.getCountryName();
+                if(l_countryName.equals("Country"))
+                    l_countryName="Country_"+l_countryId;
+                l_bufferedWriter.write(l_countryId + " " + l_countryName + " " + l_continents.getId() + "\n");
                 //building neighbors list
                 l_stringBuilder.append(l_countryId);
-                Country l_country = l_continents.getCountries().get(l_countryId);
                 for (int neighborId : l_country.getNeighbors()) {
                     l_stringBuilder.append(" ").append(neighborId);
                 }

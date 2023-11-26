@@ -212,12 +212,14 @@ public class Map {
      * @param p_bufferedReader BufferedReader object to read the text file
      */
     private void loadContinents(BufferedReader p_bufferedReader) {
+        int l_continentId=1;
         try{
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
-                addContinent(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
+                addContinent(l_continentId,l_data[0],Integer.parseInt(l_data[1]));
                 l_lines = p_bufferedReader.readLine();
+                l_continentId++;
             }
         }
         catch (IOException e){

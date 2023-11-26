@@ -122,13 +122,15 @@ class MapTest {
 	 */
 	@Test
 	public void testLoadMap() throws IOException {
-		String l_mapData = "[continents]\n1 5\n2 3\n\n[countries]\n1 Country_1 1\n2 Country_2 1\n3 Country_3 2\n4 Country_4 2\n\n[neighbors]\n1 2\n2 1\n3 4\n4 3\n";
+		String l_mapData = "[continents]\nEngland 5\nScotland 3\n\n[countries]\n1 Country_1 1\n2 Country_2 1\n3 Country_3 2\n4 Country_4 2\n\n[neighbors]\n1 2\n2 1\n3 4\n4 3\n";
 		File l_file = new File("testMap.map");
 		BufferedWriter l_writer = new BufferedWriter(new FileWriter(l_file));
 		l_writer.write(l_mapData);
 		l_writer.flush();
 		l_writer.close();
 		d_map.loadMap("testMap.map");
+		assertNotNull(d_map);
+
 		assertNotNull(d_map.getContinents().get(1));
 		assertNotNull(d_map.getContinents().get(2));
 		assertNotNull(d_map.getContinents().get(1).getCountries().get(1));

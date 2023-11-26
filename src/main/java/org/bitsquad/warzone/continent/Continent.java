@@ -31,6 +31,7 @@ public class Continent {
     public Continent(int p_continentId, int p_bonusValue){
         d_continentId = p_continentId;
         d_bonusValue = p_bonusValue;
+        d_continentName = "Continent_" + p_continentId;
         this.d_countries = new HashMap<>();
     }
 

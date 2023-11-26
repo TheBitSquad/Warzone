@@ -46,7 +46,7 @@ public class Map {
     /**
      * Used to get a particular continent by ID
      * @param p_continentId Continent id
-     * @return
+     * @return Continent object
      */
     public Continent getContinent(int p_continentId){
         return d_continents.get(p_continentId);
@@ -58,7 +58,7 @@ public class Map {
      * @param p_bonusValue bonus value of the continent
      */
     public void addContinent(int p_continentId, int p_bonusValue){
-        d_continents.putIfAbsent(p_continentId, new Continent(p_continentId, p_bonusValue));
+        this.addContinent(p_continentId, "Continent_" + p_continentId, p_bonusValue);
     }
 
     public void addContinent(int p_continentId,String p_continentName, int p_bonusValue){
@@ -96,22 +96,7 @@ public class Map {
      * @return boolean if adding a country to an existing continent, else false
      */
     public boolean addCountry(int p_countryId, int p_continentId){
-
-        // Check if the country is present in any continent
-        for(Continent l_continent: d_continents.values()){
-            if(l_continent.getCountries().containsKey(p_countryId)){
-                return false;
-            }
-        }
-
-        // Check if the continent exists
-        if(d_continents.containsKey(p_continentId)){
-            Continent l_continent = d_continents.get(p_continentId);
-            l_continent.addCountry(p_countryId, "Country");
-            return true;
-        } else {
-            return false;
-        }
+        return this.addCountry(p_countryId, "Country_"+p_countryId, p_continentId);
     }
 
     /**

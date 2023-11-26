@@ -310,7 +310,7 @@ public class Map {
             for(int l_countryId: l_continents.getCountries().keySet()){
                 Country l_country = l_continents.getCountries().get(l_countryId);
                 String l_countryName= l_country.getCountryName();
-                if(l_countryName.equals("Country"))
+                if(l_countryName.equals("Country") || l_countryName.isEmpty() || l_countryName == null)
                     l_countryName="Country_"+l_countryId;
                 l_bufferedWriter.write(l_countryId + " " + l_countryName + " " + l_continents.getId() + "\n");
                 //building neighbors list

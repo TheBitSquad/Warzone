@@ -207,8 +207,13 @@ class EditMap implements Callable<Integer> {
      * Implementation of call method
      * @return exit code
      */
-    public Integer call() throws IOException {
-        GameEngine.getInstance().handleEditMap(d_filename);
+    public Integer call() {
+        try{
+            GameEngine.getInstance().handleEditMap(d_filename);
+        } catch (Exception e){
+            LogEntryBuffer.getInstance().log(e.getMessage());
+            return 1;
+        }
         return 0;
     }
 }

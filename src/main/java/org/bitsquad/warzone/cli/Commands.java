@@ -13,6 +13,7 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
@@ -207,7 +208,12 @@ class EditMap implements Callable<Integer> {
      * @return exit code
      */
     public Integer call() {
-        GameEngine.getInstance().handleEditMap(d_filename);
+        try{
+            GameEngine.getInstance().handleEditMap(d_filename);
+        } catch (Exception e){
+            LogEntryBuffer.getInstance().log(e.getMessage());
+            return 1;
+        }
         return 0;
     }
 }

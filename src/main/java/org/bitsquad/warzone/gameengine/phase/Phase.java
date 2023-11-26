@@ -3,6 +3,8 @@ package org.bitsquad.warzone.gameengine.phase;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 
+import java.io.IOException;
+
 /**
  * Phase interface. Represents the state in State Pattern
  */
@@ -28,7 +30,7 @@ public abstract class Phase {
      * Handler for editmap command
      * @param p_filename String filename
      */
-    abstract public void handleEditMap(String p_filename);
+    abstract public void handleEditMap(String p_filename) throws IOException;
 
     /**
      * Handler for savemap command

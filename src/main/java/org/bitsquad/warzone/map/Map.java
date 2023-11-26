@@ -46,7 +46,7 @@ public class Map {
     /**
      * Used to get a particular continent by ID
      * @param p_continentId Continent id
-     * @return
+     * @return Continent object
      */
     public Continent getContinent(int p_continentId){
         return d_continents.get(p_continentId);
@@ -58,7 +58,11 @@ public class Map {
      * @param p_bonusValue bonus value of the continent
      */
     public void addContinent(int p_continentId, int p_bonusValue){
-        d_continents.putIfAbsent(p_continentId, new Continent(p_continentId, p_bonusValue));
+        this.addContinent(p_continentId, "Continent_" + p_continentId, p_bonusValue);
+    }
+
+    public void addContinent(int p_continentId,String p_continentName, int p_bonusValue){
+        d_continents.putIfAbsent(p_continentId, new Continent(p_continentId,p_continentName, p_bonusValue));
     }
 
     /**
@@ -92,22 +96,7 @@ public class Map {
      * @return boolean if adding a country to an existing continent, else false
      */
     public boolean addCountry(int p_countryId, int p_continentId){
-
-        // Check if the country is present in any continent
-        for(Continent l_continent: d_continents.values()){
-            if(l_continent.getCountries().containsKey(p_countryId)){
-                return false;
-            }
-        }
-
-        // Check if the continent exists
-        if(d_continents.containsKey(p_continentId)){
-            Continent l_continent = d_continents.get(p_continentId);
-            l_continent.addCountry(p_countryId, "");
-            return true;
-        } else {
-            return false;
-        }
+        return this.addCountry(p_countryId, "Country_"+p_countryId, p_continentId);
     }
 
     /**
@@ -208,12 +197,14 @@ public class Map {
      * @param p_bufferedReader BufferedReader object to read the text file
      */
     private void loadContinents(BufferedReader p_bufferedReader) {
+        int l_continentId=1;
         try{
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split(" ");
-                addContinent(Integer.parseInt(l_data[0]),Integer.parseInt(l_data[1]));
+                addContinent(l_continentId,l_data[0],Integer.parseInt(l_data[1]));
                 l_lines = p_bufferedReader.readLine();
+                l_continentId++;
             }
         }
         catch (IOException e){
@@ -307,16 +298,23 @@ public class Map {
         BufferedWriter l_bufferedWriter = new BufferedWriter(new FileWriter(p_fileName + ".map"));
         //save continents data
         l_bufferedWriter.write("[continents]\n");
-        for(Continent l_continents : d_continents.values())
-            l_bufferedWriter.write(l_continents.getId() + " " + l_continents.getValue() + "\n");
+        for(Continent l_continents : d_continents.values()){
+            String l_continentName= l_continents.getName();
+            if(l_continentName==null)
+                l_continentName="Continent_"+l_continents.getId();
+            l_bufferedWriter.write(l_continentName + " " + l_continents.getValue() + "\n");
+        }
         //save countries data and build neighbors list
         l_bufferedWriter.write("\n[countries]\n");
         for(Continent l_continents : d_continents.values()) {
             for(int l_countryId: l_continents.getCountries().keySet()){
-                l_bufferedWriter.write(l_countryId + " " + "Country_" + l_countryId + " " + l_continents.getId() + "\n");
+                Country l_country = l_continents.getCountries().get(l_countryId);
+                String l_countryName= l_country.getCountryName();
+                if(l_countryName.equals("Country") || l_countryName.isEmpty() || l_countryName == null)
+                    l_countryName="Country_"+l_countryId;
+                l_bufferedWriter.write(l_countryId + " " + l_countryName + " " + l_continents.getId() + "\n");
                 //building neighbors list
                 l_stringBuilder.append(l_countryId);
-                Country l_country = l_continents.getCountries().get(l_countryId);
                 for (int neighborId : l_country.getNeighbors()) {
                     l_stringBuilder.append(" ").append(neighborId);
                 }

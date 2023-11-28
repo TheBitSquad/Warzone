@@ -73,6 +73,12 @@ public class GameEngine {
     public void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
         LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getName());
+
+        if (!this.getCurrentPlayer().getClass().getSimpleName().equalsIgnoreCase("Player")) {
+            this.getCurrentPlayer().issueOrder();
+            this.setPhase(new IssueOrderPostDeploy(GameEngine.getInstance()));
+            this.handleCommit();
+        }
     }
 
     /**

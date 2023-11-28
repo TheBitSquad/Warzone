@@ -42,6 +42,7 @@ public class GameEngine {
 
     /**
      * Sets the phase
+     *
      * @param p_newPhase
      */
     public void setPhase(Phase p_newPhase) {
@@ -51,6 +52,7 @@ public class GameEngine {
 
     /**
      * Getter for PolicyManager instance
+     *
      * @return PolicyManager
      */
     public PolicyManager getPolicyManager() {
@@ -59,6 +61,7 @@ public class GameEngine {
 
     /**
      * Returns the currentPlayerIndex
+     *
      * @return int
      */
     public int getCurrentPlayerIndex() {
@@ -145,10 +148,15 @@ public class GameEngine {
         return d_instance;
     }
 
+    public static void resetInstance() {
+        d_instance = new GameEngine();
+    }
+
+
     /**
      * Handler for executing orders
      */
-    public void handleExecuteOrders(){
+    public void handleExecuteOrders() {
         this.d_gamePhase.handleExecuteOrders();
     }
 
@@ -195,9 +203,9 @@ public class GameEngine {
                     if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
                     } else {
-                        if(!this.d_policyManager.checkPolicies(l_orderToExecute))
+                        if (!this.d_policyManager.checkPolicies(l_orderToExecute))
                             LogEntryBuffer.getInstance().log("The order violates current round policies.");
-                        else if(!l_orderToExecute.isValid()){
+                        else if (!l_orderToExecute.isValid()) {
                             LogEntryBuffer.getInstance().log("The order is invalid");
                         }
                     }
@@ -452,6 +460,7 @@ public class GameEngine {
 
     /**
      * Used to get player instance using the player ID
+     *
      * @param p_playerID Player ID
      * @return Player instance
      */

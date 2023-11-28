@@ -8,6 +8,7 @@ import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
 import org.bitsquad.warzone.order.Order;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.*;
 
@@ -36,8 +37,8 @@ public class IssueOrderPostDeployTest {
             GameEngine.getInstance().setGameMap(l_map);
 
             // Assign countries to players
-            Player player1 = GameEngine.getInstance().getGamePlayers().get(0);
-            Player player2 = GameEngine.getInstance().getGamePlayers().get(1);
+            BasePlayer player1 = GameEngine.getInstance().getGamePlayers().get(0);
+            BasePlayer player2 = GameEngine.getInstance().getGamePlayers().get(1);
 
             Country l_sourceCountry= l_map.getContinents().get(1).getCountries().get(1);
             Country l_targetCountry = l_map.getContinents().get(1).getCountries().get(2);
@@ -113,7 +114,7 @@ public class IssueOrderPostDeployTest {
     @Test
     public void testHandleBlockadeValidOrder() throws Exception {
         IssueOrderPostDeploy l_issueOrderPostDeploy = new IssueOrderPostDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
         l_currentPlayer.getCurrentCards().put(Card.BlockadeCard,1);
         l_issueOrderPostDeploy.handleBlockade(GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(1).getCountryId());
         assertNotNull(l_currentPlayer.getOrderList());
@@ -135,7 +136,7 @@ public class IssueOrderPostDeployTest {
     @Test
     public void testHandleAirliftValidOrder() throws Exception {
         IssueOrderPostDeploy l_issueOrderPostDeploy = new IssueOrderPostDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
         l_currentPlayer.getCurrentCards().put(Card.AirliftCard,1);
         int numArmies = 3;
         l_issueOrderPostDeploy.handleAirlift(GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(1).getCountryId(),GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(3).getCountryId(), numArmies);
@@ -157,8 +158,8 @@ public class IssueOrderPostDeployTest {
     @Test
     public void testHandleNegotiate() {
         IssueOrderPostDeploy l_issueOrderPostDeploy = new IssueOrderPostDeploy(GameEngine.getInstance());
-        Player l_player1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_player2 =GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_player1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_player2 =GameEngine.getInstance().getGamePlayers().get(1);
 
         l_player1.getCurrentCards().put(Card.DiplomacyCard,1);
         assertDoesNotThrow(() -> l_issueOrderPostDeploy.handleNegotiate(l_player2.getId()));
@@ -185,7 +186,7 @@ public class IssueOrderPostDeployTest {
     @Test
     public void testHandleCommit() {
         IssueOrderPostDeploy l_issueOrderPostDeploy = new IssueOrderPostDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
 
         GameEngine.getInstance().setCurrentPlayerIndex(GameEngine.getInstance().getGamePlayers().size()-1);
         assertDoesNotThrow(() -> l_issueOrderPostDeploy.handleCommit());

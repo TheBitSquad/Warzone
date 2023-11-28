@@ -1,21 +1,22 @@
 package org.bitsquad.warzone.gameengine.policy;
 
 import org.bitsquad.warzone.order.Order;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 /**
  * Implements the Negotiate Policy
  */
 public class NegotiatePolicy implements Policy{
-    private Player d_playerA;
-    private Player d_playerB;
+    private BasePlayer d_playerA;
+    private BasePlayer d_playerB;
 
     /**
      * Parameterized constructor
      * @param p_playerA Player
      * @param p_playerB Player
      */
-    public NegotiatePolicy(Player p_playerA, Player p_playerB){
+    public NegotiatePolicy(BasePlayer p_playerA, BasePlayer p_playerB){
         this.d_playerA = p_playerA;
         this.d_playerB = p_playerB;
     }

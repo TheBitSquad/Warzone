@@ -4,6 +4,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 /**
@@ -17,7 +18,7 @@ public class DeployOrder extends Order{
      * @param p_targetCountryID target country ID
      * @param p_armyUnits number of army units
      */
-    public DeployOrder(Player p_player, int p_targetCountryID, int p_armyUnits){
+    public DeployOrder(BasePlayer p_player, int p_targetCountryID, int p_armyUnits){
         super(p_player, -1, p_targetCountryID, p_armyUnits);
     }
 

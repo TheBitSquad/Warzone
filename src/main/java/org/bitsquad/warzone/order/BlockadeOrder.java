@@ -4,6 +4,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.gameengine.policy.BlockadePolicy;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 public class BlockadeOrder extends Order {
@@ -14,7 +15,7 @@ public class BlockadeOrder extends Order {
      * @param p_player          Player
      * @param p_targetCountryId Target Country ID
      */
-    public BlockadeOrder(Player p_player, int p_targetCountryId) {
+    public BlockadeOrder(BasePlayer p_player, int p_targetCountryId) {
         super(p_player, -1, p_targetCountryId, 0);
     }
 

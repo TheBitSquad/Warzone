@@ -4,6 +4,7 @@ import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,8 +27,8 @@ class AirliftOrderTest {
         assertDoesNotThrow(()->{
             GameEngine.getInstance().handleAddPlayer("aman");
             GameEngine.getInstance().handleAddPlayer("nisarg");
-            Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-            Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+            BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+            BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
             Map l_map = new Map();
             l_map.addContinent(1, 3);
@@ -82,8 +83,8 @@ class AirliftOrderTest {
      */
     @Test
     void isValid() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         Order order1 = new AirliftOrder(l_p1, 1, 3, 3);
         Order order2 = new AirliftOrder(l_p1, 1, 2, 3);
@@ -99,8 +100,8 @@ class AirliftOrderTest {
      */
     @Test
     void execute() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         Order order1 = new AirliftOrder(l_p1, 1, 2, 5);
         order1.execute();

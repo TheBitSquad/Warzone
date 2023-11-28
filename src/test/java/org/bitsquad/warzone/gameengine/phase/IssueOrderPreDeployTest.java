@@ -6,6 +6,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.DeployOrder;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +38,8 @@ public class IssueOrderPreDeployTest {
             GameEngine.getInstance().setGameMap(l_map);
 
             // Assign countries to players
-            Player l_player1 = GameEngine.getInstance().getGamePlayers().get(0);
-            Player l_player2 = GameEngine.getInstance().getGamePlayers().get(1);
+            BasePlayer l_player1 = GameEngine.getInstance().getGamePlayers().get(0);
+            BasePlayer l_player2 = GameEngine.getInstance().getGamePlayers().get(1);
 
             Country l_sourceCountry= l_map.getContinents().get(1).getCountries().get(1);
             Country l_targetCountry = l_map.getContinents().get(1).getCountries().get(2);
@@ -72,7 +73,7 @@ public class IssueOrderPreDeployTest {
     public void testHandleDeployArmy() throws Exception {
 
         IssueOrderPreDeploy l_issueOrderPreDeploy = new IssueOrderPreDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
         l_currentPlayer.setAvailableArmyUnits(5);
         assertDoesNotThrow(() -> l_issueOrderPreDeploy.handleDeployArmy(GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(3).getCountryId(), 3));
         assertNotNull(l_currentPlayer.getOrderList());
@@ -87,7 +88,7 @@ public class IssueOrderPreDeployTest {
     @Test
     public void testHandleDeployArmyInsufficientArmyUnits() {
         IssueOrderPreDeploy l_issueOrderPreDeploy = new IssueOrderPreDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
         l_currentPlayer.setAvailableArmyUnits(5);
         Exception exception = assertThrows(Exception.class, () -> l_issueOrderPreDeploy.handleDeployArmy(GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(2).getCountryId(), 6));
         assertEquals("Insufficient army units", exception.getMessage());
@@ -100,7 +101,7 @@ public class IssueOrderPreDeployTest {
     @Test
     public void testHandleDeployArmyInvalidCountryOwnership() {
         IssueOrderPreDeploy l_issueOrderPreDeploy = new IssueOrderPreDeploy(GameEngine.getInstance());
-        Player l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
+        BasePlayer l_currentPlayer = GameEngine.getInstance().getCurrentPlayer();
         l_currentPlayer.setAvailableArmyUnits(5);
         Exception exception = assertThrows(Exception.class, () -> l_issueOrderPreDeploy.handleDeployArmy(GameEngine.getInstance().getGameMap().getContinents().get(1).getCountries().get(2).getCountryId(), 3));
         assertEquals("Cannot not deploy to enemy territory", exception.getMessage());

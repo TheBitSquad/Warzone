@@ -4,6 +4,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 /**
@@ -21,7 +22,7 @@ public class AirliftOrder extends Order {
      * @param p_targetCountryId Target Counry ID
      * @param p_armyUnits       Number of army units
      */
-    public AirliftOrder(Player p_player, int p_sourceCountryId, int p_targetCountryId, int p_armyUnits) {
+    public AirliftOrder(BasePlayer p_player, int p_sourceCountryId, int p_targetCountryId, int p_armyUnits) {
         super(p_player, p_sourceCountryId, p_targetCountryId, p_armyUnits);
     }
 

@@ -5,6 +5,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class AdvanceOrder extends Order{
      * @param p_targetCountryID target country ID
      * @param p_armyUnits number of army units
      */
-    public AdvanceOrder(Player p_player, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
+    public AdvanceOrder(BasePlayer p_player, int p_sourceCountryId, int p_targetCountryID, int p_armyUnits){
         super(p_player, p_sourceCountryId, p_targetCountryID, p_armyUnits);
     }
 
@@ -91,7 +92,7 @@ public class AdvanceOrder extends Order{
      */
     @Override
     public void execute(){
-        Map l_gameMap; Player l_currentPlayer;
+        Map l_gameMap; BasePlayer l_currentPlayer;
         l_gameMap = GameEngine.getInstance().getGameMap();
         l_currentPlayer = this.getPlayer();
 
@@ -130,7 +131,7 @@ public class AdvanceOrder extends Order{
                 l_targetCountry.setArmyValue(l_attackSurvivors);
 
                 // Change country ownership
-                for(Player l_player: GameEngine.getInstance().getGamePlayers()){
+                for(BasePlayer l_player: GameEngine.getInstance().getGamePlayers()){
                     if(l_player.getId() == l_targetCountry.getOwnedByPlayerId()){
                         // Remove the target country from ownership of enemy
                         l_player.removeCountryOwned(l_targetCountry);

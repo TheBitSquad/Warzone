@@ -4,12 +4,14 @@ import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.phase.IssueOrderPostDeploy;
 import org.bitsquad.warzone.gameengine.phase.Phase;
 import org.bitsquad.warzone.gameengine.phase.StartupMapEditing;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class GameEngine {
     private static GameEngine d_instance;
     private Phase d_gamePhase;
     private Map d_gameMap;
-    private List<Player> d_gamePlayers;
+    private List<BasePlayer> d_gamePlayers;
     private int d_currentPlayerIndex;
     PolicyManager d_policyManager;
 
@@ -103,7 +105,7 @@ public class GameEngine {
      *
      * @return list of game players
      */
-    public List<Player> getGamePlayers() {
+    public List<BasePlayer> getGamePlayers() {
         return d_gamePlayers;
     }
 
@@ -112,7 +114,7 @@ public class GameEngine {
      *
      * @param p_gamePlayers list of game players
      */
-    public void setGamePlayers(List<Player> p_gamePlayers) {
+    public void setGamePlayers(List<BasePlayer> p_gamePlayers) {
         this.d_gamePlayers = p_gamePlayers;
     }
 
@@ -121,7 +123,7 @@ public class GameEngine {
      *
      * @return Player
      */
-    public Player getCurrentPlayer() {
+    public BasePlayer getCurrentPlayer() {
         return this.d_gamePlayers.get(this.d_currentPlayerIndex);
     }
 
@@ -159,7 +161,7 @@ public class GameEngine {
 
         while (!l_allDeployCommandsCompleted) {
             l_allDeployCommandsCompleted = true;
-            for (Player l_player : this.d_gamePlayers) {
+            for (BasePlayer l_player : this.d_gamePlayers) {
                 l_orderToExecute = null;
                 if (l_player.isNextDeploy()) {
                     l_allDeployCommandsCompleted = false;
@@ -179,7 +181,7 @@ public class GameEngine {
         l_isAllOrderSetsEmpty = false;
         while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
-            for (Player l_player : this.d_gamePlayers) {
+            for (BasePlayer l_player : this.d_gamePlayers) {
                 l_orderToExecute = l_player.nextOrder();
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
@@ -204,7 +206,7 @@ public class GameEngine {
     public void nextRound() {
         LogEntryBuffer.getInstance().log("New Round!");
 
-        for (Player l_player : this.d_gamePlayers) {
+        for (BasePlayer l_player : this.d_gamePlayers) {
             // Assign random cards
             if (l_player.hasNewTerritory()) {
                 Card l_generatedCard = CardGenerator.generateRandomCard();
@@ -234,7 +236,7 @@ public class GameEngine {
      * @param p_player Player Objec
      * @return int number of reinforcement units
      */
-    public int getNumberOfReinforcementUnits(Player p_player) {
+    public int getNumberOfReinforcementUnits(BasePlayer p_player) {
         int l_numberReinforcement = 3;
         l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
         for (Continent l_continent : this.d_gameMap.getContinents().values()) {
@@ -357,7 +359,7 @@ public class GameEngine {
      */
     public void handleAddPlayer(String p_playerName) throws Exception {
         // Check if a player is already present
-        for (Player l_player : this.d_gamePlayers) {
+        for (BasePlayer l_player : this.d_gamePlayers) {
             if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 throw new Exception("Player already exists!");
             }
@@ -372,7 +374,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleRemovePlayer(String p_playerName) throws Exception {
-        for (Player l_player : this.d_gamePlayers) {
+        for (BasePlayer l_player : this.d_gamePlayers) {
             if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 this.d_gamePlayers.remove(l_player);
                 return;
@@ -447,8 +449,8 @@ public class GameEngine {
      * @param p_playerID Player ID
      * @return Player instance
      */
-    public Player getPlayerByID(int p_playerID) {
-        for (Player l_player : d_gamePlayers) {
+    public BasePlayer getPlayerByID(int p_playerID) {
+        for (BasePlayer l_player : d_gamePlayers) {
             if (l_player.getId() == p_playerID) {
                 return l_player;
             }

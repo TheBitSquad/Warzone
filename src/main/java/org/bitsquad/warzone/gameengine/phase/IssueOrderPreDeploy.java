@@ -3,6 +3,7 @@ package org.bitsquad.warzone.gameengine.phase;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.order.DeployOrder;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 /**
@@ -24,7 +25,7 @@ public class IssueOrderPreDeploy extends IssueOrder{
      * @throws Exception
      */
     public void handleDeployArmy(int p_targetCountryId, int p_armyUnits) throws Exception{
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
 
         // Check whether the player has the sufficient army units or not
         int l_newAvailableArmyUnits = l_currentPlayer.getAvailableArmyUnits() - p_armyUnits;

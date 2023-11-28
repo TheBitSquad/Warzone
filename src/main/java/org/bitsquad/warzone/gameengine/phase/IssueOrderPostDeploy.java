@@ -6,6 +6,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.order.*;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
@@ -13,12 +14,12 @@ import java.util.HashMap;
 /**
  * IssueOrder Post Deploy Phase implementation
  */
-class IssueOrderPostDeploy extends IssueOrder{
+public class IssueOrderPostDeploy extends IssueOrder{
     /**
      * Parameterized constructor
      * @param p_gameEngine
      */
-    IssueOrderPostDeploy(GameEngine p_gameEngine){
+    public IssueOrderPostDeploy(GameEngine p_gameEngine){
         super(p_gameEngine);
     }
 
@@ -39,7 +40,7 @@ class IssueOrderPostDeploy extends IssueOrder{
      * @throws Exception
      */
     public void handleAdvance(String p_countryNameFrom, String p_targetCountryName, int p_armyUnits) throws Exception{
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
 
         // Check if valid source country
         Country l_sourceCountry = null, l_targetCountry = null;
@@ -91,7 +92,7 @@ class IssueOrderPostDeploy extends IssueOrder{
      * @throws Exception
      */
     public void handleBomb(int p_targetCountryId) throws Exception{
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         // Check if player has bomb card
         if (!l_currentPlayer.hasCard(Card.BombCard)) {
             throw new Exception("The player does not have the card");
@@ -127,7 +128,7 @@ class IssueOrderPostDeploy extends IssueOrder{
      */
     public void handleBlockade(int p_targetCountryId) throws Exception{
         // Check if player has Blockade card
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         if (!l_currentPlayer.hasCard(Card.BlockadeCard)) {
             throw new Exception("The player does not have the card");
         }
@@ -152,7 +153,7 @@ class IssueOrderPostDeploy extends IssueOrder{
      * @throws Exception
      */
     public void handleAirlift(int p_sourceCountryId, int p_targetCountryId, int p_numArmies) throws Exception{
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         // Check if player has airlift card
         if (!l_currentPlayer.hasCard(Card.AirliftCard)) {
             throw new Exception("The player does not have the card");
@@ -193,12 +194,12 @@ class IssueOrderPostDeploy extends IssueOrder{
      */
     public void handleNegotiate(int p_targetPlayerId) throws Exception{
         // Check if player has Diplomacy card
-        Player l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
+        BasePlayer l_currentPlayer = this.d_gameEngine.getCurrentPlayer();
         if (!l_currentPlayer.hasCard(Card.DiplomacyCard)) {
             throw new Exception("The player does not have the card");
         }
 
-        Player l_targetPlayer = this.d_gameEngine.getPlayerByID(p_targetPlayerId);
+        BasePlayer l_targetPlayer = this.d_gameEngine.getPlayerByID(p_targetPlayerId);
         if (l_targetPlayer == null){
             throw new Exception("The target player ID invalid, no such player found.");
         } else if (l_targetPlayer.getId() == l_currentPlayer.getId()) {

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.phase.IssueOrderPreDeploy;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,8 +43,8 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyInitialBonus() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         assertEquals(3, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p1));
         assertEquals(3, GameEngine.getInstance().getNumberOfReinforcementUnits(l_p2));
@@ -54,8 +55,8 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyCountryBonus() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         ArrayList<Country> l_p1Countries = new ArrayList<>();
         l_p1Countries.add(new Country(1, 1));
@@ -88,8 +89,8 @@ class GameEngineTest {
      */
     @Test
     void testCalculationOfReinforcementArmyContinentBonus() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
 
         ArrayList<Country> l_p1Countries = new ArrayList<>();
         l_p1Countries.add(new Country(1, 1));
@@ -140,8 +141,8 @@ class GameEngineTest {
      */
     @Test
     void testDeployArmy() {
-        Player l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
-        Player l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
+        BasePlayer l_p1 = GameEngine.getInstance().getGamePlayers().get(0);
+        BasePlayer l_p2 = GameEngine.getInstance().getGamePlayers().get(1);
         l_p1.setAvailableArmyUnits(4);
         l_p2.setAvailableArmyUnits(7);
 

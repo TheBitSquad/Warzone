@@ -18,8 +18,8 @@ public abstract class BasePlayer implements PlayerStrategy{
     private static int LastPlayerID = 0;
     private int d_id;
     private String d_name;
-    private int d_availableArmyUnits;
-    private ArrayList<Country> d_countriesOwned;
+    protected int d_availableArmyUnits;
+    protected ArrayList<Country> d_countriesOwned;
     protected ArrayList<Order> d_orderList;
     // d_currentOrder contains the current order to be issued next
     protected Order d_currentOrder;

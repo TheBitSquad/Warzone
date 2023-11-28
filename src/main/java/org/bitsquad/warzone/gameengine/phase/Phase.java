@@ -37,7 +37,7 @@ public abstract class Phase {
      * @param p_filename String filename
      * @throws Exception
      */
-    abstract public void handleSaveMap(String p_filename) throws Exception;
+    abstract public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap) throws Exception;
 
     /**
      * Handler for validatemap command

@@ -56,7 +56,7 @@ public class StartupMapEditing extends Startup {
      * @param p_filename String filename
      * @throws Exception
      */
-    public void handleSaveMap(String p_filename) throws Exception {
+    public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap) throws Exception {
         this.d_gameEngine.getGameMap().saveMap(p_filename);
         LogEntryBuffer.getInstance().log("Map saved");
     }

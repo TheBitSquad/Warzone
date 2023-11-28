@@ -175,6 +175,13 @@ class ShowMap implements Callable<Integer> {
  */
 @Command(name = "savemap")
 class SaveMap implements Callable<Integer> {
+
+    @Option(names="-c",
+            paramLabel = "SaveAsConquestMap",
+            description = "Conquest Map type (Default: false)"
+    )
+    boolean c;
+
     @Parameters(index = "0",
             paramLabel = "Filename",
             description = "Filename of the map")
@@ -264,7 +271,7 @@ class LoadMap implements Callable<Integer> {
 @Command(name = "gameplayer")
 class GamePlayer implements Callable<Integer> {
     @Option(names = "-add",
-            description = "Enter player name")
+            description = "Enter playername/type")
     String[] d_add_names;
     @Option(names = "-remove",
             description = "Enter the player name")
@@ -491,3 +498,5 @@ class Commit implements Callable<Integer> {
         return 0;
     }
 }
+
+// TODO: Add tournament mode and single mode handlers.

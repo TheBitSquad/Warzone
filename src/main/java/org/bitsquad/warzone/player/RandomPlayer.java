@@ -36,6 +36,9 @@ public class RandomPlayer extends BasePlayer {
         for (Country l_source : l_sourceAdvanceCountries) {
             ArrayList<Integer> l_neighbors = l_source.getNeighbors();
             int l_targetCountryID = l_neighbors.get(l_random.nextInt(l_neighbors.size() ));
+            if(l_source.getArmyValue() == 0){
+                continue;
+            }
             int l_numberOfAdvanceUnits = l_random.nextInt(l_source.getArmyValue());
             if (l_numberOfAdvanceUnits == 0) {
                 continue;

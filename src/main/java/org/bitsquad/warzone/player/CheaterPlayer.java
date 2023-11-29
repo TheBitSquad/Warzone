@@ -6,7 +6,10 @@ import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.gameengine.phase.IssueOrderPostDeploy;
 import org.bitsquad.warzone.gamerunner.GameRunner;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class CheaterPlayer extends BasePlayer{
     public CheaterPlayer(String p_name) {
@@ -26,10 +29,13 @@ public class CheaterPlayer extends BasePlayer{
             l_allCountries.putAll(l_countries);
         }
 
+        List<Country> countriesToAdd = new ArrayList<>();
+
         // Conquer all immediate neighboring countries
         for(Country l_ownCountry: this.d_countriesOwned){
             for(int l_neighborCountryId: l_ownCountry.getNeighbors()){
                 Country l_targetNeighborCountry = l_allCountries.get(l_neighborCountryId);
+
                 // If player doesn't own the country
                 if(l_targetNeighborCountry.getOwnedByPlayerId() != this.getId()){
                     // Change country ownership
@@ -39,10 +45,13 @@ public class CheaterPlayer extends BasePlayer{
                             l_player.removeCountryOwned(l_targetNeighborCountry);
                         }
                     }
-                    this.addCountryOwned(l_targetNeighborCountry);
+                    countriesToAdd.add(l_targetNeighborCountry);
                     l_targetNeighborCountry.setOwnedByPlayerId(this.getId());
                 }
             }
+        }
+        for(Country l_newCountry: countriesToAdd){
+            this.addCountryOwned(l_newCountry);
         }
 
         // Double armies on countries that have neighboring enemies

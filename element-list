@@ -6,6 +6,7 @@ org.bitsquad.warzone.country
 org.bitsquad.warzone.gameengine
 org.bitsquad.warzone.gameengine.phase
 org.bitsquad.warzone.gameengine.policy
+org.bitsquad.warzone.gamerunner
 org.bitsquad.warzone.logger
 org.bitsquad.warzone.map
 org.bitsquad.warzone.order

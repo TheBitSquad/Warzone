@@ -11,8 +11,7 @@ import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
-import org.bitsquad.warzone.player.BasePlayer;
-import org.bitsquad.warzone.player.Player;
+import org.bitsquad.warzone.player.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -29,6 +28,17 @@ public class GameEngine {
     private List<BasePlayer> d_gamePlayers;
     private int d_currentPlayerIndex;
     PolicyManager d_policyManager;
+
+    public BasePlayer getWinner() {
+        return d_winner;
+    }
+
+    public void setWinner(BasePlayer d_winner) {
+        LogEntryBuffer.getInstance().log("Winner: " + d_winner.getName() + " , id: " + d_winner.getId());
+        this.d_winner = d_winner;
+    }
+
+    BasePlayer d_winner = null;
 
     /**
      * Default Constructor
@@ -164,9 +174,6 @@ public class GameEngine {
      * Executes orders in Round-Robin fashion
      */
     public void executeOrders() {
-        // Completed: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
-        // Completed: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
-        // Completed: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
         LogEntryBuffer.getInstance().log("Executing Orders");
         Order l_orderToExecute = null;
 
@@ -269,6 +276,21 @@ public class GameEngine {
         return l_numberReinforcement;
     }
 
+    public boolean checkPlayerWinAndRemoveLosers(){
+        Iterator<BasePlayer> l_playerIterator = this.d_gamePlayers.iterator();
+        while(l_playerIterator.hasNext()){
+            BasePlayer l_player = l_playerIterator.next();
+            if(l_player.getCountriesOwned().isEmpty()){
+                LogEntryBuffer.getInstance().log(l_player.getName() + " owns no countries. Player out!");
+                l_playerIterator.remove();
+            }
+        }
+        if(d_gamePlayers.size() == 1){
+            this.setWinner(d_gamePlayers.get(0));
+            return true;
+        }
+        return false;
+    }
     /**
      * Handler method for loadmap command
      *
@@ -372,7 +394,16 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAddPlayer(String p_playerName) throws Exception {
-        // Check if a player is already present
+        // IF it is a computer player, just add.
+        switch (p_playerName.toLowerCase()){
+            case "aggressive": d_gamePlayers.add(new AggressivePlayer(p_playerName)); return;
+            case "benevolent": d_gamePlayers.add(new BenevolentPlayer(p_playerName)); return;
+            case "cheater": d_gamePlayers.add(new CheaterPlayer(p_playerName)); return;
+            case "random": d_gamePlayers.add(new RandomPlayer(p_playerName)); return;
+            default: break;
+        }
+
+        // Check for existing human players with the same name
         for (BasePlayer l_player : this.d_gamePlayers) {
             if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 throw new Exception("Player already exists!");

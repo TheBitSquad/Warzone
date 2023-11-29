@@ -60,7 +60,7 @@ public class GameEngine {
     }
 
     public void incrementRoundNumber(){
-        setRoundNumber(d_maxRounds + 1);
+        setRoundNumber(this.d_roundNumber + 1);
     }
 
     public int getRoundNumber(){
@@ -70,6 +70,10 @@ public class GameEngine {
     public void setMaxRounds(int p_value){
         LogEntryBuffer.getInstance().log("Max rounds set to: " + p_value);
         d_maxRounds = p_value;
+    }
+
+    public int getMaxRounds(){
+        return this.d_maxRounds;
     }
 
     /**

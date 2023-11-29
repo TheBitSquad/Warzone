@@ -4,6 +4,7 @@
 package org.bitsquad.warzone.cli;
 
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.gamerunner.GameRunner;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -13,7 +14,6 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
@@ -499,4 +499,99 @@ class Commit implements Callable<Integer> {
     }
 }
 
-// TODO: Add tournament mode and single mode handlers.
+/**
+ * gamemode command class
+ */
+@Command(name = "gamemode")
+class GameMode implements Callable<Integer> {
+
+    @Option(names = "-s",
+            paramLabel = "Single game mode",
+            description = "Launch game in single game mode",
+            required = true
+    )
+    boolean s;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        try {
+            GameRunner.getInstance().handleSingleGameMode();
+        } catch (Exception e) {
+            LogEntryBuffer.getInstance().log(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+}
+
+
+/**
+ * tournament command class
+ */
+@Command(name = "tournament",
+        abbreviateSynopsis = true, mixinStandardHelpOptions = true)
+class Tournament implements Callable<Integer> {
+
+    @Option(names = {"-M", "--Map"}, arity = "1..5",
+            required = true,
+            paramLabel = "Map file",
+            description = "Map file path (1 - 5 maps)")
+    String[] d_mapFileNames;
+
+    @Option(names = {"-P", "--Player"}, arity = "2..4",
+            required = true,
+            paramLabel = "Player strategies",
+            description = "Player strategy: (Aggressive, Benevolent, Random, Cheater")
+    String[] d_playerStrategies;
+
+    @Option(names = "-G",
+            defaultValue = "1",
+            required = true,
+            paramLabel = "Number of games",
+            description = "Number of games (1 - 5 games)")
+    int d_numGames;
+
+    @Option(names = "-D",
+            defaultValue = "10",
+            required = true,
+            paramLabel = "Maximum number of turns",
+            description = "Maximum number of turns in a game (10 - 50 turns)")
+    int d_maxTurns;
+
+    @Spec
+    CommandSpec d_spec;
+
+    /**
+     * Implementation of call method
+     * @return exit code
+     */
+    public Integer call() {
+        validate();
+        try {
+            GameRunner.getInstance().handleTournamentMode(d_mapFileNames, d_playerStrategies, d_numGames, d_maxTurns);
+        } catch (Exception e) {
+            LogEntryBuffer.getInstance().log(e.getMessage());
+            return 1;
+        }
+        return 0;
+    }
+
+    private void validate() throws ParameterException{
+        if(d_numGames < 1 || d_numGames > 5) throw new ParameterException(d_spec.commandLine(), "Invalid number of games.");
+        for(String l_name: d_playerStrategies){
+            switch (l_name){
+                case "Benevolent":
+                case "Aggressive":
+                case "Cheater":
+                case "Random":continue;
+                default: throw new ParameterException(d_spec.commandLine(), "Only computer player strategies allowed");
+            }
+        }
+        if(d_maxTurns < 10 || d_maxTurns > 50){
+            throw new ParameterException(d_spec.commandLine(), "Invalid number of max turns");
+        }
+    }
+}

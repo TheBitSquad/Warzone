@@ -39,7 +39,6 @@ abstract class Startup extends Phase {
      * @param p_removeNames names to remove
      */
     public void handleGamePlayer(String[] p_addNames, String[] p_removeNames) {
-        //TODO: Add functionality for each new type of computer player
         if (p_addNames != null) {
             for (String l_addName : p_addNames) {
                 try {

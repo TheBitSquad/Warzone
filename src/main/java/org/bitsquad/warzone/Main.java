@@ -16,7 +16,7 @@ import java.util.Scanner;
  * @version BUILD 1.0
  */
 
-// TODO: Add end of game state to phases.
+
 public class Main {
     public static void main(String[] args) {
 

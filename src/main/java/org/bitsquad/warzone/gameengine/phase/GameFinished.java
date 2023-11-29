@@ -11,7 +11,7 @@ public class GameFinished extends Phase{
      *
      * @param p_gameEngine GameEngine
      */
-    protected GameFinished(GameEngine p_gameEngine) {
+    public GameFinished(GameEngine p_gameEngine) {
         super(p_gameEngine);
     }
 

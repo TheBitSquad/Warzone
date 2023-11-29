@@ -98,6 +98,7 @@ class MapTest {
 		assertTrue(d_map.addNeighbor(1, 2));
 		assertTrue(d_map.addNeighbor(1, 3));
 		assertTrue(d_map.addNeighbor(3, 1));
+		assertFalse(d_map.addNeighbor(4,1));
 		assertTrue(d_map.getContinents().get(1).getCountries().get(1).getNeighbors().contains(2));
 		assertTrue(d_map.getContinents().get(2).getCountries().get(2).getNeighbors().contains(1));
 	}

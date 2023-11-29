@@ -125,8 +125,12 @@ public class StartupMapEditing extends Startup {
     public void handleEditNeighbor(int[] p_addIds, int[] p_removeIds) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
-                this.d_gameEngine.getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
-                LogEntryBuffer.getInstance().log("Neighbor " + p_addIds[i] + " and " + p_addIds[i + 1] + " added");
+                boolean resp = this.d_gameEngine.getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
+                if (!resp) {
+                    LogEntryBuffer.getInstance().log("Cannot add neighbor " + p_addIds[i] + " to " + p_addIds[i + 1]);
+                } else {
+                    LogEntryBuffer.getInstance().log("Neighbor " + p_addIds[i] + " and " + p_addIds[i + 1] + " added");
+                }
             }
         }
         if (p_removeIds != null) {

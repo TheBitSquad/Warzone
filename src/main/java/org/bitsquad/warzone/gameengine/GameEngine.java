@@ -335,8 +335,8 @@ public class GameEngine {
      * @param p_filename
      * @throws Exception
      */
-    public void handleSaveMap(String p_filename) throws Exception {
-        this.d_gameMap.saveMap(p_filename);
+    public void handleSaveMap(String p_filename, boolean c) throws Exception {
+        this.d_gamePhase.handleSaveMap(p_filename,c);
     }
 
     /**

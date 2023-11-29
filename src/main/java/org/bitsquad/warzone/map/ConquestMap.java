@@ -26,6 +26,13 @@ public class ConquestMap {
     }
 
     /**
+     * Copy constructs a ConquestMap object.
+     */
+    public ConquestMap(Map p_map){
+        this.d_map = new Map(p_map);
+    }
+
+    /**
      * Gets the continents from the underlying Map instance.
      * @return HashMap containing continent IDs and corresponding Continent objects.
      */
@@ -130,8 +137,9 @@ public class ConquestMap {
                 if(l_lines.isEmpty())
                     continue;
                 String[] l_data = l_lines.split(",");
-                int l_continentId= getContinentIdByName(l_data[3]);
-                addTerritory(l_countryId, l_data[0], l_continentId);
+                String l_continentName = l_data[3].replace(" ","_");
+                int l_continentId= getContinentIdByName(l_continentName);
+                addTerritory(l_countryId, l_data[0].replace(" ","_"), l_continentId);
                 d_conquestNeighbors.add(l_data);
                 l_countryId++;
             }
@@ -152,6 +160,7 @@ public class ConquestMap {
             int l_sourceCountryId = getCountryIdByName(l_conquestNeighbor[0]);
             String[] l_neighbors = Arrays.copyOfRange(l_conquestNeighbor, 4, l_conquestNeighbor.length);
             for(String l_neighbor: l_neighbors){
+                l_neighbor = l_neighbor.replace(" ","_");
                 int l_targetCountryId = getCountryIdByName(l_neighbor);
                 addNeighbor(l_sourceCountryId,l_targetCountryId);
             }
@@ -170,7 +179,8 @@ public class ConquestMap {
             String l_lines = p_bufferedReader.readLine();
             while (!(l_lines == null) && !(l_lines.isEmpty())) {
                 String[] l_data = l_lines.split("=");
-                addContinent(l_continentId,l_data[0],Integer.parseInt(l_data[1]));
+                String l_continentName = l_data[0].replace(" ","_");
+                addContinent(l_continentId,l_continentName,Integer.parseInt(l_data[1]));
                 l_lines = p_bufferedReader.readLine();
                 l_continentId++;
             }

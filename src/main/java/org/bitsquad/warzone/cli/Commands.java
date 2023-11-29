@@ -192,7 +192,7 @@ class SaveMap implements Callable<Integer> {
      */
     public Integer call() {
         try {
-            GameEngine.getInstance().handleSaveMap(d_filename);
+            GameEngine.getInstance().handleSaveMap(d_filename,c);
         } catch (Exception e) {
             LogEntryBuffer.getInstance().log(e.getMessage());
         }

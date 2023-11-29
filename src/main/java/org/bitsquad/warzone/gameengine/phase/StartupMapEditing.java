@@ -57,6 +57,14 @@ public class StartupMapEditing extends Startup {
      * @throws Exception
      */
     public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap) throws Exception {
+        Map map = this.d_gameEngine.getGameMap();
+
+        if (p_saveAsConquestMap){
+            map = new Adapter(new ConquestMap(map));
+        }
+        else
+            map = new Map(map);
+        this.d_gameEngine.setGameMap(map);
         this.d_gameEngine.getGameMap().saveMap(p_filename);
         LogEntryBuffer.getInstance().log("Map saved");
     }
@@ -129,16 +137,18 @@ public class StartupMapEditing extends Startup {
         }
     }
     public static boolean isConquestMap(String p_fileName) throws IOException {
-        File file = new File(p_fileName);
-        BufferedReader l_reader = new BufferedReader(new FileReader(file));
-        String l_lines ;
-        while ((l_lines = l_reader.readLine()) != null) {
-            if(l_lines.isEmpty())
-                continue;
-            if (l_lines.toLowerCase().contains("[territories]"))
-                return true;
+        File l_file = new File(p_fileName);
+        if(l_file.exists()){
+            BufferedReader l_reader = new BufferedReader(new FileReader(l_file));
+            String l_lines ;
+            while ((l_lines = l_reader.readLine()) != null) {
+                if(l_lines.isEmpty())
+                    continue;
+                if (l_lines.toLowerCase().contains("[territories]"))
+                    return true;
+            }
+            l_reader.close();
         }
-        l_reader.close();
         return false;
     }
 }

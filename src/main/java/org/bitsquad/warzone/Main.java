@@ -2,6 +2,7 @@ package org.bitsquad.warzone;
 
 import org.bitsquad.warzone.cli.CliParser;
 import org.bitsquad.warzone.gameengine.GameEngine;
+import org.bitsquad.warzone.gamerunner.GameRunner;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.logger.LogFileWriter;
 import org.bitsquad.warzone.logger.LogStdoutWriter;
@@ -14,6 +15,8 @@ import java.util.Scanner;
  * @author Group_W16
  * @version BUILD 1.0
  */
+
+// TODO: Add end of game state to phases.
 public class Main {
     public static void main(String[] args) {
 
@@ -24,19 +27,6 @@ public class Main {
         l_logger.addObserver(l_logFileWriter);
         l_logger.addObserver(l_logStdoutWriter);
 
-        // Setup the CLI parser
-        CliParser parser = new CliParser();
-        Scanner scanner = new Scanner(System.in);
-
-        String ip;
-        while (true) {
-            System.out.print(">");
-            ip = scanner.nextLine();
-            try {
-                parser.parseCommandString(ip);
-            } catch (Exception e) {
-                LogEntryBuffer.getInstance().log(e.getMessage());
-            }
-        }
+        GameRunner.getInstance().runGame();
     }
 }

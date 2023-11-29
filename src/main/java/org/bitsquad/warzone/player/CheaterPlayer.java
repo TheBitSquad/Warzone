@@ -47,16 +47,16 @@ public class CheaterPlayer extends BasePlayer{
 
         // Double armies on countries that have neighboring enemies
         for(Country l_ownCountry: this.d_countriesOwned){
-            boolean neighborIsEnemy = false;
+            boolean l_neighborIsEnemy = false;
             for(int l_neighborCountryId: l_ownCountry.getNeighbors()){
                 Country l_targetNeighborCountry = l_allCountries.get(l_neighborCountryId);
                 // If player doesn't own the country
                 if(l_targetNeighborCountry.getOwnedByPlayerId() != this.getId()) {
-                    neighborIsEnemy = true;
+                    l_neighborIsEnemy = true;
                     break;
                 }
             }
-            if(neighborIsEnemy) {
+            if(l_neighborIsEnemy) {
                 l_ownCountry.setArmyValue(l_ownCountry.getArmyValue() * 2);
             }
         }

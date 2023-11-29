@@ -45,15 +45,20 @@ public class GameRunner {
         CliParser.setCommandClassNames(new ArrayList<>());
 
         List<String> l_resultTable = new ArrayList<>();
+        StringBuilder l_format = new StringBuilder("|");
 
-        String l_header = "Table";
+        List<String> l_tableRow = new ArrayList<>();
+        l_tableRow.add("Table");
+        l_format.append(" %-20s |");
         for(int i = 1; i<=d_numGames; i++){
-            l_header += "\tGame" + i;
+            l_format.append(" %-20s |");
+            l_tableRow.add("Game" + i);
         }
-        l_resultTable.add(l_header);
+        l_resultTable.add(String.format(l_format.toString(), l_tableRow.toArray()));
 
         for(String l_mapName: d_mapFileNames){
-            String l_mapResult = l_mapName;
+            l_tableRow.clear();
+            l_tableRow.add(l_mapName.substring(Math.max(0, l_mapName.length() - 20), l_mapName.length()));
             for (int l_gameNumber = 1; l_gameNumber <= d_numGames; l_gameNumber ++){
                 LogEntryBuffer.getInstance().log("Game " + l_gameNumber);
                 // Initialise a game engine instance, its variables and run the game.
@@ -84,13 +89,13 @@ public class GameRunner {
 
                 if(GameEngine.getInstance().getPhase().getClass().getSimpleName().equalsIgnoreCase("GameFinished")){
                     if(GameEngine.getInstance().getWinner() == null){
-                        l_mapResult += "\tDraw";
+                        l_tableRow.add("Draw!");
                     } else {
-                        l_mapResult += "\t" + GameEngine.getInstance().getWinner().getName();
+                        l_tableRow.add(GameEngine.getInstance().getWinner().getName());
                     }
                 }
             }
-            l_resultTable.add(l_mapResult);
+            l_resultTable.add(String.format(l_format.toString(), l_tableRow.toArray()));
         }
         for (String l_str: l_resultTable){
             LogEntryBuffer.getInstance().log(l_str);

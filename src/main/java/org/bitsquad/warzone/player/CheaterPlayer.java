@@ -18,6 +18,7 @@ public class CheaterPlayer extends BasePlayer{
 
     @Override
     public void issueOrder() {
+        if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;
         // Conquer all immediate neighboring enemy countries
         // Double all armies on countries that have enemy neighbors
         // All this directly changes the map, does not issue order.

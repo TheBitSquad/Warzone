@@ -18,6 +18,7 @@ public class RandomPlayer extends BasePlayer {
 
     @Override
     public void issueOrder() {
+        if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;
         // Randomly choose a country
         Collections.shuffle(this.d_countriesOwned);
         Country l_deployTargetCountry = this.d_countriesOwned.get(0) ;

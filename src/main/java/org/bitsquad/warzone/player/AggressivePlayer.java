@@ -15,10 +15,11 @@ public class AggressivePlayer extends BasePlayer{
 
     @Override
     public void issueOrder() {
+        if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;
         // Deploy to its strongest country
         // Decide the strongest country
         int l_maxUnits = 0;
-        Country l_maxCountry = null;
+        Country l_maxCountry = this.d_countriesOwned.get(0);
         for(Country l_country: this.d_countriesOwned){
             if(l_country.getArmyValue() >= l_maxUnits){
                 l_maxCountry = l_country;
@@ -51,7 +52,7 @@ public class AggressivePlayer extends BasePlayer{
                 l_minTargetValue = l_possibleTarget.getArmyValue();
             }
         }
-        
+
         if(l_maxCountry != null && l_targetAttackCountry != null)
             this.d_orderList.add(new AdvanceOrder(this, l_maxCountry.getCountryId(), l_targetAttackCountry.getCountryId(), l_maxCountry.getArmyValue()));
 

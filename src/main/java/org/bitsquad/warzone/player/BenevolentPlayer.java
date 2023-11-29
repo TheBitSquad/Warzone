@@ -16,8 +16,9 @@ public class BenevolentPlayer extends BasePlayer {
     @Override
     public void issueOrder() {
         // Find the weakest country, and deploy to it
+        if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;
         int minValue = Integer.MAX_VALUE;
-        Country l_weakestCountry = null;
+        Country l_weakestCountry = this.d_countriesOwned.get(0);
         for(Country l_country: this.d_countriesOwned){
             if(l_country.getArmyValue() <= minValue){
                 minValue = l_country.getArmyValue();

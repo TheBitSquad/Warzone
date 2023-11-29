@@ -227,7 +227,9 @@ public class IssueOrderPostDeploy extends IssueOrder{
             // Change the phase to pre deploy for the next player
             LogEntryBuffer.getInstance().log("Player committed. Next player's turn");
             this.d_gameEngine.setCurrentPlayerIndexToNextPlayer();
-            this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+            if(!this.d_gameEngine.getPhase().getClass().getSimpleName().equalsIgnoreCase("GameFinished")){
+                this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+            }
         }
     }
 }

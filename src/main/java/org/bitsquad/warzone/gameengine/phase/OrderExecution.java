@@ -154,12 +154,14 @@ public class OrderExecution extends Phase {
      */
     public void handleExecuteOrders() {
         this.d_gameEngine.executeOrders();
-        boolean isGameFinished = this.d_gameEngine.checkPlayerWinAndRemoveLosers();
+        boolean isGameFinished = this.d_gameEngine.checkPlayerWinAndRemoveLosers() || this.d_gameEngine.getRoundNumber()+1 >= this.d_gameEngine.getMaxRounds();
         if(isGameFinished){
             this.d_gameEngine.setPhase(new GameFinished(this.d_gameEngine));
         } else {
             this.d_gameEngine.nextRound();
-            this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+            if(!this.d_gameEngine.getPhase().getClass().getSimpleName().equalsIgnoreCase("GameFinished")){
+                this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+            }
         }
     }
 }

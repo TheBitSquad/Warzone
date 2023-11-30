@@ -13,11 +13,7 @@ import java.util.Scanner;
  * Main Class
  *
  * @author Group_W16
- * @version BUILD 1.0
- */
-
-/**
- * Main class
+ * @version BUILD 3.0
  */
 public class Main {
 

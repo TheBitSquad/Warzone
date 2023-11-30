@@ -11,11 +11,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents the Random Player strategy
+ */
 public class RandomPlayer extends BasePlayer {
+
+    /**
+     * Parameterized constructor
+     * @param p_name
+     */
     public RandomPlayer(String p_name) {
         super(p_name);
     }
 
+    /**
+     * Implementation of issue order
+     */
     @Override
     public void issueOrder() {
         if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;

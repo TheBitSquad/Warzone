@@ -11,11 +11,22 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implementation of Cheater player strategy
+ */
 public class CheaterPlayer extends BasePlayer{
+
+    /**
+     * Parameterised constructor
+     * @param p_name Name of the player
+     */
     public CheaterPlayer(String p_name) {
         super(p_name);
     }
 
+    /**
+     * Issue order
+     */
     @Override
     public void issueOrder() {
         if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;

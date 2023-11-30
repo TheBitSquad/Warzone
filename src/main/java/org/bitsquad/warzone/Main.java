@@ -16,8 +16,15 @@ import java.util.Scanner;
  * @version BUILD 1.0
  */
 
-
+/**
+ * Main class
+ */
 public class Main {
+
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
 
         // Setup the logger

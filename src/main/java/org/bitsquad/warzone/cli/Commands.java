@@ -579,6 +579,10 @@ class Tournament implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Validates the command parameters
+     * @throws ParameterException
+     */
     private void validate() throws ParameterException{
         if(d_numGames < 1 || d_numGames > 5) throw new ParameterException(d_spec.commandLine(), "Invalid number of games.");
         for(String l_name: d_playerStrategies){

@@ -8,11 +8,21 @@ import org.bitsquad.warzone.order.DeployOrder;
 
 import java.util.HashMap;
 
+/**
+ * Implementation of Aggressive Player strategy
+ */
 public class AggressivePlayer extends BasePlayer{
+    /**
+     * Parameterized constructor
+     * @param p_name Name of the player
+     */
     public AggressivePlayer(String p_name) {
         super(p_name);
     }
 
+    /**
+     * Issue order method
+     */
     @Override
     public void issueOrder() {
         if(this.d_countriesOwned == null || this.d_countriesOwned.isEmpty()) return;

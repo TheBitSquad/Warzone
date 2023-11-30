@@ -8,11 +8,22 @@ import org.bitsquad.warzone.order.DeployOrder;
 
 import java.util.HashMap;
 
+/**
+ * Implementation of Benevolent player strategy
+ */
 public class BenevolentPlayer extends BasePlayer {
+
+    /**
+     * Parameterized constructor
+     * @param p_name Name of the player
+     */
     public BenevolentPlayer(String p_name) {
         super(p_name);
     }
 
+    /**
+     * Issue order method
+     */
     @Override
     public void issueOrder() {
         // Find the weakest country, and deploy to it

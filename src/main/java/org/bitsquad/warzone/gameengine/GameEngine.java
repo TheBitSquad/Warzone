@@ -45,33 +45,60 @@ public class GameEngine {
         d_gamePhase = new StartupMapEditing(this);
     }
 
+    /**
+     * Getter for winner
+     * @return BasePlayer Player instance who won the game
+     */
     public BasePlayer getWinner() {
         return d_winner;
     }
 
+    /**
+     * Setter for winner
+     * @param d_winner
+     */
     public void setWinner(BasePlayer d_winner) {
         LogEntryBuffer.getInstance().log("Winner: " + d_winner.getName() + " , id: " + d_winner.getId());
         this.d_winner = d_winner;
     }
 
+    /**
+     * Setter for round number
+     * @param p_value Round number
+     */
     public void setRoundNumber(int p_value){
         LogEntryBuffer.getInstance().log("Round: " + p_value);
         this.d_roundNumber = p_value;
     }
 
+    /**
+     * Increments the round number
+     */
     public void incrementRoundNumber(){
         setRoundNumber(this.d_roundNumber + 1);
     }
 
+    /**
+     * Getter for round number
+     * @return int Round number
+     */
     public int getRoundNumber(){
         return this.d_roundNumber;
     }
 
+    /**
+     * Sets the max rounds for the game
+     * @param p_value Integer
+     */
     public void setMaxRounds(int p_value){
         LogEntryBuffer.getInstance().log("Max rounds set to: " + p_value);
         d_maxRounds = p_value;
     }
 
+    /**
+     * Getter for max rounds of the game
+     * @return
+     */
     public int getMaxRounds(){
         return this.d_maxRounds;
     }
@@ -86,9 +113,14 @@ public class GameEngine {
         LogEntryBuffer.getInstance().log("Phase changed. Current Phase: " + this.d_gamePhase.getClass().getSimpleName());
     }
 
+    /**
+     * Getter for game phase
+     * @return Phase
+     */
     public Phase getPhase(){
         return this.d_gamePhase;
     }
+
     /**
      * Getter for PolicyManager instance
      *
@@ -187,6 +219,9 @@ public class GameEngine {
         return d_instance;
     }
 
+    /**
+     * Resets the gameengine instance
+     */
     public static void resetInstance() {
         d_instance = new GameEngine();
     }
@@ -312,6 +347,10 @@ public class GameEngine {
         return l_numberReinforcement;
     }
 
+    /**
+     * Checks for player win and removes losers
+     * @return Boolean if there is a game winner
+     */
     public boolean checkPlayerWinAndRemoveLosers(){
         Iterator<BasePlayer> l_playerIterator = this.d_gamePlayers.iterator();
         while(l_playerIterator.hasNext()){

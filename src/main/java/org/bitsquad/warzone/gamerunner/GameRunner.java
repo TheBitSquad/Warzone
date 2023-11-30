@@ -9,15 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * GameRunner handles gamemode logic
+ */
 public class GameRunner {
 
     CliParser d_commandParser;
     Scanner d_inputScanner;
 
+    /**
+     * Default Constructor
+     */
     public GameRunner(){}
 
     private static GameRunner d_instance;
 
+    /**
+     * Singleton instance getter
+     * @return GameRunner
+     */
     public static GameRunner getInstance(){
         if(d_instance == null){
             d_instance = new GameRunner();
@@ -25,6 +35,9 @@ public class GameRunner {
         return d_instance;
     }
 
+    /**
+     * Handler for Single Game mode
+     */
     public void handleSingleGameMode(){
         LogEntryBuffer.getInstance().log("Single Game Mode");
         CliParser.setDefaultCommandClassNames();
@@ -40,6 +53,14 @@ public class GameRunner {
         }
     }
 
+    /**
+     * Handler for Tournament mode
+     * @param d_mapFileNames List of filenames
+     * @param d_playerStrategies List of Player Strategies
+     * @param d_numGames Number of games
+     * @param d_maxTurns Maximum number of rounds in a game
+     * @throws Exception
+     */
     public void handleTournamentMode(String[] d_mapFileNames, String[] d_playerStrategies, int d_numGames, int d_maxTurns) throws Exception {
         LogEntryBuffer.getInstance().log("Tournament mode");
         CliParser.setCommandClassNames(new ArrayList<>());
@@ -106,6 +127,9 @@ public class GameRunner {
         }
     }
 
+    /**
+     * Sets up and runs the game
+     */
     public void runGame(){
         List<String> l_initialCommandList = new ArrayList<String>(List.of("Tournament", "GameMode"));
 

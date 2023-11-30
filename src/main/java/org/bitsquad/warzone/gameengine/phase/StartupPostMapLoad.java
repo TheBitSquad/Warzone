@@ -55,6 +55,12 @@ class StartupPostMapLoad extends Startup{
     public void handleEditCountry(int[] p_addIds, int[] p_removeIds){
         this.printInvalidCommandMessage();
     }
+
+    /**
+     * Handler for editneighbor command
+     * @param p_addIds
+     * @param p_removeIds
+     */
     public void handleEditNeighbor(int[] p_addIds, int[] p_removeIds){
         this.printInvalidCommandMessage();
     }

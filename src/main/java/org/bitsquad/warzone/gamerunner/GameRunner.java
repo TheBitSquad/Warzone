@@ -95,7 +95,11 @@ public class GameRunner {
                     }
                 }
             }
-            l_resultTable.add(String.format(l_format.toString(), l_tableRow.toArray()));
+            try{
+                l_resultTable.add(String.format(l_format.toString(), l_tableRow.toArray()));
+            } catch (Exception e){
+                // Ignore
+            }
         }
         for (String l_str: l_resultTable){
             LogEntryBuffer.getInstance().log(l_str);

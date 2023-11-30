@@ -35,7 +35,7 @@ public class OrderExecution extends Phase {
      * Handler method for savemap command
      * @param p_filename String filename
      */
-    public void handleSaveMap(String p_filename) {
+    public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap) {
         printInvalidCommandMessage();
     }
 
@@ -154,8 +154,14 @@ public class OrderExecution extends Phase {
      */
     public void handleExecuteOrders() {
         this.d_gameEngine.executeOrders();
-        this.d_gameEngine.nextRound();
-        // FUTURE: Add check for player win condition.
-        this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+        boolean isGameFinished = this.d_gameEngine.checkPlayerWinAndRemoveLosers() || this.d_gameEngine.getRoundNumber()+1 >= this.d_gameEngine.getMaxRounds();
+        if(isGameFinished){
+            this.d_gameEngine.setPhase(new GameFinished(this.d_gameEngine));
+        } else {
+            this.d_gameEngine.nextRound();
+            if(!this.d_gameEngine.getPhase().getClass().getSimpleName().equalsIgnoreCase("GameFinished")){
+                this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+            }
+        }
     }
 }

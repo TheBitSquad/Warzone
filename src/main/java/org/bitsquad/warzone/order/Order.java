@@ -1,7 +1,7 @@
 package org.bitsquad.warzone.order;
 
 
-import org.bitsquad.warzone.player.Player;
+import org.bitsquad.warzone.player.BasePlayer;
 
 /**
  * A new interface for Order, to implement the Command Pattern
@@ -22,7 +22,7 @@ interface GameOrder{
  * All other Orders extend this class, it acts as the Command Interface for the Command Pattern
  */
 public abstract class Order implements GameOrder{
-    protected Player d_playerInstance;
+    protected BasePlayer d_playerInstance;
     private int d_sourceCountryId;
     private int d_targetCountryId;
     private int d_noOfArmyUnits;
@@ -35,7 +35,7 @@ public abstract class Order implements GameOrder{
      * @param p_targetCountryId Target Country ID
      * @param p_noOfArmyUnits   No of Army Units
      */
-    public Order(Player p_player, int p_sourceCountryId, int p_targetCountryId, int p_noOfArmyUnits) {
+    public Order(BasePlayer p_player, int p_sourceCountryId, int p_targetCountryId, int p_noOfArmyUnits) {
         this.d_playerInstance = p_player;
         this.d_sourceCountryId = p_sourceCountryId;
         this.d_targetCountryId = p_targetCountryId;
@@ -59,7 +59,7 @@ public abstract class Order implements GameOrder{
      * 
      * @return Returns the player instance
      */
-    public Player getPlayer() {
+    public BasePlayer getPlayer() {
         return d_playerInstance;
     }
 

@@ -56,7 +56,15 @@ public class StartupMapEditing extends Startup {
      * @param p_filename String filename
      * @throws Exception
      */
-    public void handleSaveMap(String p_filename) throws Exception {
+    public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap) throws Exception {
+        Map map = this.d_gameEngine.getGameMap();
+
+        if (p_saveAsConquestMap){
+            map = new Adapter(new ConquestMap(map));
+        }
+        else
+            map = new Map(map);
+        this.d_gameEngine.setGameMap(map);
         this.d_gameEngine.getGameMap().saveMap(p_filename);
         LogEntryBuffer.getInstance().log("Map saved");
     }
@@ -117,8 +125,12 @@ public class StartupMapEditing extends Startup {
     public void handleEditNeighbor(int[] p_addIds, int[] p_removeIds) {
         if (p_addIds != null) {
             for (int i = 0; i < p_addIds.length; i += 2) {
-                this.d_gameEngine.getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
-                LogEntryBuffer.getInstance().log("Neighbor " + p_addIds[i] + " and " + p_addIds[i + 1] + " added");
+                boolean resp = this.d_gameEngine.getGameMap().addNeighbor(p_addIds[i], p_addIds[i + 1]);
+                if (!resp) {
+                    LogEntryBuffer.getInstance().log("Cannot add neighbor " + p_addIds[i] + " to " + p_addIds[i + 1]);
+                } else {
+                    LogEntryBuffer.getInstance().log("Neighbor " + p_addIds[i] + " and " + p_addIds[i + 1] + " added");
+                }
             }
         }
         if (p_removeIds != null) {
@@ -128,17 +140,28 @@ public class StartupMapEditing extends Startup {
             }
         }
     }
+
+    /**
+     * Checks if a map is a conquest map or not
+     * @param p_fileName Filename
+     * @return
+     * @throws IOException
+     */
     public static boolean isConquestMap(String p_fileName) throws IOException {
-        File file = new File(p_fileName);
-        BufferedReader l_reader = new BufferedReader(new FileReader(file));
-        String l_lines ;
-        while ((l_lines = l_reader.readLine()) != null) {
-            if(l_lines.isEmpty())
-                continue;
-            if (l_lines.toLowerCase().contains("[territories]"))
-                return true;
+        File l_file = new File(p_fileName);
+        if(l_file.exists()){
+            BufferedReader l_reader = new BufferedReader(new FileReader(l_file));
+            String l_lines ;
+            while ((l_lines = l_reader.readLine()) != null) {
+                if(l_lines.isEmpty())
+                    continue;
+                if (l_lines.toLowerCase().contains("[territories]")){
+                    l_reader.close();
+                    return true;
+                }
+            }
+            l_reader.close();
         }
-        l_reader.close();
         return false;
     }
 }

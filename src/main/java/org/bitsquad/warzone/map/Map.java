@@ -30,9 +30,20 @@ public class Map {
     private HashMap<Integer, Continent> d_continents;
     private Graph<Country, DefaultEdge> d_graph;
 
+    /**
+     * Constructor for Map class
+     */
     public Map(){
         d_continents = new HashMap<Integer, Continent>();
         d_graph = new SimpleGraph<>(DefaultEdge.class);
+    }
+
+    /**
+     * Copy Constructor for Map
+     */
+    public Map(Map p_original){
+        this.d_continents = new HashMap<>(p_original.getContinents());
+        this.d_graph = new SimpleGraph<>(DefaultEdge.class);
     }
 
     /**

@@ -5,6 +5,7 @@ import org.bitsquad.warzone.country.Country;
 import org.bitsquad.warzone.gameengine.GameEngine;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
+import org.bitsquad.warzone.player.BasePlayer;
 import org.bitsquad.warzone.player.Player;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class BombOrder extends Order {
      * @param p_player          Player instance
      * @param p_targetCountryID Target Country ID
      */
-    public BombOrder(Player p_player, int p_targetCountryID) {
+    public BombOrder(BasePlayer p_player, int p_targetCountryID) {
         super(p_player, -1, p_targetCountryID, 0);
     }
 

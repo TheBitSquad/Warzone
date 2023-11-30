@@ -34,7 +34,7 @@ class StartupPostMapLoad extends Startup{
      * Handler for savemap command
      * @param p_filename
      */
-    public void handleSaveMap(String p_filename){
+    public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap){
         this.printInvalidCommandMessage();
     }
 
@@ -55,6 +55,12 @@ class StartupPostMapLoad extends Startup{
     public void handleEditCountry(int[] p_addIds, int[] p_removeIds){
         this.printInvalidCommandMessage();
     }
+
+    /**
+     * Handler for editneighbor command
+     * @param p_addIds
+     * @param p_removeIds
+     */
     public void handleEditNeighbor(int[] p_addIds, int[] p_removeIds){
         this.printInvalidCommandMessage();
     }

@@ -37,6 +37,35 @@ public class CliParser {
         CommandClassNames.add("Commit");
     }
 
+    public static void setDefaultCommandClassNames() {
+        CommandClassNames.clear();
+        // Add to the map to return the class/object for a lookup.
+        CommandClassNames.add("EditContinent");
+        CommandClassNames.add("EditCountry");
+        CommandClassNames.add("EditNeighbor");
+
+        CommandClassNames.add("SaveMap");
+        CommandClassNames.add("EditMap");
+        CommandClassNames.add("ValidateMap");
+        CommandClassNames.add("ShowMap");
+        CommandClassNames.add("LoadMap");
+
+        CommandClassNames.add("GamePlayer");
+        CommandClassNames.add("AssignCountries");
+
+        CommandClassNames.add("Deploy");
+        CommandClassNames.add("Advance");
+
+        CommandClassNames.add("Bomb");
+        CommandClassNames.add("Airlift");
+        CommandClassNames.add("Negotiate");
+        CommandClassNames.add("Blockade");
+
+        CommandClassNames.add("Commit");
+    }
+    public static void setCommandClassNames(List<String> p_newCommandClassNames){
+        CommandClassNames = p_newCommandClassNames;
+    }
     /**
      * Gets corresponding command handler class name for command name
      * @param p_commandName command name

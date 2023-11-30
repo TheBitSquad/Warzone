@@ -4,13 +4,15 @@ import org.bitsquad.warzone.card.Card;
 import org.bitsquad.warzone.card.CardGenerator;
 import org.bitsquad.warzone.continent.Continent;
 import org.bitsquad.warzone.country.Country;
+import org.bitsquad.warzone.gameengine.phase.GameFinished;
+import org.bitsquad.warzone.gameengine.phase.IssueOrderPostDeploy;
 import org.bitsquad.warzone.gameengine.phase.Phase;
 import org.bitsquad.warzone.gameengine.phase.StartupMapEditing;
 import org.bitsquad.warzone.gameengine.policy.PolicyManager;
 import org.bitsquad.warzone.logger.LogEntryBuffer;
 import org.bitsquad.warzone.map.Map;
 import org.bitsquad.warzone.order.*;
-import org.bitsquad.warzone.player.Player;
+import org.bitsquad.warzone.player.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,9 +26,14 @@ public class GameEngine {
     private static GameEngine d_instance;
     private Phase d_gamePhase;
     private Map d_gameMap;
-    private List<Player> d_gamePlayers;
+    private List<BasePlayer> d_gamePlayers;
     private int d_currentPlayerIndex;
     PolicyManager d_policyManager;
+
+    BasePlayer d_winner = null;
+    private int d_roundNumber = 0;
+
+    private int d_maxRounds = Integer.MAX_VALUE;
 
     /**
      * Default Constructor
@@ -39,7 +46,66 @@ public class GameEngine {
     }
 
     /**
+     * Getter for winner
+     * @return BasePlayer Player instance who won the game
+     */
+    public BasePlayer getWinner() {
+        return d_winner;
+    }
+
+    /**
+     * Setter for winner
+     * @param d_winner
+     */
+    public void setWinner(BasePlayer d_winner) {
+        LogEntryBuffer.getInstance().log("Winner: " + d_winner.getName() + " , id: " + d_winner.getId());
+        this.d_winner = d_winner;
+    }
+
+    /**
+     * Setter for round number
+     * @param p_value Round number
+     */
+    public void setRoundNumber(int p_value){
+        LogEntryBuffer.getInstance().log("Round: " + p_value);
+        this.d_roundNumber = p_value;
+    }
+
+    /**
+     * Increments the round number
+     */
+    public void incrementRoundNumber(){
+        setRoundNumber(this.d_roundNumber + 1);
+    }
+
+    /**
+     * Getter for round number
+     * @return int Round number
+     */
+    public int getRoundNumber(){
+        return this.d_roundNumber;
+    }
+
+    /**
+     * Sets the max rounds for the game
+     * @param p_value Integer
+     */
+    public void setMaxRounds(int p_value){
+        LogEntryBuffer.getInstance().log("Max rounds set to: " + p_value);
+        d_maxRounds = p_value;
+    }
+
+    /**
+     * Getter for max rounds of the game
+     * @return
+     */
+    public int getMaxRounds(){
+        return this.d_maxRounds;
+    }
+
+    /**
      * Sets the phase
+     *
      * @param p_newPhase
      */
     public void setPhase(Phase p_newPhase) {
@@ -48,7 +114,16 @@ public class GameEngine {
     }
 
     /**
+     * Getter for game phase
+     * @return Phase
+     */
+    public Phase getPhase(){
+        return this.d_gamePhase;
+    }
+
+    /**
      * Getter for PolicyManager instance
+     *
      * @return PolicyManager
      */
     public PolicyManager getPolicyManager() {
@@ -57,6 +132,7 @@ public class GameEngine {
 
     /**
      * Returns the currentPlayerIndex
+     *
      * @return int
      */
     public int getCurrentPlayerIndex() {
@@ -71,6 +147,12 @@ public class GameEngine {
     public void setCurrentPlayerIndex(int p_currentPlayerIndex) {
         this.d_currentPlayerIndex = p_currentPlayerIndex;
         LogEntryBuffer.getInstance().log("Current turn: Player id: " + this.getCurrentPlayer().getName());
+
+        if (!this.getCurrentPlayer().getClass().getSimpleName().equalsIgnoreCase("Player")) {
+            this.getCurrentPlayer().issueOrder();
+            this.setPhase(new IssueOrderPostDeploy(GameEngine.getInstance()));
+            this.handleCommit();
+        }
     }
 
     /**
@@ -103,7 +185,7 @@ public class GameEngine {
      *
      * @return list of game players
      */
-    public List<Player> getGamePlayers() {
+    public List<BasePlayer> getGamePlayers() {
         return d_gamePlayers;
     }
 
@@ -112,7 +194,7 @@ public class GameEngine {
      *
      * @param p_gamePlayers list of game players
      */
-    public void setGamePlayers(List<Player> p_gamePlayers) {
+    public void setGamePlayers(List<BasePlayer> p_gamePlayers) {
         this.d_gamePlayers = p_gamePlayers;
     }
 
@@ -121,7 +203,7 @@ public class GameEngine {
      *
      * @return Player
      */
-    public Player getCurrentPlayer() {
+    public BasePlayer getCurrentPlayer() {
         return this.d_gamePlayers.get(this.d_currentPlayerIndex);
     }
 
@@ -138,9 +220,17 @@ public class GameEngine {
     }
 
     /**
+     * Resets the gameengine instance
+     */
+    public static void resetInstance() {
+        d_instance = new GameEngine();
+    }
+
+
+    /**
      * Handler for executing orders
      */
-    public void handleExecuteOrders(){
+    public void handleExecuteOrders() {
         this.d_gamePhase.handleExecuteOrders();
     }
 
@@ -148,9 +238,6 @@ public class GameEngine {
      * Executes orders in Round-Robin fashion
      */
     public void executeOrders() {
-        // Completed: ExecuteOrders-Modify so that all deploy orders are executed first then the rest
-        // Completed: ExecuteOrders-Modify so that policies are first checked then order is discarded or executed.
-        // Completed: ExecuteOrders-Modify to check if an order is valid, before executing (Since the game changes at runtime)
         LogEntryBuffer.getInstance().log("Executing Orders");
         Order l_orderToExecute = null;
 
@@ -159,7 +246,7 @@ public class GameEngine {
 
         while (!l_allDeployCommandsCompleted) {
             l_allDeployCommandsCompleted = true;
-            for (Player l_player : this.d_gamePlayers) {
+            for (BasePlayer l_player : this.d_gamePlayers) {
                 l_orderToExecute = null;
                 if (l_player.isNextDeploy()) {
                     l_allDeployCommandsCompleted = false;
@@ -179,7 +266,7 @@ public class GameEngine {
         l_isAllOrderSetsEmpty = false;
         while (!l_isAllOrderSetsEmpty) {
             l_isAllOrderSetsEmpty = true;
-            for (Player l_player : this.d_gamePlayers) {
+            for (BasePlayer l_player : this.d_gamePlayers) {
                 l_orderToExecute = l_player.nextOrder();
                 if (l_orderToExecute != null) {
                     l_isAllOrderSetsEmpty = false;
@@ -187,9 +274,9 @@ public class GameEngine {
                     if (this.d_policyManager.checkPolicies(l_orderToExecute) && l_orderToExecute.isValid()) {
                         l_orderToExecute.execute();
                     } else {
-                        if(!this.d_policyManager.checkPolicies(l_orderToExecute))
+                        if (!this.d_policyManager.checkPolicies(l_orderToExecute))
                             LogEntryBuffer.getInstance().log("The order violates current round policies.");
-                        else if(!l_orderToExecute.isValid()){
+                        else if (!l_orderToExecute.isValid()) {
                             LogEntryBuffer.getInstance().log("The order is invalid");
                         }
                     }
@@ -204,7 +291,7 @@ public class GameEngine {
     public void nextRound() {
         LogEntryBuffer.getInstance().log("New Round!");
 
-        for (Player l_player : this.d_gamePlayers) {
+        for (BasePlayer l_player : this.d_gamePlayers) {
             // Assign random cards
             if (l_player.hasNewTerritory()) {
                 Card l_generatedCard = CardGenerator.generateRandomCard();
@@ -225,6 +312,13 @@ public class GameEngine {
             l_player.clearState();
         }
         d_policyManager.clearPolicies();
+        incrementRoundNumber();
+        if(d_roundNumber >= d_maxRounds){
+            setPhase(new GameFinished(this));
+            LogEntryBuffer.getInstance().log("Max number of rounds reached.");
+            LogEntryBuffer.getInstance().log("Draw!");
+            return;
+        }
         setCurrentPlayerIndex(0);
     }
 
@@ -234,7 +328,7 @@ public class GameEngine {
      * @param p_player Player Objec
      * @return int number of reinforcement units
      */
-    public int getNumberOfReinforcementUnits(Player p_player) {
+    public int getNumberOfReinforcementUnits(BasePlayer p_player) {
         int l_numberReinforcement = 3;
         l_numberReinforcement += p_player.getCountriesOwned().size() / 3;
         for (Continent l_continent : this.d_gameMap.getContinents().values()) {
@@ -253,6 +347,25 @@ public class GameEngine {
         return l_numberReinforcement;
     }
 
+    /**
+     * Checks for player win and removes losers
+     * @return Boolean if there is a game winner
+     */
+    public boolean checkPlayerWinAndRemoveLosers(){
+        Iterator<BasePlayer> l_playerIterator = this.d_gamePlayers.iterator();
+        while(l_playerIterator.hasNext()){
+            BasePlayer l_player = l_playerIterator.next();
+            if(l_player.getCountriesOwned().isEmpty()){
+                LogEntryBuffer.getInstance().log(l_player.getName() + " owns no countries. Player out!");
+                l_playerIterator.remove();
+            }
+        }
+        if(d_gamePlayers.size() == 1){
+            this.setWinner(d_gamePlayers.get(0));
+            return true;
+        }
+        return false;
+    }
     /**
      * Handler method for loadmap command
      *
@@ -319,8 +432,8 @@ public class GameEngine {
      * @param p_filename
      * @throws Exception
      */
-    public void handleSaveMap(String p_filename) throws Exception {
-        this.d_gameMap.saveMap(p_filename);
+    public void handleSaveMap(String p_filename, boolean c) throws Exception {
+        this.d_gamePhase.handleSaveMap(p_filename,c);
     }
 
     /**
@@ -356,8 +469,17 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleAddPlayer(String p_playerName) throws Exception {
-        // Check if a player is already present
-        for (Player l_player : this.d_gamePlayers) {
+        // IF it is a computer player, just add.
+        switch (p_playerName.toLowerCase()){
+            case "aggressive": d_gamePlayers.add(new AggressivePlayer(p_playerName)); return;
+            case "benevolent": d_gamePlayers.add(new BenevolentPlayer(p_playerName)); return;
+            case "cheater": d_gamePlayers.add(new CheaterPlayer(p_playerName)); return;
+            case "random": d_gamePlayers.add(new RandomPlayer(p_playerName)); return;
+            default: break;
+        }
+
+        // Check for existing human players with the same name
+        for (BasePlayer l_player : this.d_gamePlayers) {
             if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 throw new Exception("Player already exists!");
             }
@@ -372,7 +494,7 @@ public class GameEngine {
      * @throws Exception
      */
     public void handleRemovePlayer(String p_playerName) throws Exception {
-        for (Player l_player : this.d_gamePlayers) {
+        for (BasePlayer l_player : this.d_gamePlayers) {
             if (l_player.getName().equalsIgnoreCase(p_playerName)) {
                 this.d_gamePlayers.remove(l_player);
                 return;
@@ -444,11 +566,12 @@ public class GameEngine {
 
     /**
      * Used to get player instance using the player ID
+     *
      * @param p_playerID Player ID
      * @return Player instance
      */
-    public Player getPlayerByID(int p_playerID) {
-        for (Player l_player : d_gamePlayers) {
+    public BasePlayer getPlayerByID(int p_playerID) {
+        for (BasePlayer l_player : d_gamePlayers) {
             if (l_player.getId() == p_playerID) {
                 return l_player;
             }

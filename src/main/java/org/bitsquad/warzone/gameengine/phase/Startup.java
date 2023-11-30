@@ -95,7 +95,9 @@ abstract class Startup extends Phase {
         }
 
         this.d_gameEngine.nextRound();
-        this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+        if(!this.d_gameEngine.getPhase().getClass().getSimpleName().equalsIgnoreCase("GameFinished")){
+            this.d_gameEngine.setPhase(new IssueOrderPreDeploy(this.d_gameEngine));
+        }
     }
 
     /**

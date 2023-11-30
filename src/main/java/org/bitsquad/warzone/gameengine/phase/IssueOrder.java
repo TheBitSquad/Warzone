@@ -34,7 +34,7 @@ abstract class IssueOrder extends Phase{
      * Handler method for savemap command
      * @param p_filename String filename
      */
-    public void handleSaveMap(String p_filename){
+    public void handleSaveMap(String p_filename, boolean p_saveAsConquestMap){
         this.printInvalidCommandMessage();
     }
 

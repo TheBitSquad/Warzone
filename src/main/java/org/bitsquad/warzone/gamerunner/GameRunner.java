@@ -39,6 +39,7 @@ public class GameRunner {
      * Handler for Single Game mode
      */
     public void handleSingleGameMode(){
+        GameEngine.resetInstance();
         LogEntryBuffer.getInstance().log("Single Game Mode");
         CliParser.setDefaultCommandClassNames();
         String ip;
